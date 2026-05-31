@@ -5,7 +5,7 @@ import { APP_NAME } from "./constants";
 const log = createChildLogger("email");
 
 const resend = new Resend(process.env.RESEND_API_KEY || "re_placeholder");
-const FROM = process.env.EMAIL_FROM || `${APP_NAME} <noreply@mendyr.com>`;
+const FROM = process.env.EMAIL_FROM || `${APP_NAME} <noreply@mendyr.app>`;
 
 interface EmailOptions {
   to: string;
@@ -60,7 +60,7 @@ export async function sendWelcomeEmail(to: string, name: string): Promise<boolea
             </a>
           </div>
           <p style="color: #94a3b8; font-size: 14px;">
-            If you have any questions, reply to this email or reach out at support@mendyr.com.
+            If you have any questions, reply to this email or reach out at support@mendyr.app.
           </p>
         </div>
       </div>
@@ -153,7 +153,7 @@ export async function sendNurseStatusEmail(
                   </a>
                 </div>`
               : `<p style="color: #475569; font-size: 16px; line-height: 1.6;">
-                  You can update your application and resubmit. If you have questions, contact us at support@mendyr.com.
+                  You can update your application and resubmit. If you have questions, contact us at support@mendyr.app.
                 </p>`
           }
         </div>
@@ -166,7 +166,7 @@ export async function sendAdminNotification(
   subject: string,
   message: string
 ): Promise<boolean> {
-  const adminEmail = process.env.SUPER_ADMIN_EMAIL || "admin@mendyr.com";
+  const adminEmail = process.env.SUPER_ADMIN_EMAIL || "admin@mendyr.app";
   return sendEmail({
     to: adminEmail,
     subject: `[Admin] ${subject}`,

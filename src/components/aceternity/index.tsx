@@ -261,6 +261,32 @@ export function BentoGridItem({
 /**
  * Sparkles — small animated particle dots.
  */
+const SPARKLES_COUNT = 30;
+
+function createSparkleConfig(index: number) {
+  let seed = (index + 1) * 0x9e3779b1;
+
+  const random = () => {
+    seed |= 0;
+    seed = (seed + 0x6d2b79f5) | 0;
+    let value = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    value ^= value + Math.imul(value ^ (value >>> 7), 61 | value);
+    return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
+  };
+
+  return {
+    left: `${(random() * 100).toFixed(3)}%`,
+    top: `${(random() * 100).toFixed(3)}%`,
+    duration: 2 + random() * 2,
+    delay: random() * 3,
+    repeatDelay: random() * 4,
+  };
+}
+
+const SPARKLES = Array.from({ length: SPARKLES_COUNT }, (_, index) =>
+  createSparkleConfig(index),
+);
+
 export function SparklesBackground({
   children,
   className,
@@ -271,23 +297,23 @@ export function SparklesBackground({
   return (
     <div className={cn("relative overflow-hidden", className)}>
       <div className="absolute inset-0">
-        {Array.from({ length: 30 }).map((_, i) => (
+        {SPARKLES.map((sparkle, i) => (
           <motion.div
             key={i}
             className="absolute w-1 h-1 rounded-full bg-primary"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: sparkle.left,
+              top: sparkle.top,
             }}
             animate={{
               opacity: [0, 1, 0],
               scale: [0, 1, 0],
             }}
             transition={{
-              duration: 2 + Math.random() * 2,
-              delay: Math.random() * 3,
+              duration: sparkle.duration,
+              delay: sparkle.delay,
               repeat: Infinity,
-              repeatDelay: Math.random() * 4,
+              repeatDelay: sparkle.repeatDelay,
             }}
           />
         ))}

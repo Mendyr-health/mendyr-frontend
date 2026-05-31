@@ -75,11 +75,11 @@ export async function POST(request: NextRequest) {
         });
 
         // Auto-add to waitlist
-        const waitlistExists = await tx.waitlistEntry.findFirst({
+        const waitlistExists = await tx.waitlist.findFirst({
           where: { email: email.toLowerCase() },
         });
         if (!waitlistExists) {
-          await tx.waitlistEntry.create({
+          await tx.waitlist.create({
             data: {
               publicId: nanoid(21),
               email: email.toLowerCase(),

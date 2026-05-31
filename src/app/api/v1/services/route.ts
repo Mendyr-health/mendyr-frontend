@@ -3,6 +3,12 @@ import { requireAuth, requireRole } from "@/lib/auth/guards";
 import { apiHandler, successResponse, errorResponse } from "@/server/middleware/api-response";
 import { createServiceSchema } from "@/lib/validators";
 
+const parseServiceFeatures = (features: string | null) =>
+  features ? (JSON.parse(features) as string[]) : [];
+
+const serializeServiceFeatures = (features?: string[]) =>
+  features ? JSON.stringify(features) : undefined;
+
 // GET /api/v1/services — list services (public)
 export const GET = apiHandler(async () => {
   const services = await prisma.service.findMany({
@@ -24,7 +30,12 @@ export const GET = apiHandler(async () => {
     },
   });
 
-  return successResponse(services);
+  const normalizedServices = services.map((service) => ({
+    ...service,
+    features: parseServiceFeatures(service.features),
+  }));
+
+  return successResponse(normalizedServices);
 });
 
 // POST /api/v1/services — create service (admin only)
@@ -46,6 +57,7 @@ export const POST = apiHandler(async (request: Request) => {
   const service = await prisma.service.create({
     data: {
       ...body,
+      features: serializeServiceFeatures(body.features),
       sortOrder,
       isActive: true,
       seoTitle: `${body.name} — Mendyr Home Healthcare`,
@@ -53,5 +65,11 @@ export const POST = apiHandler(async (request: Request) => {
     },
   });
 
-  return successResponse(service, 201);
+  return successResponse(
+    {
+      ...service,
+      features: parseServiceFeatures(service.features),
+    },
+    201
+  );
 });

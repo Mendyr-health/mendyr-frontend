@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if already on waitlist
-    const existing = await prisma.waitlistEntry.findFirst({
+    const existing = await prisma.waitlist.findFirst({
       where: { email: email.toLowerCase() },
     });
 
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
       return apiResponse({ message: "You're already on the waitlist!" });
     }
 
-    const entry = await prisma.waitlistEntry.create({
+    const entry = await prisma.waitlist.create({
       data: {
         publicId: nanoid(21),
         email: email.toLowerCase(),

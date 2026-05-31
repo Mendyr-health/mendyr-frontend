@@ -18,10 +18,10 @@
   --accent-foreground: 0 0% 100%;
 
   /* Backgrounds */
-  --background: 0 0% 100%;
-  /* #FFFFFF */
-  --background-secondary: 210 40% 98%;
-  /* #F8FAFC */
+  --background: 220 33% 97%;
+  /* #F7F9FC */
+  --background-secondary: 220 33% 95%;
+  /* #EEF2F7 */
   --foreground: 222 47% 11%;
   /* #0F172A */
 
@@ -71,7 +71,7 @@
   --color-primary-light: hsl(208 87% 67%);
   --color-primary-dark: hsl(220 85% 40%);
   --color-accent: hsl(214 71% 44%);
-  --color-background: hsl(0 0% 100%);
+  --color-background: hsl(220 33% 97%);
   --color-foreground: hsl(222 47% 11%);
   --color-muted: hsl(210 40% 96%);
   --color-muted-foreground: hsl(215 16% 47%);
@@ -90,10 +90,17 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: hsl(var(--background));
 }
 
 body {
   background-color: hsl(var(--background));
+  background-image:
+    linear-gradient(to right, rgba(148, 163, 184, 0.14) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.14) 1px, transparent 1px),
+    linear-gradient(180deg, hsl(220 33% 98%), hsl(220 33% 96%));
+  background-size: 48px 48px, 48px 48px, 100% 100%;
+  background-position: 0 0, 0 0, 0 0;
   color: hsl(var(--foreground));
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
   min-height: 100vh;

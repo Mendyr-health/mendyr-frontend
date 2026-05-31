@@ -9,7 +9,7 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(false);
   const [settings, setSettings] = useState({
     siteName: "Mendyr",
-    supportEmail: "support@mendyr.com",
+    supportEmail: "support@mendyr.app",
     launchDate: "",
     maintenanceMode: false,
     registrationEnabled: true,

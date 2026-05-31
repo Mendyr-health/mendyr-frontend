@@ -141,7 +141,7 @@ const SYSTEM_SETTINGS = [
   { key: "nurse_registration_enabled", value: "true", type: "boolean", group: "auth", description: "Allow nurse registrations" },
   { key: "patient_registration_enabled", value: "true", type: "boolean", group: "auth", description: "Allow patient registrations" },
   { key: "waitlist_enabled", value: "true", type: "boolean", group: "general", description: "Show waitlist signup" },
-  { key: "contact_email", value: "support@mendyr.com", type: "string", group: "general", description: "Support email" },
+  { key: "contact_email", value: "support@mendyr.app", type: "string", group: "general", description: "Support email" },
   { key: "company_phone", value: "+91-XXXXXXXXXX", type: "string", group: "general", description: "Company phone" },
 ];
 
@@ -196,7 +196,7 @@ async function main() {
 
   // 3. Create super admin user
   console.log("  📝 Creating super admin...");
-  const superAdminEmail = process.env.SUPER_ADMIN_EMAIL || "admin@mendyr.com";
+  const superAdminEmail = process.env.SUPER_ADMIN_EMAIL || "admin@mendyr.app";
   const superAdminPassword = process.env.SUPER_ADMIN_PASSWORD || "Admin@123456";
   const passwordHash = await argon2.hash(superAdminPassword, {
     type: argon2.argon2id,

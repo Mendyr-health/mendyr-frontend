@@ -82,8 +82,8 @@ export default function PatientSettingsPage() {
         </div>
         <p className="text-sm text-muted-foreground mb-3">
           Need help? Contact our support team at{" "}
-          <a href="mailto:support@mendyr.com" className="text-primary-light hover:underline">
-            support@mendyr.com
+          <a href="mailto:support@mendyr.app" className="text-primary-light hover:underline">
+            support@mendyr.app
           </a>
         </p>
       </motion.div>

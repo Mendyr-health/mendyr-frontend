@@ -46,7 +46,7 @@ export default function ContactPage() {
           {/* Contact Info */}
           <div className="space-y-6">
             {[
-              { icon: <Mail className="w-5 h-5" />, label: "Email", value: "support@mendyr.com" },
+              { icon: <Mail className="w-5 h-5" />, label: "Email", value: "support@mendyr.app" },
               { icon: <Phone className="w-5 h-5" />, label: "Phone", value: "+91 (800) 000-0000" },
               { icon: <MapPin className="w-5 h-5" />, label: "Location", value: "India" },
             ].map((item, idx) => (

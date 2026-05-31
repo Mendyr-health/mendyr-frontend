@@ -17,7 +17,7 @@ export function PublicHeader() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <Image src="/mendyr.png" alt="Mendyr Logo" width={120} height={40} className="h-8 w-auto object-contain" style={{ width: "auto" }} />
+            <Image src="/mendyr.png" alt="Mendyr Logo" width={120} height={40} loading="eager" className="h-8 w-auto object-contain" style={{ width: "auto" }} />
           </Link>
 
           {/* Desktop Nav */}
@@ -136,7 +136,7 @@ export function PublicFooter() {
           {/* Brand */}
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <Image src="/mendyr.png" alt="Mendyr Logo" width={120} height={40} className="h-8 w-auto object-contain" style={{ width: "auto" }} />
+              <Image src="/mendyr.png" loading="eager" alt="Mendyr Logo" width={120} height={40} className="h-8 w-auto object-contain" style={{ width: "auto" }} />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Connecting patients with verified nurses and caregivers for

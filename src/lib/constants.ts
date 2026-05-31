@@ -147,5 +147,5 @@ export const FAQ_ITEMS = [
   { question: "How much do the services cost?", answer: "Our pricing varies by service type and duration. We believe in transparent pricing with no hidden charges. Visit our Services page for detailed pricing ranges for each service category." },
   { question: "Can I become a nurse on the Mendyr platform?", answer: "Absolutely! We welcome qualified and experienced nurses to join our platform. Click on 'Become a Nurse' to submit your application. Our team will review your credentials and get back to you." },
   { question: "Is my personal data safe with Mendyr?", answer: "Yes. We take data privacy very seriously. All personal and medical information is encrypted, securely stored, and handled in compliance with applicable data protection regulations. We never share your data without consent." },
-  { question: "How do I contact Mendyr for support?", answer: "You can reach us through our Contact page, email us at support@mendyr.com, or call our helpline. We aim to respond to all inquiries within 24 hours." },
+  { question: "How do I contact Mendyr for support?", answer: "You can reach us through our Contact page, email us at support@mendyr.app, or call our helpline. We aim to respond to all inquiries within 24 hours." },
 ] as const;

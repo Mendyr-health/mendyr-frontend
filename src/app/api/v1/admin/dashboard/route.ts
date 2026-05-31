@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
       prisma.nurseProfile.count(),
       prisma.user.count({ where: { role: { in: ["ADMIN", "SUPER_ADMIN"] } } }),
       prisma.nurseProfile.count({ where: { verificationStatus: "PENDING" } }),
-      prisma.waitlistEntry.count(),
+      prisma.waitlist.count(),
       prisma.contactInquiry.count({ where: { status: "NEW" } }),
     ]);
 

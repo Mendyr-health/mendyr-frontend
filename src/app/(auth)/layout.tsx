@@ -24,7 +24,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         </div>
         <div className="relative z-10 text-center">
           <Link href="/" className="flex items-center justify-center gap-3 mb-8">
-            <Image src="/mendyr.png" alt="Mendyr Logo" width={160} height={48} className="h-12 w-auto object-contain" style={{ width: "auto" }} />
+            <Image src="/mendyr.png" alt="Mendyr Logo" width={160} height={48} loading="eager" className="h-12 w-auto object-contain" style={{ width: "auto" }} />
           </Link>
           <h2 className="text-2xl font-semibold text-muted-foreground mb-4">
             Healthcare That Comes Home
@@ -40,7 +40,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center gap-2 mb-8">
-            <Image src="/mendyr.png" alt="Mendyr Logo" width={120} height={40} className="h-8 w-auto object-contain" style={{ width: "auto" }} />
+            <Image src="/mendyr.png" alt="Mendyr Logo" width={120} height={40} loading="eager" className="h-8 w-auto object-contain" style={{ width: "auto" }} />
           </div>
           {children}
         </div>

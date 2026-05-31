@@ -263,7 +263,7 @@ export default function PatientRegisterPage() {
                           <button
                             type="button"
                             className={cn(
-                              "flex h-12 w-full items-center rounded-xl border border-white/60 bg-white/40 px-4 py-3 text-left text-sm shadow-sm backdrop-blur-md transition-all focus:outline-none focus:ring-2 focus:ring-primary/40 dark:border-white/10 dark:bg-black/20",
+                              "flex h-12 w-full items-center rounded-xl border border-border/80 bg-card/95 px-4 py-3 text-left text-sm shadow-[0_8px_24px_rgba(15,23,42,0.05)] backdrop-blur-md transition-all focus:outline-none focus:ring-2 focus:ring-primary/20",
                               !field.value && "text-muted-foreground"
                             )}
                           >
@@ -272,7 +272,7 @@ export default function PatientRegisterPage() {
                           </button>
                         </FormControl>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto border border-white/40 bg-background/95 p-0 shadow-xl backdrop-blur-md" align="start">
+                      <PopoverContent className="w-auto border border-border/80 bg-card/98 p-0 shadow-[0_18px_40px_rgba(15,23,42,0.1)] backdrop-blur-md" align="start">
                         <Calendar
                           mode="single"
                           selected={field.value}
@@ -342,7 +342,7 @@ export default function PatientRegisterPage() {
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              className="space-y-3 rounded-xl border border-white/60 bg-white/40 p-6 text-sm shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-black/20"
+              className="space-y-3 rounded-xl border border-border/80 bg-card/95 p-6 text-sm shadow-[0_8px_24px_rgba(15,23,42,0.05)] backdrop-blur-md"
             >
               <div className="flex justify-between gap-4">
                 <span className="text-muted-foreground">Full Name</span>
@@ -383,7 +383,7 @@ export default function PatientRegisterPage() {
                 type="button"
                 variant="outline"
                 onClick={() => setStep((currentStep) => currentStep - 1)}
-                className="h-12 rounded-xl border-white/60 bg-white/40 text-foreground backdrop-blur-md hover:bg-white/60 dark:border-white/10 dark:bg-black/20 dark:hover:bg-black/40"
+                className="h-12 rounded-xl border-border/80 bg-card/95 text-foreground shadow-[0_8px_24px_rgba(15,23,42,0.05)] backdrop-blur-md hover:bg-white"
               >
                 <ArrowLeft className="h-4 w-4" /> Back
               </Button>

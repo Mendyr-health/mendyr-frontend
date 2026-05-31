@@ -22,21 +22,18 @@ const SOFT_DELETE_MODELS = ["User", "NurseProfile", "PatientProfile", "Service"]
 export const prisma = basePrisma.$extends({
   query: {
     $allModels: {
-      // @ts-expect-error Prisma extension types are complex
       async findMany({ model, args, query }) {
         if (SOFT_DELETE_MODELS.includes(model)) {
           args.where = { ...args.where, deletedAt: null };
         }
         return query(args);
       },
-      // @ts-expect-error Prisma extension types are complex
       async findFirst({ model, args, query }) {
         if (SOFT_DELETE_MODELS.includes(model)) {
           args.where = { ...args.where, deletedAt: null };
         }
         return query(args);
       },
-      // @ts-expect-error Prisma extension types are complex
       async findUnique({ model, args, query }) {
         if (SOFT_DELETE_MODELS.includes(model)) {
           // findUnique doesn't support arbitrary where, so we pass through
@@ -53,7 +50,6 @@ export const prisma = basePrisma.$extends({
         }
         return query(args);
       },
-      // @ts-expect-error Prisma extension types are complex
       async delete({ model, args, query }) {
         if (SOFT_DELETE_MODELS.includes(model)) {
           // Convert delete → soft-delete
@@ -64,7 +60,6 @@ export const prisma = basePrisma.$extends({
         }
         return query(args);
       },
-      // @ts-expect-error Prisma extension types are complex
       async deleteMany({ model, args, query }) {
         if (SOFT_DELETE_MODELS.includes(model)) {
           return (basePrisma[model as keyof typeof basePrisma] as any).updateMany({
@@ -74,7 +69,6 @@ export const prisma = basePrisma.$extends({
         }
         return query(args);
       },
-      // @ts-expect-error Prisma extension types are complex
       async count({ model, args, query }) {
         if (SOFT_DELETE_MODELS.includes(model)) {
           args.where = { ...args.where, deletedAt: null };

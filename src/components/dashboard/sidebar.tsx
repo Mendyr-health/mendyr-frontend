@@ -43,7 +43,7 @@ export function DashboardSidebar({
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className="flex items-center gap-2 px-6 py-5 border-b border-border">
-        <Image src="/mendyr.png" alt="Mendyr Logo" width={120} height={40} className="h-8 w-auto object-contain" style={{ width: "auto" }} />
+        <Image src="/mendyr.png" loading="eager" alt="Mendyr Logo" width={120} height={40} className="h-8 w-auto object-contain" style={{ width: "auto" }} />
       </div>
 
       {/* Nav Links */}

@@ -95,13 +95,13 @@ export async function GET(request: NextRequest) {
         }
 
         [data, total] = await Promise.all([
-          prisma.waitlistEntry.findMany({
+          prisma.waitlist.findMany({
             where,
             orderBy: { [sortBy]: sortOrder },
             skip,
             take: limit,
           }),
-          prisma.waitlistEntry.count({ where }),
+          prisma.waitlist.count({ where }),
         ]);
         break;
       }

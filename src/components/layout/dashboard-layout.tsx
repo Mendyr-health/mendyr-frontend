@@ -45,7 +45,7 @@ export function DashboardLayout({
     <div className="flex flex-col h-full">
       {/* Logo */}
       <div className="p-4 flex items-center gap-3 border-b border-border">
-        <Image src="/mendyr.png" alt="Mendyr Logo" width={120} height={40} className={`h-8 object-contain ${collapsed ? "w-8" : "w-auto"}`} style={collapsed ? { height: "auto" } : { width: "auto" }} />
+        <Image src="/mendyr.png" loading="eager" alt="Mendyr Logo" width={120} height={40} className={`h-8 object-contain ${collapsed ? "w-8" : "w-auto"}`} style={collapsed ? { height: "auto" } : { width: "auto" }} />
       </div>
 
       {/* Role badge */}

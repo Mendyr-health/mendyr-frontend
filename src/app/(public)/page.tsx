@@ -36,31 +36,56 @@ const iconMap: Record<string, React.ReactNode> = {
 
 function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+    <section className="
+      relative
+      min-h-[100svh]
+      flex
+      items-center
+      justify-center
+      overflow-hidden
+      pt-24
+      pb-12">
       <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="var(--color-primary)" />
       <BackgroundBeams />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-glass text-sm text-primary mb-8"
         >
-          <Star className="w-4 h-4" />
+          <Star className="w-2 h-2 lg:w-4 lg:h-4" />
           <span>Launching Soon — Join the Waitlist</span>
         </motion.div>
 
         <TextGenerateEffect
           words="Healthcare That Comes Home to You"
-          className="text-4xl md:text-6xl lg:text-7xl text-foreground font-[family-name:var(--font-outfit)]"
+          className="mx-auto
+            max-w-4xl
+            text-[clamp(2rem,8vw,5rem)]
+            font-bold
+            leading-[1.05]
+            tracking-tight
+            text-foreground
+            font-[family-name:var(--font-outfit)]
+          "
         />
 
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.6 }}
-          className="mt-6 text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed"
+          className="mt-6
+            text-base
+            sm:text-lg
+            md:text-xl
+            text-muted-foreground
+            max-w-2xl
+            mx-auto
+            leading-relaxed
+            px-2
+          "
         >
           Mendyr connects you with verified nurses and caregivers for professional
           healthcare services delivered right to your doorstep.
@@ -74,13 +99,31 @@ function HeroSection() {
         >
           <Link
             href="/register/patient"
-            className="group flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-primary text-white font-semibold text-lg hover:opacity-90 transition-all hover:scale-[1.02]"
+            className="group
+              flex
+              items-center
+              justify-center
+              gap-2
+              w-full
+              sm:w-auto
+              min-w-[220px]
+              px-6
+              py-4
+              rounded-xl
+              bg-gradient-primary
+              text-white
+              font-semibold
+              text-base
+              sm:text-lg
+              hover:opacity-90
+              transition-all
+              "
           >
             Get Started
             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
           <MovingBorder as="div" containerClassName="cursor-pointer">
-            <Link href="/become-a-nurse" className="flex items-center gap-2 text-foreground font-medium">
+            <Link href="/become-a-nurse" className="flex items-center gap-2 w-full sm:w-auto text-lg font-semibold text-foreground px-4 py-1">
               Become a Nurse
               <ArrowRight className="w-4 h-4" />
             </Link>
