@@ -47,3 +47,17 @@ next-env.d.ts
 # temp files
 /temp-mendyr
 globals.css.backup
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS specific files
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

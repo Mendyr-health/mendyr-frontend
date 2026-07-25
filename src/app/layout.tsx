@@ -55,6 +55,7 @@ export const metadata: Metadata = {
 };
 
 import { StoreProvider } from "@/store/StoreProvider";
+import { I18nProvider } from "@/components/I18nProvider";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
@@ -70,7 +71,9 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
-        <StoreProvider>{children}</StoreProvider>
+        <I18nProvider>
+          <StoreProvider>{children}</StoreProvider>
+        </I18nProvider>
       </body>
       {GA_ID && GA_ID !== "G-XXXXXXXXXX" && <GoogleAnalytics gaId={GA_ID} />}
     </html>
