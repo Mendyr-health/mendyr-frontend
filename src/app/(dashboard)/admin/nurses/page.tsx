@@ -93,43 +93,44 @@ export default function AdminNursesPage() {
 
       {/* Table */}
       <div className="bg-glass rounded-xl overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-border">
-                <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Name</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Email</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Phone</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Experience</th>
-                <th className="text-left px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Status</th>
-                <th className="text-right px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider">Actions</th>
+              <tr className="border-b border-border bg-muted/30">
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Name</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Email</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Phone</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Experience</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Status</th>
+                <th className="text-right px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-border">
               {loading ? (
                 Array.from({ length: 5 }).map((_, i) => (
-                  <tr key={i}><td colSpan={6} className="px-4 py-4"><div className="skeleton h-4 w-full" /></td></tr>
+                  <tr key={i}><td colSpan={6} className="px-4 py-4"><div className="w-full h-12 bg-muted/50 rounded-xl animate-pulse" /></td></tr>
                 ))
               ) : nurses.length === 0 ? (
                 <tr><td colSpan={6} className="px-4 py-12 text-center text-sm text-muted-foreground">No nurses found</td></tr>
               ) : (
                 nurses.map((nurse) => (
-                  <motion.tr key={nurse.publicId} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="hover:bg-muted">
-                    <td className="px-4 py-3 text-sm text-foreground">{nurse.user.fullName}</td>
-                    <td className="px-4 py-3 text-sm text-muted-foreground">{nurse.user.email}</td>
-                    <td className="px-4 py-3 text-sm text-muted-foreground">{nurse.user.phone || "—"}</td>
-                    <td className="px-4 py-3 text-sm text-muted-foreground">{nurse.experience || "—"}</td>
-                    <td className="px-4 py-3">
-                      <span className={`text-xs px-2 py-1 rounded-full font-medium ${statusColors[nurse.verificationStatus] || ""}`}>
+                  <motion.tr key={nurse.publicId} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="hover:bg-muted/30 transition-colors">
+                    <td className="px-4 py-4 text-sm font-medium text-foreground">{nurse.user.fullName}</td>
+                    <td className="px-4 py-4 text-sm text-muted-foreground">{nurse.user.email}</td>
+                    <td className="px-4 py-4 text-sm text-muted-foreground">{nurse.user.phone || "—"}</td>
+                    <td className="px-4 py-4 text-sm text-muted-foreground">{nurse.experience || "—"}</td>
+                    <td className="px-4 py-4">
+                      <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${statusColors[nurse.verificationStatus] || ""}`}>
                         {nurse.verificationStatus}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-right">
-                      <div className="flex items-center justify-end gap-1">
+                    <td className="px-4 py-4 text-right">
+                      <div className="flex items-center justify-end gap-2">
                         {nurse.verificationStatus === "PENDING" && (
                           <>
-                            <button onClick={() => handleAction(nurse.publicId, "approve")} className="p-1.5 rounded-lg hover:bg-success/10 text-success" title="Approve"><CheckCircle className="w-4 h-4" /></button>
-                            <button onClick={() => handleAction(nurse.publicId, "reject")} className="p-1.5 rounded-lg hover:bg-destructive/10 text-destructive" title="Reject"><XCircle className="w-4 h-4" /></button>
+                            <button onClick={() => handleAction(nurse.publicId, "approve")} className="p-2 rounded-xl bg-success/10 hover:bg-success/20 text-success transition-colors" title="Approve"><CheckCircle className="w-4 h-4" /></button>
+                            <button onClick={() => handleAction(nurse.publicId, "reject")} className="p-2 rounded-xl bg-destructive/10 hover:bg-destructive/20 text-destructive transition-colors" title="Reject"><XCircle className="w-4 h-4" /></button>
                           </>
                         )}
                       </div>
@@ -139,6 +140,53 @@ export default function AdminNursesPage() {
               )}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Card List View */}
+        <div className="md:hidden flex flex-col divide-y divide-border">
+          {loading ? (
+             Array.from({ length: 5 }).map((_, i) => (
+               <div key={i} className="p-4"><div className="w-full h-24 bg-muted/50 rounded-2xl animate-pulse" /></div>
+             ))
+          ) : nurses.length === 0 ? (
+            <div className="px-4 py-12 text-center text-sm text-muted-foreground">No nurses found</div>
+          ) : (
+            nurses.map((nurse) => (
+              <motion.div key={nurse.publicId} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="p-4 flex flex-col gap-3">
+                <div className="flex justify-between items-start gap-2">
+                  <div>
+                    <h3 className="font-semibold text-foreground">{nurse.user.fullName}</h3>
+                    <p className="text-sm text-muted-foreground">{nurse.user.email}</p>
+                  </div>
+                  <span className={`text-[10px] px-2 py-1 rounded-full font-semibold uppercase tracking-wider ${statusColors[nurse.verificationStatus] || ""}`}>
+                    {nurse.verificationStatus}
+                  </span>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground bg-muted/30 p-3 rounded-xl">
+                  <div>
+                    <span className="block text-xs uppercase text-muted-foreground/70 mb-0.5">Phone</span>
+                    <span className="font-medium text-foreground">{nurse.user.phone || "—"}</span>
+                  </div>
+                  <div>
+                    <span className="block text-xs uppercase text-muted-foreground/70 mb-0.5">Experience</span>
+                    <span className="font-medium text-foreground">{nurse.experience || "—"}</span>
+                  </div>
+                </div>
+
+                {nurse.verificationStatus === "PENDING" && (
+                  <div className="flex items-center gap-2 mt-2">
+                    <button onClick={() => handleAction(nurse.publicId, "approve")} className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-success/10 text-success font-medium active:scale-95 transition-all">
+                      <CheckCircle className="w-4 h-4" /> Approve
+                    </button>
+                    <button onClick={() => handleAction(nurse.publicId, "reject")} className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-destructive/10 text-destructive font-medium active:scale-95 transition-all">
+                      <XCircle className="w-4 h-4" /> Reject
+                    </button>
+                  </div>
+                )}
+              </motion.div>
+            ))
+          )}
         </div>
 
         {/* Pagination */}
