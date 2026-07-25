@@ -67,6 +67,13 @@ jobs:
           name: web-build-out-ios
           path: out
 
+      - name: Symlink Node for Xcode
+        run: sudo ln -s $(which node) /usr/local/bin/node || true
+
+      - name: Update CocoaPods Repo
+        run: pod repo update || true
+        working-directory: ./ios/App
+
       - name: Sync Capacitor iOS
         run: npx cap sync ios
 
