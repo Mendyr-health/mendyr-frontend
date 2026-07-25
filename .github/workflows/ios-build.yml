@@ -1,11 +1,9 @@
-name: Build Mobile Apps (Capacitor)
+name: Build iOS App (Capacitor)
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
   workflow_dispatch: # Allows manual triggering from the GitHub Actions tab
+  schedule:
+    - cron: '0 5 * * *' # Runs at 5:00 AM UTC every day
 
 jobs:
   build-web:
@@ -42,56 +40,9 @@ jobs:
       - name: Upload Web Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: web-build-out
+          name: web-build-out-ios
           path: out
           retention-days: 1
-
-  build-android:
-    name: Build Android APK
-    runs-on: ubuntu-latest
-    needs: build-web
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
-
-      - name: Setup Java JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: '21'
-          cache: 'gradle'
-
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install NPM Dependencies
-        run: npm ci
-
-      - name: Download Web Build Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: web-build-out
-          path: out
-
-      - name: Sync Capacitor Android
-        run: npx cap sync android
-
-      - name: Build Android Debug APK
-        working-directory: ./android
-        run: ./gradlew assembleDebug
-
-      - name: Upload Android APK Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: mendyr-android-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
-          retention-days: 7
 
   build-ios:
     name: Build iOS App
@@ -113,7 +64,7 @@ jobs:
       - name: Download Web Build Artifact
         uses: actions/download-artifact@v4
         with:
-          name: web-build-out
+          name: web-build-out-ios
           path: out
 
       - name: Sync Capacitor iOS
