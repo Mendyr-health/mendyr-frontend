@@ -12,7 +12,9 @@
   },
   "dependencies": {
     "@capacitor/android": "^8.4.2",
+    "@capacitor/app": "^8.1.1",
     "@capacitor/core": "^8.4.2",
+    "@capacitor/dialog": "^8.0.1",
     "@capacitor/ios": "^8.4.2",
     "@hookform/resolvers": "^5.4.0",
     "@next/third-parties": "^16",

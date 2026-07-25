@@ -91,6 +91,7 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: hsl(var(--background));
+  overscroll-behavior-y: none;
 }
 
 body {
@@ -104,6 +105,7 @@ body {
   color: hsl(var(--foreground));
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
   min-height: 100vh;
+  overscroll-behavior-y: none;
 }
 
 /* ─── Typography ──────────────────────────────── */

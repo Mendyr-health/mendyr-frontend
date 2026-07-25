@@ -56,6 +56,7 @@ export const metadata: Metadata = {
 
 import { StoreProvider } from "@/store/StoreProvider";
 import { I18nProvider } from "@/components/I18nProvider";
+import { CapacitorAppListener } from "@/components/CapacitorAppListener";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
@@ -71,6 +72,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
+        <CapacitorAppListener />
         <I18nProvider>
           <StoreProvider>{children}</StoreProvider>
         </I18nProvider>

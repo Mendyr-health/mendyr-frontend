@@ -1,8 +1,13 @@
 "use client";
-import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { useAuth } from "@/hooks/use-auth";
 import { ADMIN_NAV_LINKS, SUPER_ADMIN_NAV_LINKS, NURSE_NAV_LINKS, PATIENT_NAV_LINKS } from "@/lib/constants";
 import { usePathname } from "next/navigation";
+import { usePlatform } from "@/hooks/usePlatform";
+import dynamic from "next/dynamic";
+
+// Dynamically load layouts so we don't send mobile layout code to web users and vice-versa
+const WebDashboardLayout = dynamic(() => import("@/components/web/layout/WebDashboardLayout"));
+const MobileDashboardLayout = dynamic(() => import("@/components/mobile/layout/MobileDashboardLayout"));
 
 function getNavLinksForRole(role: string) {
   switch (role) {
@@ -17,6 +22,7 @@ function getNavLinksForRole(role: string) {
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, loading, logout } = useAuth();
   const pathname = usePathname();
+  const { isMobile } = usePlatform();
 
   if (loading) {
     return (
@@ -37,20 +43,29 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   const role = user?.role || roleFromPath;
   const navLinks = getNavLinksForRole(role);
+  const userName = user?.fullName || "User";
+
+  if (isMobile) {
+    return (
+      <MobileDashboardLayout 
+        navLinks={navLinks} 
+        role={role} 
+        userName={userName} 
+        onLogout={logout}
+      >
+        {children}
+      </MobileDashboardLayout>
+    );
+  }
 
   return (
-    <div className="min-h-screen">
-      <DashboardSidebar
-        navLinks={navLinks}
-        role={role}
-        userName={user?.fullName || "User"}
-        onLogout={logout}
-      />
-      <main className="lg:pl-64 min-h-screen">
-        <div className="p-6 lg:p-8 max-w-7xl mx-auto">
-          {children}
-        </div>
-      </main>
-    </div>
+    <WebDashboardLayout 
+      navLinks={navLinks} 
+      role={role} 
+      userName={userName} 
+      onLogout={logout}
+    >
+      {children}
+    </WebDashboardLayout>
   );
 }
