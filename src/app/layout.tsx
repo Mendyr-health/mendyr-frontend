@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const inter = Inter({
@@ -76,6 +77,7 @@ export default function RootLayout({
         <I18nProvider>
           <StoreProvider>{children}</StoreProvider>
         </I18nProvider>
+        <Toaster position="top-right" richColors theme="dark" />
       </body>
       {GA_ID && GA_ID !== "G-XXXXXXXXXX" && <GoogleAnalytics gaId={GA_ID} />}
     </html>

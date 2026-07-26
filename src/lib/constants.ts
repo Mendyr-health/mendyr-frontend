@@ -126,10 +126,13 @@ export const SUPER_ADMIN_NAV_LINKS = [
 
 export const NURSE_NAV_LINKS = [
   { label: "Dashboard", href: "/nurse", icon: "LayoutDashboard" },
-  { label: "Profile", href: "/nurse/profile", icon: "User" },
+  { label: "Appointments", href: "/nurse/appointments", icon: "Calendar" },
+  { label: "Messages", href: "/nurse/messages", icon: "MessageSquare" },
+  { label: "Availability", href: "/nurse/availability", icon: "Clock" },
+  { label: "Earnings", href: "/nurse/earnings", icon: "DollarSign" },
   { label: "Documents", href: "/nurse/documents", icon: "FileText" },
   { label: "Status", href: "/nurse/status", icon: "CheckCircle" },
-  { label: "Availability", href: "/nurse/availability", icon: "Calendar" },
+  { label: "Profile", href: "/nurse/profile", icon: "User" },
   { label: "Settings", href: "/nurse/settings", icon: "Settings" },
 ] as const;
 

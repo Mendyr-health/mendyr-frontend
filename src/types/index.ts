@@ -223,3 +223,80 @@ export interface PermissionPublic {
   action: string;
   description: string | null;
 }
+
+// ─── Nurse Appointments & Clinical Care ─────
+
+export type AppointmentStatus =
+  | "PENDING_ACCEPTANCE"
+  | "ACCEPTED"
+  | "REJECTED"
+  | "IN_PROGRESS"
+  | "COMPLETED"
+  | "CANCELLED";
+
+export interface AppointmentPublic {
+  publicId: string;
+  patientName: string;
+  patientAge?: number;
+  patientGender?: string;
+  patientAvatar?: string | null;
+  patientPhone?: string;
+  serviceName: string;
+  serviceSlug: string;
+  date: string; // ISO date or formatted string
+  timeSlot: string; // e.g. "09:00 AM - 01:00 PM"
+  durationHours: number;
+  location: {
+    address: string;
+    city: string;
+    state: string;
+    distanceKm?: number;
+  };
+  payoutAmount: number;
+  status: AppointmentStatus;
+  specialInstructions?: string;
+  medicalConditions?: string[];
+  rejectionReason?: string;
+  checkInTime?: string;
+  checkOutTime?: string;
+  careNotes?: CareNotePublic[];
+  createdAt: string;
+}
+
+export interface CareNotePublic {
+  id: string;
+  timestamp: string;
+  vitals?: {
+    bloodPressure?: string;
+    heartRate?: string;
+    temperature?: string;
+    oxygenSaturation?: string;
+  };
+  medicationsAdministered?: string[];
+  notes: string;
+  authorName: string;
+}
+
+// ─── Nurse Earnings & Payouts ───────────────
+
+export interface EarningTransactionPublic {
+  id: string;
+  appointmentId: string;
+  patientName: string;
+  serviceName: string;
+  date: string;
+  amount: number;
+  status: "PAID" | "PROCESSING" | "PENDING";
+  paymentMethod?: string;
+}
+
+export interface NurseEarningsSummary {
+  todayEarnings: number;
+  weekEarnings: number;
+  monthEarnings: number;
+  totalEarnings: number;
+  pendingPayout: number;
+  completedVisitsCount: number;
+  transactions: EarningTransactionPublic[];
+}
+
