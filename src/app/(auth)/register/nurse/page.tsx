@@ -54,6 +54,12 @@ type DocType = "aadhaar" | "certificate" | "photo";
 const STEPS = ["Personal", "Professional", "Documents", "Review"];
 const DOCUMENT_TYPES: DocType[] = ["aadhaar", "certificate", "photo"];
 
+const DEFAULT_NURSE_DOB = new Date(1995, 0, 1);
+const OLDEST_NURSE_DOB = new Date();
+OLDEST_NURSE_DOB.setFullYear(OLDEST_NURSE_DOB.getFullYear() - 70);
+const YOUNGEST_NURSE_DOB = new Date();
+YOUNGEST_NURSE_DOB.setFullYear(YOUNGEST_NURSE_DOB.getFullYear() - 18);
+
 export default function NurseRegisterPage() {
   const [step, setStep] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
@@ -185,9 +191,6 @@ export default function NurseRegisterPage() {
       </motion.div>
     );
   }
-
-  const oldestAllowedBirthDate = new Date();
-  oldestAllowedBirthDate.setFullYear(oldestAllowedBirthDate.getFullYear() - 70);
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
@@ -363,8 +366,13 @@ export default function NurseRegisterPage() {
                           <Calendar
                             mode="single"
                             selected={field.value}
-                            onSelect={field.onChange}
-                            disabled={(date) => date > new Date() || date < oldestAllowedBirthDate}
+                            onSelect={(date) => field.onChange(date)}
+                            disabled={(date) => date > YOUNGEST_NURSE_DOB || date < OLDEST_NURSE_DOB}
+                            captionLayout="dropdown"
+                            startMonth={OLDEST_NURSE_DOB}
+                            endMonth={YOUNGEST_NURSE_DOB}
+                            reverseYears={true}
+                            defaultMonth={field.value || DEFAULT_NURSE_DOB}
                           />
                         </PopoverContent>
                       </Popover>

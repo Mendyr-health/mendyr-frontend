@@ -41,6 +41,10 @@ type PatientFormValues = z.infer<typeof patientRegistrationFormSchema>;
 
 const STEPS = ["Personal Info", "Address", "Review"];
 
+const DEFAULT_PATIENT_DOB = new Date(1990, 0, 1);
+const OLDEST_PATIENT_DOB = new Date(1900, 0, 1);
+const TODAY_DATE = new Date();
+
 export default function PatientRegisterPage() {
   const [step, setStep] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
@@ -276,8 +280,13 @@ export default function PatientRegisterPage() {
                         <Calendar
                           mode="single"
                           selected={field.value}
-                          onSelect={field.onChange}
-                          disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                          onSelect={(date) => field.onChange(date)}
+                          disabled={(date) => date > TODAY_DATE || date < OLDEST_PATIENT_DOB}
+                          captionLayout="dropdown"
+                          startMonth={OLDEST_PATIENT_DOB}
+                          endMonth={TODAY_DATE}
+                          reverseYears={true}
+                          defaultMonth={field.value || DEFAULT_PATIENT_DOB}
                         />
                       </PopoverContent>
                     </Popover>
