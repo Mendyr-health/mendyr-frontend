@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isEligibleDateOfBirth } from "@/lib/date-of-birth";
 
 // ── Common ───────────────────────────────────────
 
@@ -31,20 +32,16 @@ const dateOfBirthSchema = z
   .date({ required_error: "Date of birth is required" })
   .max(new Date(), "Date of birth cannot be in the future");
 
-const nurseDateOfBirthSchema = dateOfBirthSchema.refine(
-  (date) => {
-    const age = (Date.now() - date.getTime()) / (365.25 * 24 * 60 * 60 * 1000);
-    return age >= 18 && age <= 70;
-  },
-  { message: "Nurse must be between 18 and 70 years old" }
-);
+const eligibleDateOfBirthSchema = dateOfBirthSchema.refine(isEligibleDateOfBirth, {
+  message: "You must be between 18 and 55 years old",
+});
 
 export const patientRegistrationFormSchema = z.object({
   fullName: nameSchema,
   email: emailSchema,
   phone: z.string().min(10, "Invalid phone number").max(15, "Invalid phone number"),
   password: passwordSchema,
-  dob: dateOfBirthSchema,
+  dob: eligibleDateOfBirthSchema,
   address: z.string().min(5, "Address is required").max(500),
   city: z.string().min(2, "City is required").max(100),
   state: z.string().min(2, "State is required").max(100),
@@ -56,7 +53,7 @@ export const nurseRegistrationFormSchema = z.object({
   phone: z.string().min(10, "Invalid phone number").max(15, "Invalid phone number"),
   password: passwordSchema,
   gender: z.enum(["MALE", "FEMALE", "OTHER", "PREFER_NOT_TO_SAY"]),
-  dateOfBirth: nurseDateOfBirthSchema,
+  dateOfBirth: eligibleDateOfBirthSchema,
   address: z.string().min(5, "Address is required").max(500),
   city: z.string().min(2, "City is required").max(100),
   state: z.string().min(2, "State is required").max(100),
@@ -85,10 +82,9 @@ export const registerNurseSchema = z.object({
   dateOfBirth: z.string().refine(
     (val) => {
       const date = new Date(val);
-      const age = (Date.now() - date.getTime()) / (365.25 * 24 * 60 * 60 * 1000);
-      return age >= 18 && age <= 70;
+      return isEligibleDateOfBirth(date);
     },
-    { message: "Nurse must be between 18 and 70 years old" }
+    { message: "You must be between 18 and 55 years old" }
   ),
   address: z.string().min(5).max(500),
   city: z.string().min(2).max(100).optional(),
