@@ -23,6 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
 
 import { patientRegistrationFormSchema } from "@/lib/validators";
+import { getDateOfBirthRange } from "@/lib/date-of-birth";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -47,6 +48,7 @@ export default function PatientRegisterPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const { earliestDate, latestDate } = getDateOfBirthRange();
 
   const form = useForm<PatientFormValues>({
     resolver: zodResolver(patientRegistrationFormSchema),
@@ -275,9 +277,13 @@ export default function PatientRegisterPage() {
                       <PopoverContent className="w-auto border border-border/80 bg-card/98 p-0 shadow-[0_18px_40px_rgba(15,23,42,0.1)] backdrop-blur-md" align="start">
                         <Calendar
                           mode="single"
+                          captionLayout="dropdown"
                           selected={field.value}
                           onSelect={field.onChange}
-                          disabled={(date) => date > new Date() || date < new Date("1900-01-01")}
+                          defaultMonth={latestDate}
+                          startMonth={earliestDate}
+                          endMonth={latestDate}
+                          disabled={(date) => date < earliestDate || date > latestDate}
                         />
                       </PopoverContent>
                     </Popover>

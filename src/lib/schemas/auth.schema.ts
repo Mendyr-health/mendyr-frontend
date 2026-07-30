@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import { isEligibleDateOfBirth } from "@/lib/date-of-birth";
 
 // ── Common field schemas ─────────────────────────
 
@@ -85,11 +86,10 @@ export const nurseRegisterStep1Schema = yup.object({
   dateOfBirth: yup
     .string()
     .required("Date of birth is required")
-    .test("age-range", "Nurse must be between 18 and 70 years old", (val) => {
+    .test("age-range", "You must be between 18 and 55 years old", (val) => {
       if (!val) return false;
       const date = new Date(val);
-      const age = (Date.now() - date.getTime()) / (365.25 * 24 * 60 * 60 * 1000);
-      return age >= 18 && age <= 70;
+      return isEligibleDateOfBirth(date);
     }),
 });
 

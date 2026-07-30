@@ -25,6 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
 
 import { nurseRegistrationFormSchema } from "@/lib/validators";
+import { getDateOfBirthRange } from "@/lib/date-of-birth";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -186,8 +187,7 @@ export default function NurseRegisterPage() {
     );
   }
 
-  const oldestAllowedBirthDate = new Date();
-  oldestAllowedBirthDate.setFullYear(oldestAllowedBirthDate.getFullYear() - 70);
+  const { earliestDate, latestDate } = getDateOfBirthRange();
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
@@ -362,9 +362,13 @@ export default function NurseRegisterPage() {
                         <PopoverContent className="w-auto border border-white/40 bg-background/95 p-0 shadow-xl backdrop-blur-md" align="start">
                           <Calendar
                             mode="single"
+                            captionLayout="dropdown"
                             selected={field.value}
                             onSelect={field.onChange}
-                            disabled={(date) => date > new Date() || date < oldestAllowedBirthDate}
+                            defaultMonth={latestDate}
+                            startMonth={earliestDate}
+                            endMonth={latestDate}
+                            disabled={(date) => date < earliestDate || date > latestDate}
                           />
                         </PopoverContent>
                       </Popover>
