@@ -1,0 +1,29 @@
+{
+  "name": "@mendyr/shared-ui",
+  "version": "0.1.0",
+  "private": true,
+  "main": "src/index.ts",
+  "dependencies": {
+    "@mendyr/shared-utils": "*",
+    "lucide-react": "^0.513.0",
+    "@radix-ui/react-accordion": "^1.0.0",
+    "@radix-ui/react-alert-dialog": "^1.0.0",
+    "@radix-ui/react-avatar": "^1.0.0",
+    "@radix-ui/react-checkbox": "^1.0.0",
+    "@radix-ui/react-dialog": "^1.0.0",
+    "@radix-ui/react-dropdown-menu": "^2.0.0",
+    "@radix-ui/react-label": "^2.0.0",
+    "@radix-ui/react-popover": "^1.0.0",
+    "@radix-ui/react-progress": "^1.0.0",
+    "@radix-ui/react-scroll-area": "^1.0.0",
+    "@radix-ui/react-select": "^2.0.0",
+    "@radix-ui/react-separator": "^1.0.0",
+    "@radix-ui/react-slot": "^1.0.0",
+    "@radix-ui/react-switch": "^1.0.0",
+    "@radix-ui/react-tabs": "^1.0.0",
+    "@radix-ui/react-toast": "^1.0.0",
+    "@radix-ui/react-tooltip": "^1.0.0",
+    "class-variance-authority": "^0.7.0",
+    "react-day-picker": "^10.0.1"
+  }
+}
