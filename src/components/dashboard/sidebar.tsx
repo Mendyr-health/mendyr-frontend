@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Heart, LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
-import * as LucideIcons from "lucide-react";
+import { NAV_ICONS } from "@/lib/nav-icons";
 
 interface NavLink {
   readonly label: string;
@@ -28,7 +28,7 @@ export function DashboardSidebar({
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const getIcon = (iconName: string) => {
-    const Icon = (LucideIcons as unknown as Record<string, React.ComponentType<{ className?: string }>>)[iconName];
+    const Icon = NAV_ICONS[iconName as keyof typeof NAV_ICONS];
     return Icon ? <Icon className="h-5 w-5" /> : null;
   };
 

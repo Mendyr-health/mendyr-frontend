@@ -4,8 +4,8 @@
 /* ─── Custom Theme Tokens ─────────────────────── */
 :root {
   /* Primary - Deep Blue Theme */
-  --primary: 237 96% 48%;
-  /* #0511F2 */
+  --primary: 217 85% 48%;
+  /* #1262E2 */
   --primary-foreground: 0 0% 100%;
   --primary-light: 208 87% 67%;
   /* #63B0F2 */
@@ -39,7 +39,7 @@
   --border: 214 32% 91%;
   /* #E2E8F0 */
   --input: 214 32% 91%;
-  --ring: 237 96% 48%;
+  --ring: 217 85% 48%;
 
   /* Semantic */
   --destructive: 0 84% 60%;
@@ -67,7 +67,7 @@
 }
 
 @theme {
-  --color-primary: hsl(237 96% 48%);
+  --color-primary: hsl(217 85% 48%);
   --color-primary-light: hsl(208 87% 67%);
   --color-primary-dark: hsl(220 85% 40%);
   --color-accent: hsl(214 71% 44%);
