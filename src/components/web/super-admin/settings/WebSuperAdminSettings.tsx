@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Settings, Save, Loader2, CheckCircle } from "lucide-react";
+import { apiFetch } from "@/lib/api-client";
 
 export default function WebSuperAdminSettings() {
   const [saved, setSaved] = useState(false);
@@ -21,7 +22,7 @@ export default function WebSuperAdminSettings() {
   const handleSave = async () => {
     setLoading(true);
     try {
-      await fetch("/api/v1/admin/settings", {
+      await apiFetch("/api/v1/admin/settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(settings),

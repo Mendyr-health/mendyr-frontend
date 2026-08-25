@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
+import { apiFetch } from "@/lib/api-client";
 
 export interface AuditEntry {
   id: string;
@@ -24,7 +25,7 @@ export function useAuditLogs() {
   const fetchLogs = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/v1/admin/audit-logs?q=${debouncedQuery}&page=${page}&limit=30`);
+      const res = await apiFetch(`/api/v1/admin/audit-logs?q=${debouncedQuery}&page=${page}&limit=30`);
       const data = await res.json();
       if (data.success) { setLogs(data.data || []); setTotalPages(data.meta?.totalPages || 1); }
     } catch {/* */} finally { setLoading(false); }

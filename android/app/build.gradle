@@ -4,7 +4,7 @@ android {
     namespace "com.mendyr.app"
     compileSdk rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.mendyr.app"
+        applicationId "com.mendyr.patient"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

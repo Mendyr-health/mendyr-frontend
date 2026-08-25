@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { NAV_ICONS } from "@/lib/nav-icons";
+import { hapticTap } from "@/lib/haptics";
 
 interface NavLink {
   readonly label: string;
@@ -42,6 +43,7 @@ export function BottomNavigation({ navLinks, role }: BottomNavigationProps) {
             <Link
               key={link.href}
               href={link.href}
+              onClick={() => hapticTap()}
               className={cn(
                 "flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors",
                 active ? "text-primary" : "text-muted-foreground hover:text-foreground"

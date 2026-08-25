@@ -1,8 +1,10 @@
 "use client";
+import { useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { ADMIN_NAV_LINKS, SUPER_ADMIN_NAV_LINKS, NURSE_NAV_LINKS, PATIENT_NAV_LINKS } from "@/lib/constants";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { usePlatform } from "@/hooks/usePlatform";
+import { initPushNotifications } from "@/lib/push-notifications";
 import dynamic from "next/dynamic";
 
 // Dynamically load layouts so we don't send mobile layout code to web users and vice-versa
@@ -22,7 +24,13 @@ function getNavLinksForRole(role: string) {
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, loading, logout } = useAuth();
   const pathname = usePathname();
+  const router = useRouter();
   const { isMobile } = usePlatform();
+
+  useEffect(() => {
+    if (!user) return;
+    initPushNotifications((path) => router.push(path)).catch(() => {});
+  }, [user, router]);
 
   if (loading) {
     return (

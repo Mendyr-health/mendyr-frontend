@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { apiFetch } from "@/lib/api-client";
 
 export interface ServiceEntry {
   publicId: string;
@@ -25,7 +26,7 @@ export function useServices() {
     const params = new URLSearchParams({ entity: "services", page: String(page), limit: "20", sortBy: "name", sortOrder: "asc" });
     if (debouncedQuery) params.set("q", debouncedQuery);
     try {
-      const res = await fetch(`/api/v1/search?${params}`);
+      const res = await apiFetch(`/api/v1/search?${params}`);
       const data = await res.json();
       if (data.success) { 
         setServices(data.data || []); 

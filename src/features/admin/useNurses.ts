@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
+import { apiFetch } from "@/lib/api-client";
 
 export interface NurseEntry {
   publicId: string;
@@ -36,7 +37,7 @@ export function useNurses() {
     if (statusFilter) params.set("status", statusFilter);
 
     try {
-      const res = await fetch(`/api/v1/search?${params}`);
+      const res = await apiFetch(`/api/v1/search?${params}`);
       const data = await res.json();
       if (data.success) {
         setNurses(data.data || []);
@@ -53,7 +54,7 @@ export function useNurses() {
 
   const handleAction = async (publicId: string, action: "approve" | "reject") => {
     try {
-      await fetch(`/api/v1/admin/nurses/${publicId}/${action}`, { method: "POST" });
+      await apiFetch(`/api/v1/admin/nurses/${publicId}/${action}`, { method: "POST" });
       fetchNurses();
     } catch {
       // Ignore
