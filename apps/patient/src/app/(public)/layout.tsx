@@ -2,7 +2,6 @@
 
 import { usePathname } from "next/navigation";
 import { PublicHeader, PublicFooter } from "@/components/layout/public-layout";
-import { usePlatform } from "@mendyr/shared-utils";
 
 export default function PublicLayout({
   children,
@@ -10,12 +9,10 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { isCapacitor } = usePlatform();
-  // The native app's home screen is a minimal branded launch point (see
-  // MinimalHome) — the marketing header/footer chrome would defeat the
-  // point of it. Other public pages (services, about, contact) still get
-  // the normal chrome even inside the app, since they're useful there too.
-  const isMinimalNativeHome = isCapacitor && pathname === "/";
+  // The home screen is a minimal branded launch point (see
+  // MinimalHome). Other public pages (services, about, contact) still get
+  // the normal chrome, since they're useful there too.
+  const isMinimalNativeHome = pathname === "/";
 
   if (isMinimalNativeHome) {
     return <>{children}</>;
