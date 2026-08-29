@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@source "../";
+@import 'tailwindcss';
+@source '../';
 
 /* ─── Custom Theme Tokens ─────────────────────── */
 :root {
@@ -90,10 +90,20 @@ body {
     linear-gradient(to right, rgba(148, 163, 184, 0.14) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(148, 163, 184, 0.14) 1px, transparent 1px),
     linear-gradient(180deg, hsl(0 0% 100%), hsl(0 0% 98%));
-  background-size: 48px 48px, 48px 48px, 100% 100%;
-  background-position: 0 0, 0 0, 0 0;
+  background-size:
+    48px 48px,
+    48px 48px,
+    100% 100%;
+  background-position:
+    0 0,
+    0 0,
+    0 0;
   color: hsl(var(--foreground));
-  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  font-family:
+    var(--font-inter),
+    system-ui,
+    -apple-system,
+    sans-serif;
   min-height: 100vh;
   overscroll-behavior-y: none;
 }
@@ -178,7 +188,8 @@ h6 {
 }
 
 .glow-primary {
-  box-shadow: 0 0 30px hsl(var(--primary) / 0.15),
+  box-shadow:
+    0 0 30px hsl(var(--primary) / 0.15),
     0 0 60px hsl(var(--primary) / 0.08);
 }
 
@@ -188,7 +199,6 @@ h6 {
 
 /* ─── Animations ──────────────────────────────── */
 @keyframes float {
-
   0%,
   100% {
     transform: translateY(0);
@@ -200,7 +210,6 @@ h6 {
 }
 
 @keyframes pulse-glow {
-
   0%,
   100% {
     opacity: 0.4;
@@ -236,10 +245,12 @@ h6 {
 
 /* ─── Skeleton Loading ────────────────────────── */
 .skeleton {
-  background: linear-gradient(90deg,
-      hsl(var(--muted)) 25%,
-      hsl(var(--muted) / 0.5) 50%,
-      hsl(var(--muted)) 75%);
+  background: linear-gradient(
+    90deg,
+    hsl(var(--muted)) 25%,
+    hsl(var(--muted) / 0.5) 50%,
+    hsl(var(--muted)) 75%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.5s ease-in-out infinite;
   border-radius: var(--radius);

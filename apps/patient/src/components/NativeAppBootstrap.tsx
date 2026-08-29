@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { App } from "@capacitor/app";
-import { Capacitor } from "@capacitor/core";
-import { Dialog } from "@capacitor/dialog";
-import { StatusBar, Style } from "@capacitor/status-bar";
-import { SplashScreen } from "@capacitor/splash-screen";
-import { Keyboard } from "@capacitor/keyboard";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { App } from '@capacitor/app';
+import { Capacitor } from '@capacitor/core';
+import { Dialog } from '@capacitor/dialog';
+import { StatusBar, Style } from '@capacitor/status-bar';
+import { SplashScreen } from '@capacitor/splash-screen';
+import { Keyboard } from '@capacitor/keyboard';
 
 // Mounted once at the root layout. Wires up everything that makes the
 // Capacitor build behave like a native app instead of a website in a frame:
@@ -19,11 +19,11 @@ export function NativeAppBootstrap() {
   useEffect(() => {
     if (!Capacitor.isNativePlatform()) return;
 
-    document.documentElement.classList.add("is-native-app");
+    document.documentElement.classList.add('is-native-app');
 
     // App background is light, so status bar text/icons must be dark to stay legible.
     StatusBar.setStyle({ style: Style.Light }).catch(() => {});
-    StatusBar.setBackgroundColor({ color: "#F7F9FC" }).catch(() => {});
+    StatusBar.setBackgroundColor({ color: '#F7F9FC' }).catch(() => {});
 
     // The splash screen is set to launchAutoHide: false in capacitor.config.ts
     // so it stays up until React has actually painted the first frame,
@@ -31,15 +31,15 @@ export function NativeAppBootstrap() {
     const hideSplash = () => SplashScreen.hide().catch(() => {});
     const raf = requestAnimationFrame(hideSplash);
 
-    const backButtonListener = App.addListener("backButton", ({ canGoBack }) => {
+    const backButtonListener = App.addListener('backButton', ({ canGoBack }) => {
       const currentPath = window.location.pathname;
-      const rootPages = ["/", "/login", "/patient", "/nurse"];
+      const rootPages = ['/', '/login', '/patient', '/nurse', '/admin', '/super-admin'];
       const isRootPage = rootPages.includes(currentPath);
 
       if (isRootPage) {
         Dialog.confirm({
-          title: "Exit App",
-          message: "Are you sure you want to exit?",
+          title: 'Exit App',
+          message: 'Are you sure you want to exit?',
         }).then(({ value }) => {
           if (value) {
             App.exitApp();
@@ -56,11 +56,11 @@ export function NativeAppBootstrap() {
       }
     });
 
-    const keyboardShowListener = Keyboard.addListener("keyboardWillShow", () => {
-      document.documentElement.classList.add("keyboard-open");
+    const keyboardShowListener = Keyboard.addListener('keyboardWillShow', () => {
+      document.documentElement.classList.add('keyboard-open');
     });
-    const keyboardHideListener = Keyboard.addListener("keyboardWillHide", () => {
-      document.documentElement.classList.remove("keyboard-open");
+    const keyboardHideListener = Keyboard.addListener('keyboardWillHide', () => {
+      document.documentElement.classList.remove('keyboard-open');
     });
 
     return () => {

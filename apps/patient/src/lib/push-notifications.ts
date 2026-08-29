@@ -1,6 +1,6 @@
-import { Capacitor } from "@capacitor/core";
-import { PushNotifications } from "@capacitor/push-notifications";
-import { apiFetch } from "@/lib/api-client";
+import { Capacitor } from '@capacitor/core';
+import { PushNotifications } from '@capacitor/push-notifications';
+import { apiFetch } from '@/lib/api-client';
 
 // Push delivery: Capacitor's PushNotifications plugin gets a raw platform token — FCM on
 // Android, and (once a matching Firebase project has APNs configured) FCM-wrapped-APNs on
@@ -15,9 +15,9 @@ import { apiFetch } from "@/lib/api-client";
 
 async function registerDeviceToken(token: string): Promise<void> {
   const platform = Capacitor.getPlatform(); // "ios" | "android"
-  await apiFetch("/api/v1/users/me/devices", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+  await apiFetch('/api/v1/users/me/devices', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ platform, pushToken: token }),
   });
 }
@@ -28,13 +28,13 @@ async function registerDeviceToken(token: string): Promise<void> {
  * dashboard root. */
 function deepLinkForNotification(data: Record<string, string>): string | null {
   switch (data.template_key) {
-    case "offer_received":
-      return "/nurse/appointments";
-    case "booking_confirmed":
-    case "booking_status":
+    case 'offer_received':
+      return '/nurse/appointments';
+    case 'booking_confirmed':
+    case 'booking_status':
       // No dedicated per-booking patient appointments page yet — the dashboard surfaces
       // upcoming appointments inline, so that's the closest real screen to land on.
-      return "/patient";
+      return '/patient';
     default:
       return null;
   }
@@ -47,24 +47,24 @@ export async function initPushNotifications(onDeepLink: (path: string) => void):
   if (!Capacitor.isNativePlatform()) return;
 
   const permission = await PushNotifications.checkPermissions();
-  if (permission.receive !== "granted") {
+  if (permission.receive !== 'granted') {
     const requested = await PushNotifications.requestPermissions();
-    if (requested.receive !== "granted") return;
+    if (requested.receive !== 'granted') return;
   }
 
-  await PushNotifications.addListener("registration", (token) => {
+  await PushNotifications.addListener('registration', (token) => {
     registerDeviceToken(token.value).catch(() => {
       // Best-effort: a failed registration just means this device won't receive pushes
       // until the next app launch retries it — not worth surfacing to the user.
     });
   });
 
-  await PushNotifications.addListener("registrationError", () => {
+  await PushNotifications.addListener('registrationError', () => {
     // Firebase not configured yet, or the platform denied registration outright — see
     // docs/PUSH_NOTIFICATIONS.md for native-side setup. Nothing actionable for the user.
   });
 
-  await PushNotifications.addListener("pushNotificationActionPerformed", (action) => {
+  await PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
     const path = deepLinkForNotification(action.notification.data as Record<string, string>);
     if (path) onDeepLink(path);
   });

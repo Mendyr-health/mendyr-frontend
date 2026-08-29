@@ -1,6 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../index';
-import { AppointmentPublic, AppointmentStatus, CareNotePublic, EarningTransactionPublic } from '@/types';
+import {
+  AppointmentPublic,
+  AppointmentStatus,
+  CareNotePublic,
+  EarningTransactionPublic,
+} from '@/types';
 
 export interface NurseMessage {
   id: string;
@@ -62,7 +67,8 @@ const INITIAL_MOCK_APPOINTMENTS: AppointmentPublic[] = [
       distanceKm: 2.4,
     },
     payoutAmount: 1200,
-    specialInstructions: 'Patient had knee replacement 5 days ago. Needs sterile dressing change and vitals check.',
+    specialInstructions:
+      'Patient had knee replacement 5 days ago. Needs sterile dressing change and vitals check.',
   },
   {
     publicId: 'apt-102',
@@ -79,7 +85,8 @@ const INITIAL_MOCK_APPOINTMENTS: AppointmentPublic[] = [
       distanceKm: 4.1,
     },
     payoutAmount: 850,
-    specialInstructions: 'Administer IV iron infusion prescribed by Dr. Mehta. Check blood pressure before and after.',
+    specialInstructions:
+      'Administer IV iron infusion prescribed by Dr. Mehta. Check blood pressure before and after.',
   },
   {
     publicId: 'apt-103',
@@ -96,7 +103,8 @@ const INITIAL_MOCK_APPOINTMENTS: AppointmentPublic[] = [
       distanceKm: 6.8,
     },
     payoutAmount: 1600,
-    specialInstructions: 'Morning hygiene assistance, insulin injection, and physical mobility exercises.',
+    specialInstructions:
+      'Morning hygiene assistance, insulin injection, and physical mobility exercises.',
   },
   {
     publicId: 'apt-104',
@@ -120,7 +128,8 @@ const INITIAL_MOCK_APPOINTMENTS: AppointmentPublic[] = [
         id: 'note-1',
         timestamp: '06:00 PM',
         authorName: 'Nurse Keshav',
-        notes: 'Vitals stable: BP 128/82, HR 74 bpm. Completed limb mobility drills without discomfort.',
+        notes:
+          'Vitals stable: BP 128/82, HR 74 bpm. Completed limb mobility drills without discomfort.',
         vitals: { bloodPressure: '128/82', heartRate: 74, temperature: 98.4, oxygenLevel: 98 },
       },
     ],
@@ -276,13 +285,20 @@ export const nurseSlice = createSlice({
       const apt = state.appointments.find((a) => a.publicId === action.payload.id);
       if (apt) {
         apt.status = 'COMPLETED';
-        apt.checkOutTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        apt.checkOutTime = new Date().toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+        });
         apt.careNotes = [...(apt.careNotes || []), action.payload.note];
 
         // Automatically create a paid earning transaction in Redux store!
         const newTxn: EarningTransactionPublic = {
           id: `TXN-${Math.floor(10000 + Math.random() * 90000)}`,
-          date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+          date: new Date().toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+          }),
           amount: apt.payoutAmount,
           status: 'PAID',
           serviceName: apt.serviceName,
@@ -292,7 +308,10 @@ export const nurseSlice = createSlice({
         state.transactions.unshift(newTxn);
       }
     },
-    sendCareMessage: (state, action: PayloadAction<{ threadId: string; text: string; attachment?: any }>) => {
+    sendCareMessage: (
+      state,
+      action: PayloadAction<{ threadId: string; text: string; attachment?: any }>,
+    ) => {
       const thread = state.messageThreads.find((t) => t.id === action.payload.threadId);
       if (thread) {
         const newMsg: NurseMessage = {
@@ -310,7 +329,10 @@ export const nurseSlice = createSlice({
     toggleOnDutyStatus: (state) => {
       state.availability.onDutyNow = !state.availability.onDutyNow;
     },
-    updateAvailabilityDay: (state, action: PayloadAction<{ day: string; active: boolean; hours: string }>) => {
+    updateAvailabilityDay: (
+      state,
+      action: PayloadAction<{ day: string; active: boolean; hours: string }>,
+    ) => {
       const dayIdx = state.availability.days.findIndex((d) => d.day === action.payload.day);
       if (dayIdx !== -1) {
         state.availability.days[dayIdx] = action.payload;
@@ -334,10 +356,14 @@ export const {
 } = nurseSlice.actions;
 
 // Selectors
-export const selectNurseAppointments = (state: RootState) => state.nurse?.appointments || INITIAL_MOCK_APPOINTMENTS;
-export const selectNurseTransactions = (state: RootState) => state.nurse?.transactions || INITIAL_MOCK_TRANSACTIONS;
-export const selectNurseMessageThreads = (state: RootState) => state.nurse?.messageThreads || INITIAL_MOCK_THREADS;
-export const selectNurseAvailability = (state: RootState) => state.nurse?.availability || initialState.availability;
+export const selectNurseAppointments = (state: RootState) =>
+  state.nurse?.appointments || INITIAL_MOCK_APPOINTMENTS;
+export const selectNurseTransactions = (state: RootState) =>
+  state.nurse?.transactions || INITIAL_MOCK_TRANSACTIONS;
+export const selectNurseMessageThreads = (state: RootState) =>
+  state.nurse?.messageThreads || INITIAL_MOCK_THREADS;
+export const selectNurseAvailability = (state: RootState) =>
+  state.nurse?.availability || initialState.availability;
 export const selectNurseStatus = (state: RootState) => state.nurse?.status || 'APPROVED';
 
 export const selectNurseEarningsSummary = (state: RootState) => {
@@ -345,7 +371,9 @@ export const selectNurseEarningsSummary = (state: RootState) => {
   const transactions = state.nurse?.transactions || INITIAL_MOCK_TRANSACTIONS;
 
   const completedVisits = appointments.filter((a) => a.status === 'COMPLETED');
-  const confirmedOrActive = appointments.filter((a) => a.status === 'CONFIRMED' || a.status === 'IN_PROGRESS');
+  const confirmedOrActive = appointments.filter(
+    (a) => a.status === 'CONFIRMED' || a.status === 'IN_PROGRESS',
+  );
 
   const todayEarnings = completedVisits.reduce((sum, apt) => sum + apt.payoutAmount, 0);
   const weekEarnings = transactions.reduce((sum, tx) => sum + tx.amount, 0);

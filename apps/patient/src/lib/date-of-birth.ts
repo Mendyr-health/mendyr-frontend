@@ -1,4 +1,4 @@
-import { differenceInYears, startOfDay, subYears } from "date-fns";
+import { differenceInYears, startOfDay, subYears } from 'date-fns';
 
 export const MINIMUM_AGE = 18;
 export const MAXIMUM_AGE = 55;

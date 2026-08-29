@@ -1,8 +1,8 @@
-import { notFound } from "next/navigation";
-import type { Metadata } from "next";
-import Link from "next/link";
-import { CheckCircle, ArrowLeft, ArrowRight } from "lucide-react";
-import { HEALTHCARE_SERVICES } from "@mendyr/shared-utils";
+import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { CheckCircle, ArrowLeft, ArrowRight } from 'lucide-react';
+import { HEALTHCARE_SERVICES } from '@mendyr/shared-utils';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -15,7 +15,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const service = HEALTHCARE_SERVICES.find((s) => s.slug === slug);
-  if (!service) return { title: "Service Not Found" };
+  if (!service) return { title: 'Service Not Found' };
   return {
     title: service.name,
     description: service.shortDesc,
@@ -31,30 +31,30 @@ export default async function ServiceDetailPage({ params }: Props) {
 
   return (
     <div className="pt-24 pb-24">
-      <div className="max-w-4xl mx-auto px-6">
+      <div className="mx-auto max-w-4xl px-6">
         <Link
           href="/services"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-8"
+          className="text-muted-foreground hover:text-primary mb-8 inline-flex items-center gap-2 text-sm transition-colors"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="h-4 w-4" />
           Back to Services
         </Link>
 
         <div className="bg-glass rounded-2xl p-8 md:p-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground font-[family-name:var(--font-outfit)] mb-4">
+          <h1 className="text-foreground mb-4 font-[family-name:var(--font-outfit)] text-3xl font-bold md:text-4xl">
             {service.name}
           </h1>
-          <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+          <p className="text-muted-foreground mb-8 text-lg leading-relaxed">
             {service.description}
           </p>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-8">
+          <div className="mb-8 grid gap-8 md:grid-cols-2">
             <div>
-              <h2 className="text-xl font-semibold text-foreground mb-4">Features</h2>
+              <h2 className="text-foreground mb-4 text-xl font-semibold">Features</h2>
               <ul className="space-y-3">
                 {service.features.map((feature, idx) => (
                   <li key={idx} className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                    <CheckCircle className="text-primary mt-0.5 h-5 w-5 shrink-0" />
                     <span className="text-muted-foreground">{feature}</span>
                   </li>
                 ))}
@@ -62,17 +62,17 @@ export default async function ServiceDetailPage({ params }: Props) {
             </div>
 
             <div className="bg-sidebar rounded-xl p-6">
-              <h2 className="text-xl font-semibold text-foreground mb-2">Pricing</h2>
-              <p className="text-2xl font-bold text-gradient mb-4">{service.pricingRange}</p>
-              <p className="text-sm text-muted-foreground mb-6">
+              <h2 className="text-foreground mb-2 text-xl font-semibold">Pricing</h2>
+              <p className="text-gradient mb-4 text-2xl font-bold">{service.pricingRange}</p>
+              <p className="text-muted-foreground mb-6 text-sm">
                 Final pricing depends on service duration, complexity, and specific requirements.
               </p>
               <Link
                 href="/register/patient"
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gradient-primary text-white font-medium hover:opacity-90 transition-opacity"
+                className="bg-gradient-primary flex w-full items-center justify-center gap-2 rounded-xl py-3 font-medium text-white transition-opacity hover:opacity-90"
               >
                 Register to Get Started
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import { DashboardSidebar } from "@/components/dashboard/sidebar";
+import { DashboardSidebar } from '@/components/dashboard/sidebar';
 
 interface NavLink {
   readonly label: string;
@@ -14,19 +14,18 @@ interface WebDashboardLayoutProps {
   onLogout: () => void;
 }
 
-export default function WebDashboardLayout({ children, navLinks, role, userName, onLogout }: WebDashboardLayoutProps) {
+export default function WebDashboardLayout({
+  children,
+  navLinks,
+  role,
+  userName,
+  onLogout,
+}: WebDashboardLayoutProps) {
   return (
     <div className="min-h-[100svh]">
-      <DashboardSidebar
-        navLinks={navLinks}
-        role={role}
-        userName={userName}
-        onLogout={onLogout}
-      />
-      <main className="lg:pl-64 min-h-[100svh]">
-        <div className="p-6 lg:p-8 max-w-7xl mx-auto">
-          {children}
-        </div>
+      <DashboardSidebar navLinks={navLinks} role={role} userName={userName} onLogout={onLogout} />
+      <main className="min-h-[100svh] lg:pl-64">
+        <div className="mx-auto max-w-7xl p-6 lg:p-8">{children}</div>
       </main>
     </div>
   );

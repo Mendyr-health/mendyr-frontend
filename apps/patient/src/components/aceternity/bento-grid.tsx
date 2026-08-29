@@ -1,6 +1,6 @@
-"use client";
-import { cn } from "@mendyr/shared-utils";
-import React from "react";
+'use client';
+import { cn } from '@mendyr/shared-utils';
+import React from 'react';
 
 export function BentoGrid({
   className,
@@ -12,8 +12,8 @@ export function BentoGrid({
   return (
     <div
       className={cn(
-        "grid md:auto-rows-[18rem] grid-cols-1 md:grid-cols-3 gap-4 max-w-7xl mx-auto",
-        className
+        'mx-auto grid max-w-7xl grid-cols-1 gap-4 md:auto-rows-[18rem] md:grid-cols-3',
+        className,
       )}
     >
       {children}
@@ -37,19 +37,15 @@ export function BentoGridItem({
   return (
     <div
       className={cn(
-        "row-span-1 rounded-xl group/bento hover:shadow-xl transition duration-200 shadow-none p-4 bg-glass border border-border justify-between flex flex-col space-y-4",
-        className
+        'group/bento bg-glass border-border row-span-1 flex flex-col justify-between space-y-4 rounded-xl border p-4 shadow-none transition duration-200 hover:shadow-xl',
+        className,
       )}
     >
       {header}
-      <div className="group-hover/bento:translate-x-2 transition duration-200">
+      <div className="transition duration-200 group-hover/bento:translate-x-2">
         {icon}
-        <div className="font-outfit font-bold text-muted-foreground mb-2 mt-2">
-          {title}
-        </div>
-        <div className="text-sm text-muted-foreground">
-          {description}
-        </div>
+        <div className="font-outfit text-muted-foreground mt-2 mb-2 font-bold">{title}</div>
+        <div className="text-muted-foreground text-sm">{description}</div>
       </div>
     </div>
   );

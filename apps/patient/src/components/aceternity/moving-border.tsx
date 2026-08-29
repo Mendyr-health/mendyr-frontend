@@ -1,15 +1,15 @@
-"use client";
-import { cn } from "@mendyr/shared-utils";
-import { motion } from "framer-motion";
-import React, { useRef } from "react";
+'use client';
+import { cn } from '@mendyr/shared-utils';
+import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
 
 export function MovingBorder({
   children,
   duration = 3000,
   className,
   containerClassName,
-  borderRadius = "1.75rem",
-  as: Component = "button",
+  borderRadius = '1.75rem',
+  as: Component = 'button',
   ...otherProps
 }: {
   children: React.ReactNode;
@@ -23,8 +23,8 @@ export function MovingBorder({
   return (
     <Component
       className={cn(
-        "relative inline-flex h-12 overflow-hidden p-[2px] focus:outline-none",
-        containerClassName
+        'relative inline-flex h-12 overflow-hidden p-[2px] focus:outline-none',
+        containerClassName,
       )}
       style={{ borderRadius }}
       {...otherProps}
@@ -38,16 +38,20 @@ export function MovingBorder({
       />
       <span
         className={cn(
-          "inline-flex h-full w-full cursor-pointer items-center justify-center rounded-[calc(1.75rem-2px)] bg-background px-6 py-2 text-sm font-medium text-foreground backdrop-blur-3xl",
-          className
+          'bg-background text-foreground inline-flex h-full w-full cursor-pointer items-center justify-center rounded-[calc(1.75rem-2px)] px-6 py-2 text-sm font-medium backdrop-blur-3xl',
+          className,
         )}
       >
         {children}
       </span>
       <style jsx>{`
         @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
         }
       `}</style>
     </Component>

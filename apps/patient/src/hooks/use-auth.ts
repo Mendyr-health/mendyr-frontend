@@ -1,8 +1,8 @@
-"use client";
-import { useState, useEffect, useCallback } from "react";
-import type { UserPublic } from "@/types";
-import { apiFetch } from "@/lib/api-client";
-import { getMockSession, clearMockSession } from "@/lib/mock-session";
+'use client';
+import { useState, useEffect, useCallback } from 'react';
+import type { UserPublic } from '@/types';
+import { apiFetch } from '@/lib/api-client';
+import { getMockSession, clearMockSession } from '@/lib/mock-session';
 
 export function useAuth() {
   const [user, setUser] = useState<UserPublic | null>(null);
@@ -10,7 +10,7 @@ export function useAuth() {
 
   const fetchUser = useCallback(async () => {
     try {
-      const res = await apiFetch("/api/auth/me");
+      const res = await apiFetch('/api/auth/me');
       if (res.ok) {
         const data = await res.json();
         setUser(data.data);
@@ -34,11 +34,11 @@ export function useAuth() {
 
   const logout = useCallback(async () => {
     try {
-      await apiFetch("/api/auth/logout", { method: "POST" });
+      await apiFetch('/api/auth/logout', { method: 'POST' });
     } finally {
       clearMockSession();
       setUser(null);
-      window.location.href = "/login";
+      window.location.href = '/login';
     }
   }, []);
 
