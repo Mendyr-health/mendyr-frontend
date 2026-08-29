@@ -364,7 +364,7 @@ export default function NurseRegisterPage() {
                             mode="single"
                             captionLayout="dropdown"
                             selected={field.value}
-                            onSelect={field.onChange}
+                            onSelect={(date) => field.onChange(date)}
                             defaultMonth={latestDate}
                             startMonth={earliestDate}
                             endMonth={latestDate}
