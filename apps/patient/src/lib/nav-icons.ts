@@ -20,7 +20,7 @@ import {
   UserCheck,
   Users,
   Wrench,
-} from "lucide-react";
+} from 'lucide-react';
 
 /**
  * Icons referenced by name from the NAV_LINKS constants.

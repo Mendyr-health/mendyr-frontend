@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { apiFetch } from "@/lib/api-client";
+import { useState, useEffect, useCallback } from 'react';
+import { apiFetch } from '@/lib/api-client';
 
 export interface ContactEntry {
   publicId: string;
@@ -15,9 +15,9 @@ export interface ContactEntry {
 export function useContacts() {
   const [contacts, setContacts] = useState<ContactEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [query, setQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
+  const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedContact, setSelectedContact] = useState<ContactEntry | null>(null);
@@ -29,24 +29,32 @@ export function useContacts() {
 
   const fetchContacts = useCallback(async () => {
     setLoading(true);
-    const params = new URLSearchParams({ entity: "contacts", page: String(page), limit: "20", sortBy: "createdAt", sortOrder: "desc" });
-    if (debouncedQuery) params.set("q", debouncedQuery);
-    if (statusFilter) params.set("status", statusFilter);
+    const params = new URLSearchParams({
+      entity: 'contacts',
+      page: String(page),
+      limit: '20',
+      sortBy: 'createdAt',
+      sortOrder: 'desc',
+    });
+    if (debouncedQuery) params.set('q', debouncedQuery);
+    if (statusFilter) params.set('status', statusFilter);
     try {
       const res = await apiFetch(`/api/v1/search?${params}`);
       const data = await res.json();
-      if (data.success) { 
-        setContacts(data.data || []); 
-        setTotalPages(data.meta?.totalPages || 1); 
+      if (data.success) {
+        setContacts(data.data || []);
+        setTotalPages(data.meta?.totalPages || 1);
       }
     } catch {
       // Ignore
-    } finally { 
-      setLoading(false); 
+    } finally {
+      setLoading(false);
     }
   }, [debouncedQuery, statusFilter, page]);
 
-  useEffect(() => { fetchContacts(); }, [fetchContacts]);
+  useEffect(() => {
+    fetchContacts();
+  }, [fetchContacts]);
 
   return {
     contacts,
@@ -59,6 +67,6 @@ export function useContacts() {
     setPage,
     totalPages,
     selectedContact,
-    setSelectedContact
+    setSelectedContact,
   };
 }

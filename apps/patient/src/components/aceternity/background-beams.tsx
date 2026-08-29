@@ -1,6 +1,6 @@
-"use client";
-import { cn } from "@mendyr/shared-utils";
-import { useEffect, useRef } from "react";
+'use client';
+import { cn } from '@mendyr/shared-utils';
+import { useEffect, useRef } from 'react';
 
 export function BackgroundBeams({ className }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -8,7 +8,7 @@ export function BackgroundBeams({ className }: { className?: string }) {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     let animationId: number;
@@ -21,7 +21,7 @@ export function BackgroundBeams({ className }: { className?: string }) {
     };
 
     resize();
-    window.addEventListener("resize", resize);
+    window.addEventListener('resize', resize);
 
     const beams = Array.from({ length: 6 }, (_, i) => ({
       x: Math.random() * canvas.offsetWidth,
@@ -54,7 +54,14 @@ export function BackgroundBeams({ className }: { className?: string }) {
         const cp1y = canvas.offsetHeight * 0.33;
         const cp2x = x - Math.sin(time * 0.5 + beam.offset) * 50;
         const cp2y = canvas.offsetHeight * 0.66;
-        ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, x + Math.sin(time + beam.offset) * 30, canvas.offsetHeight);
+        ctx.bezierCurveTo(
+          cp1x,
+          cp1y,
+          cp2x,
+          cp2y,
+          x + Math.sin(time + beam.offset) * 30,
+          canvas.offsetHeight,
+        );
         ctx.stroke();
       }
 
@@ -65,15 +72,15 @@ export function BackgroundBeams({ className }: { className?: string }) {
 
     return () => {
       cancelAnimationFrame(animationId);
-      window.removeEventListener("resize", resize);
+      window.removeEventListener('resize', resize);
     };
   }, []);
 
   return (
     <canvas
       ref={canvasRef}
-      className={cn("pointer-events-none absolute inset-0 z-0", className)}
-      style={{ width: "100%", height: "100%" }}
+      className={cn('pointer-events-none absolute inset-0 z-0', className)}
+      style={{ width: '100%', height: '100%' }}
     />
   );
 }

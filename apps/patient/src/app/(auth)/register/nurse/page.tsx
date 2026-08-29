@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { motion } from "framer-motion";
-import { format } from "date-fns";
+import { useState } from 'react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { format } from 'date-fns';
 import {
   ArrowLeft,
   ArrowRight,
@@ -19,18 +19,18 @@ import {
   Phone,
   Upload,
   User,
-} from "lucide-react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import type { z } from "zod";
+} from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import type { z } from 'zod';
 
-import { nurseRegistrationFormSchema } from "@/lib/validators";
-import { getDateOfBirthRange } from "@/lib/date-of-birth";
-import { apiFetch } from "@/lib/api-client";
-import { cn } from "@mendyr/shared-utils";
-import { Input } from "@mendyr/shared-ui/src/ui/input";
-import { Textarea } from "@mendyr/shared-ui/src/ui/textarea";
-import { Button } from "@mendyr/shared-ui/src/ui/button";
+import { nurseRegistrationFormSchema } from '@/lib/validators';
+import { getDateOfBirthRange } from '@/lib/date-of-birth';
+import { apiFetch } from '@/lib/api-client';
+import { cn } from '@mendyr/shared-utils';
+import { Input } from '@mendyr/shared-ui/src/ui/input';
+import { Textarea } from '@mendyr/shared-ui/src/ui/textarea';
+import { Button } from '@mendyr/shared-ui/src/ui/button';
 import {
   Form,
   FormControl,
@@ -38,76 +38,76 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@mendyr/shared-ui/src/ui/form";
-import { Popover, PopoverContent, PopoverTrigger } from "@mendyr/shared-ui/src/ui/popover";
-import { Calendar } from "@mendyr/shared-ui/src/ui/calendar";
+} from '@mendyr/shared-ui/src/ui/form';
+import { Popover, PopoverContent, PopoverTrigger } from '@mendyr/shared-ui/src/ui/popover';
+import { Calendar } from '@mendyr/shared-ui/src/ui/calendar';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@mendyr/shared-ui/src/ui/select";
+} from '@mendyr/shared-ui/src/ui/select';
 
 type NurseFormValues = z.infer<typeof nurseRegistrationFormSchema>;
 
-type DocType = "aadhaar" | "certificate" | "photo";
+type DocType = 'aadhaar' | 'certificate' | 'photo';
 
-const STEPS = ["Personal", "Professional", "Documents", "Review"];
-const DOCUMENT_TYPES: DocType[] = ["aadhaar", "certificate", "photo"];
+const STEPS = ['Personal', 'Professional', 'Documents', 'Review'];
+const DOCUMENT_TYPES: DocType[] = ['aadhaar', 'certificate', 'photo'];
 
 export default function NurseRegisterPage() {
   const [step, setStep] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [files, setFiles] = useState<Partial<Record<DocType, File>>>({});
 
   const form = useForm<NurseFormValues>({
     resolver: zodResolver(nurseRegistrationFormSchema),
     defaultValues: {
-      fullName: "",
-      email: "",
-      phone: "",
-      password: "",
-      gender: "PREFER_NOT_TO_SAY",
+      fullName: '',
+      email: '',
+      phone: '',
+      password: '',
+      gender: 'PREFER_NOT_TO_SAY',
       dateOfBirth: undefined,
-      address: "",
-      city: "",
-      state: "",
-      experience: "",
-      qualifications: "",
-      certifications: "",
-      preferredContact: "email",
+      address: '',
+      city: '',
+      state: '',
+      experience: '',
+      qualifications: '',
+      certifications: '',
+      preferredContact: 'email',
     },
-    mode: "onTouched",
+    mode: 'onTouched',
   });
 
   const handleSubmit = async (values: NurseFormValues) => {
     setLoading(true);
-    setError("");
+    setError('');
 
     try {
-      const res = await apiFetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await apiFetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...values,
-          dateOfBirth: format(values.dateOfBirth, "yyyy-MM-dd"),
-          role: "NURSE",
+          dateOfBirth: format(values.dateOfBirth, 'yyyy-MM-dd'),
+          role: 'NURSE',
         }),
       });
       const data = await res.json();
 
       if (!data.success) {
-        setError(data.error?.message || "Registration failed");
+        setError(data.error?.message || 'Registration failed');
         return;
       }
 
       setSuccess(true);
     } catch {
-      setError("Something went wrong.");
+      setError('Something went wrong.');
     } finally {
       setLoading(false);
     }
@@ -116,12 +116,12 @@ export default function NurseRegisterPage() {
   const handleNext = async () => {
     if (step === 0) {
       const isValid = await form.trigger([
-        "fullName",
-        "email",
-        "phone",
-        "password",
-        "gender",
-        "dateOfBirth",
+        'fullName',
+        'email',
+        'phone',
+        'password',
+        'gender',
+        'dateOfBirth',
       ]);
 
       if (isValid) {
@@ -132,13 +132,13 @@ export default function NurseRegisterPage() {
 
     if (step === 1) {
       const isValid = await form.trigger([
-        "address",
-        "city",
-        "state",
-        "experience",
-        "qualifications",
-        "certifications",
-        "preferredContact",
+        'address',
+        'city',
+        'state',
+        'experience',
+        'qualifications',
+        'certifications',
+        'preferredContact',
       ]);
 
       if (isValid) {
@@ -153,9 +153,9 @@ export default function NurseRegisterPage() {
   };
 
   const openFilePicker = (docType: DocType) => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = docType === "photo" ? "image/*" : "image/*,.pdf";
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = docType === 'photo' ? 'image/*' : 'image/*,.pdf';
     input.onchange = (event) => {
       const file = (event.target as HTMLInputElement).files?.[0];
       if (file) {
@@ -172,15 +172,15 @@ export default function NurseRegisterPage() {
         animate={{ opacity: 1, scale: 1 }}
         className="py-12 text-center"
       >
-        <CheckCircle className="mx-auto mb-6 h-16 w-16 text-success" />
-        <h2 className="mb-3 text-2xl font-bold text-foreground">Application Submitted!</h2>
-        <p className="mb-6 text-muted-foreground">
+        <CheckCircle className="text-success mx-auto mb-6 h-16 w-16" />
+        <h2 className="text-foreground mb-3 text-2xl font-bold">Application Submitted!</h2>
+        <p className="text-muted-foreground mb-6">
           Your application has been received. An admin will review your profile and documents.
           We&apos;ll notify you of the outcome.
         </p>
         <Link
           href="/login"
-          className="inline-flex items-center gap-2 rounded-xl bg-gradient-primary px-6 py-3 font-medium text-white"
+          className="bg-gradient-primary inline-flex items-center gap-2 rounded-xl px-6 py-3 font-medium text-white"
         >
           Go to Login <ArrowRight className="h-4 w-4" />
         </Link>
@@ -192,39 +192,39 @@ export default function NurseRegisterPage() {
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-      <h1 className="mb-2 text-2xl font-bold text-foreground font-[family-name:var(--font-outfit)]">
+      <h1 className="text-foreground mb-2 font-[family-name:var(--font-outfit)] text-2xl font-bold">
         Nurse Application
       </h1>
-      <p className="mb-6 text-muted-foreground">Apply to join Mendyr&apos;s healthcare network</p>
+      <p className="text-muted-foreground mb-6">Apply to join Mendyr&apos;s healthcare network</p>
 
       <div className="mb-8 flex items-center gap-2">
         {STEPS.map((label, index) => (
           <div key={label} className="flex flex-1 items-center gap-2">
             <div
               className={cn(
-                "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold",
-                index <= step ? "bg-gradient-primary text-white" : "bg-muted text-muted-foreground"
+                'flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold',
+                index <= step ? 'bg-gradient-primary text-white' : 'bg-muted text-muted-foreground',
               )}
             >
               {index + 1}
             </div>
             <span
               className={cn(
-                "hidden truncate text-xs sm:block",
-                index <= step ? "text-foreground" : "text-muted-foreground"
+                'hidden truncate text-xs sm:block',
+                index <= step ? 'text-foreground' : 'text-muted-foreground',
               )}
             >
               {label}
             </span>
             {index < STEPS.length - 1 && (
-              <div className={cn("mx-1 h-px flex-1", index < step ? "bg-primary" : "bg-muted")} />
+              <div className={cn('mx-1 h-px flex-1', index < step ? 'bg-primary' : 'bg-muted')} />
             )}
           </div>
         ))}
       </div>
 
       {error && (
-        <div className="mb-4 rounded-xl border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+        <div className="border-destructive/20 bg-destructive/10 text-destructive mb-4 rounded-xl border px-4 py-3 text-sm">
           {error}
         </div>
       )}
@@ -232,7 +232,11 @@ export default function NurseRegisterPage() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-5">
           {step === 0 && (
-            <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="space-y-4"
+            >
               <FormField
                 control={form.control}
                 name="fullName"
@@ -240,9 +244,13 @@ export default function NurseRegisterPage() {
                   <FormItem>
                     <FormLabel>Full Name</FormLabel>
                     <div className="relative">
-                      <User className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <User className="text-muted-foreground absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2" />
                       <FormControl>
-                        <Input {...field} placeholder="Full name" className="h-12 rounded-xl pl-11" />
+                        <Input
+                          {...field}
+                          placeholder="Full name"
+                          className="h-12 rounded-xl pl-11"
+                        />
                       </FormControl>
                     </div>
                     <FormMessage />
@@ -257,9 +265,14 @@ export default function NurseRegisterPage() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <div className="relative">
-                      <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <Mail className="text-muted-foreground absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2" />
                       <FormControl>
-                        <Input {...field} type="email" placeholder="you@example.com" className="h-12 rounded-xl pl-11" />
+                        <Input
+                          {...field}
+                          type="email"
+                          placeholder="you@example.com"
+                          className="h-12 rounded-xl pl-11"
+                        />
                       </FormControl>
                     </div>
                     <FormMessage />
@@ -274,9 +287,14 @@ export default function NurseRegisterPage() {
                   <FormItem>
                     <FormLabel>Phone</FormLabel>
                     <div className="relative">
-                      <Phone className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <Phone className="text-muted-foreground absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2" />
                       <FormControl>
-                        <Input {...field} type="tel" placeholder="Phone number" className="h-12 rounded-xl pl-11" />
+                        <Input
+                          {...field}
+                          type="tel"
+                          placeholder="Phone number"
+                          className="h-12 rounded-xl pl-11"
+                        />
                       </FormControl>
                     </div>
                     <FormMessage />
@@ -291,22 +309,26 @@ export default function NurseRegisterPage() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <div className="relative">
-                      <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <Lock className="text-muted-foreground absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2" />
                       <FormControl>
                         <Input
                           {...field}
-                          type={showPassword ? "text" : "password"}
+                          type={showPassword ? 'text' : 'password'}
                           placeholder="Password"
-                          className="h-12 rounded-xl pl-11 pr-11"
+                          className="h-12 rounded-xl pr-11 pl-11"
                         />
                       </FormControl>
                       <button
                         type="button"
                         onClick={() => setShowPassword((current) => !current)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground"
-                        aria-label={showPassword ? "Hide password" : "Show password"}
+                        className="text-muted-foreground absolute top-1/2 right-4 -translate-y-1/2"
+                        aria-label={showPassword ? 'Hide password' : 'Show password'}
                       >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
                       </button>
                     </div>
                     <FormMessage />
@@ -327,7 +349,7 @@ export default function NurseRegisterPage() {
                             <SelectValue placeholder="Select gender" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent className="rounded-xl border-white/40 bg-background/95 backdrop-blur-md">
+                        <SelectContent className="bg-background/95 rounded-xl border-white/40 backdrop-blur-md">
                           <SelectItem value="PREFER_NOT_TO_SAY">Prefer not to say</SelectItem>
                           <SelectItem value="MALE">Male</SelectItem>
                           <SelectItem value="FEMALE">Female</SelectItem>
@@ -351,16 +373,23 @@ export default function NurseRegisterPage() {
                             <button
                               type="button"
                               className={cn(
-                                "flex h-12 w-full items-center rounded-xl border border-white/60 bg-white/40 px-4 py-3 text-left text-sm shadow-sm backdrop-blur-md transition-all focus:outline-none focus:ring-2 focus:ring-primary/40 dark:border-white/10 dark:bg-black/20",
-                                !field.value && "text-muted-foreground"
+                                'focus:ring-primary/40 flex h-12 w-full items-center rounded-xl border border-white/60 bg-white/40 px-4 py-3 text-left text-sm shadow-sm backdrop-blur-md transition-all focus:ring-2 focus:outline-none dark:border-white/10 dark:bg-black/20',
+                                !field.value && 'text-muted-foreground',
                               )}
                             >
                               <CalendarIcon className="mr-2 h-4 w-4 opacity-50" />
-                              {field.value ? format(field.value, "PPP") : <span>Select a date</span>}
+                              {field.value ? (
+                                format(field.value, 'PPP')
+                              ) : (
+                                <span>Select a date</span>
+                              )}
                             </button>
                           </FormControl>
                         </PopoverTrigger>
-                        <PopoverContent className="w-auto border border-white/40 bg-background/95 p-0 shadow-xl backdrop-blur-md" align="start">
+                        <PopoverContent
+                          className="bg-background/95 w-auto border border-white/40 p-0 shadow-xl backdrop-blur-md"
+                          align="start"
+                        >
                           <Calendar
                             mode="single"
                             captionLayout="dropdown"
@@ -382,7 +411,11 @@ export default function NurseRegisterPage() {
           )}
 
           {step === 1 && (
-            <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="space-y-4"
+            >
               <FormField
                 control={form.control}
                 name="address"
@@ -390,7 +423,7 @@ export default function NurseRegisterPage() {
                   <FormItem>
                     <FormLabel>Address</FormLabel>
                     <div className="relative">
-                      <MapPin className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <MapPin className="text-muted-foreground absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2" />
                       <FormControl>
                         <Input {...field} placeholder="Address" className="h-12 rounded-xl pl-11" />
                       </FormControl>
@@ -436,7 +469,11 @@ export default function NurseRegisterPage() {
                   <FormItem>
                     <FormLabel>Experience</FormLabel>
                     <FormControl>
-                      <Input {...field} placeholder="5 years in ICU nursing" className="h-12 rounded-xl" />
+                      <Input
+                        {...field}
+                        placeholder="5 years in ICU nursing"
+                        className="h-12 rounded-xl"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -454,7 +491,7 @@ export default function NurseRegisterPage() {
                         {...field}
                         rows={3}
                         placeholder="B.Sc Nursing, GNM, etc."
-                        className="rounded-xl bg-white/40 backdrop-blur-md border-white/60 dark:bg-black/20 dark:border-white/10"
+                        className="rounded-xl border-white/60 bg-white/40 backdrop-blur-md dark:border-white/10 dark:bg-black/20"
                       />
                     </FormControl>
                     <FormMessage />
@@ -473,7 +510,7 @@ export default function NurseRegisterPage() {
                         {...field}
                         rows={3}
                         placeholder="BLS, ACLS, ICU certification, etc."
-                        className="rounded-xl bg-white/40 backdrop-blur-md border-white/60 dark:bg-black/20 dark:border-white/10"
+                        className="rounded-xl border-white/60 bg-white/40 backdrop-blur-md dark:border-white/10 dark:bg-black/20"
                       />
                     </FormControl>
                     <FormMessage />
@@ -493,7 +530,7 @@ export default function NurseRegisterPage() {
                           <SelectValue placeholder="Choose preferred contact" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="rounded-xl border-white/40 bg-background/95 backdrop-blur-md">
+                      <SelectContent className="bg-background/95 rounded-xl border-white/40 backdrop-blur-md">
                         <SelectItem value="email">Email</SelectItem>
                         <SelectItem value="phone">Phone</SelectItem>
                         <SelectItem value="whatsapp">WhatsApp</SelectItem>
@@ -507,20 +544,26 @@ export default function NurseRegisterPage() {
           )}
 
           {step === 2 && (
-            <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="space-y-4"
+            >
               {DOCUMENT_TYPES.map((docType) => (
                 <div
                   key={docType}
-                  className="rounded-xl border border-dashed border-border p-6 text-center transition-colors hover:border-primary/30"
+                  className="border-border hover:border-primary/30 rounded-xl border border-dashed p-6 text-center transition-colors"
                 >
                   {files[docType] ? (
                     <div className="flex items-center justify-center gap-3">
-                      <FileText className="h-5 w-5 text-primary" />
-                      <span className="text-sm text-foreground">{files[docType]?.name}</span>
+                      <FileText className="text-primary h-5 w-5" />
+                      <span className="text-foreground text-sm">{files[docType]?.name}</span>
                       <button
                         type="button"
-                        onClick={() => setFiles((currentFiles) => ({ ...currentFiles, [docType]: undefined }))}
-                        className="text-xs text-destructive"
+                        onClick={() =>
+                          setFiles((currentFiles) => ({ ...currentFiles, [docType]: undefined }))
+                        }
+                        className="text-destructive text-xs"
                       >
                         Remove
                       </button>
@@ -531,12 +574,17 @@ export default function NurseRegisterPage() {
                       onClick={() => openFilePicker(docType)}
                       className="flex w-full flex-col items-center gap-2"
                     >
-                      <Upload className="h-8 w-8 text-muted-foreground" />
-                      <span className="text-sm text-muted-foreground">
-                        Upload {docType === "aadhaar" ? "Aadhaar Card" : docType === "certificate" ? "Certificate" : "Profile Photo"}
+                      <Upload className="text-muted-foreground h-8 w-8" />
+                      <span className="text-muted-foreground text-sm">
+                        Upload{' '}
+                        {docType === 'aadhaar'
+                          ? 'Aadhaar Card'
+                          : docType === 'certificate'
+                            ? 'Certificate'
+                            : 'Profile Photo'}
                       </span>
-                      <span className="text-xs text-muted-foreground">
-                        {docType === "photo" ? "JPG, PNG" : "JPG, PNG, PDF"} (max 5MB)
+                      <span className="text-muted-foreground text-xs">
+                        {docType === 'photo' ? 'JPG, PNG' : 'JPG, PNG, PDF'} (max 5MB)
                       </span>
                     </button>
                   )}
@@ -552,26 +600,31 @@ export default function NurseRegisterPage() {
               className="max-h-64 space-y-3 overflow-y-auto rounded-xl border border-white/60 bg-white/40 p-6 text-sm shadow-sm backdrop-blur-md dark:border-white/10 dark:bg-black/20"
             >
               {[
-                ["Name", form.getValues("fullName")],
-                ["Email", form.getValues("email")],
-                ["Phone", form.getValues("phone")],
-                ["Gender", form.getValues("gender")],
-                ["Date of Birth", form.getValues("dateOfBirth") ? format(form.getValues("dateOfBirth"), "PPP") : ""],
-                ["Address", form.getValues("address")],
-                ["City", form.getValues("city")],
-                ["State", form.getValues("state")],
-                ["Experience", form.getValues("experience")],
-                ["Preferred Contact", form.getValues("preferredContact")],
+                ['Name', form.getValues('fullName')],
+                ['Email', form.getValues('email')],
+                ['Phone', form.getValues('phone')],
+                ['Gender', form.getValues('gender')],
+                [
+                  'Date of Birth',
+                  form.getValues('dateOfBirth') ? format(form.getValues('dateOfBirth'), 'PPP') : '',
+                ],
+                ['Address', form.getValues('address')],
+                ['City', form.getValues('city')],
+                ['State', form.getValues('state')],
+                ['Experience', form.getValues('experience')],
+                ['Preferred Contact', form.getValues('preferredContact')],
               ].map(([label, value]) =>
                 value ? (
                   <div key={label} className="flex justify-between gap-4">
                     <span className="text-muted-foreground">{label}</span>
-                    <span className="max-w-[60%] truncate text-right text-foreground">{value}</span>
+                    <span className="text-foreground max-w-[60%] truncate text-right">{value}</span>
                   </div>
-                ) : null
+                ) : null,
               )}
-              <div className="mt-3 border-t border-border pt-3">
-                <p className="text-muted-foreground">Documents: {Object.values(files).filter(Boolean).length}/3 uploaded</p>
+              <div className="border-border mt-3 border-t pt-3">
+                <p className="text-muted-foreground">
+                  Documents: {Object.values(files).filter(Boolean).length}/3 uploaded
+                </p>
               </div>
             </motion.div>
           )}
@@ -582,7 +635,7 @@ export default function NurseRegisterPage() {
                 type="button"
                 variant="outline"
                 onClick={() => setStep((currentStep) => currentStep - 1)}
-                className="h-12 rounded-xl border-border text-foreground hover:bg-muted"
+                className="border-border text-foreground hover:bg-muted h-12 rounded-xl"
               >
                 <ArrowLeft className="h-4 w-4" /> Back
               </Button>
@@ -592,27 +645,31 @@ export default function NurseRegisterPage() {
               <Button
                 type="button"
                 onClick={handleNext}
-                className="h-12 flex-1 rounded-xl bg-gradient-primary text-white transition-opacity hover:opacity-90"
+                className="bg-gradient-primary h-12 flex-1 rounded-xl text-white transition-opacity hover:opacity-90"
               >
-                {step === 2 ? "Review" : "Next"} <ArrowRight className="h-4 w-4" />
+                {step === 2 ? 'Review' : 'Next'} <ArrowRight className="h-4 w-4" />
               </Button>
             ) : (
               <Button
                 type="submit"
                 disabled={loading}
-                className="h-12 flex-1 rounded-xl bg-gradient-primary text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                className="bg-gradient-primary h-12 flex-1 rounded-xl text-white transition-opacity hover:opacity-90 disabled:opacity-50"
               >
-                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle className="h-4 w-4" />}
-                {loading ? "Submitting..." : "Submit Application"}
+                {loading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <CheckCircle className="h-4 w-4" />
+                )}
+                {loading ? 'Submitting...' : 'Submit Application'}
               </Button>
             )}
           </div>
         </form>
       </Form>
 
-      <p className="mt-6 text-center text-sm text-muted-foreground">
-        Already registered?{" "}
-        <Link href="/login" className="font-medium text-primary hover:underline">
+      <p className="text-muted-foreground mt-6 text-center text-sm">
+        Already registered?{' '}
+        <Link href="/login" className="text-primary font-medium hover:underline">
           Sign In
         </Link>
       </p>

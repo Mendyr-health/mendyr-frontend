@@ -1,26 +1,39 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import { ArrowRight, Loader2 } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import { ArrowRight, Loader2 } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
-import { useAuth } from "@/hooks/use-auth";
-import { markOnboardingComplete } from "@/lib/onboarding";
-import { ROLE_DASHBOARD_PATH, type Role } from "@/lib/mock-users";
-import { Input } from "@mendyr/shared-ui/src/ui/input";
-import { Button } from "@mendyr/shared-ui/src/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@mendyr/shared-ui/src/ui/select";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@mendyr/shared-ui/src/ui/form";
+import { useAuth } from '@/hooks/use-auth';
+import { markOnboardingComplete } from '@/lib/onboarding';
+import { ROLE_DASHBOARD_PATH, type Role } from '@/lib/mock-users';
+import { Input } from '@mendyr/shared-ui/src/ui/input';
+import { Button } from '@mendyr/shared-ui/src/ui/button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@mendyr/shared-ui/src/ui/select';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@mendyr/shared-ui/src/ui/form';
 
 const onboardingSchema = z.object({
-  fullName: z.string().min(2, "Name must be at least 2 characters").max(100),
-  dateOfBirth: z.string().min(1, "Date of birth is required"),
-  gender: z.enum(["MALE", "FEMALE", "OTHER", "PREFER_NOT_TO_SAY"]),
-  phone: z.string().min(10, "Enter a valid phone number").max(15),
+  fullName: z.string().min(2, 'Name must be at least 2 characters').max(100),
+  dateOfBirth: z.string().min(1, 'Date of birth is required'),
+  gender: z.enum(['MALE', 'FEMALE', 'OTHER', 'PREFER_NOT_TO_SAY']),
+  phone: z.string().min(10, 'Enter a valid phone number').max(15),
 });
 
 type OnboardingFormValues = z.infer<typeof onboardingSchema>;
@@ -36,21 +49,21 @@ export default function OnboardingPage() {
 
   const form = useForm<OnboardingFormValues>({
     resolver: zodResolver(onboardingSchema),
-    defaultValues: { fullName: "", dateOfBirth: "", gender: "PREFER_NOT_TO_SAY", phone: "" },
-    mode: "onTouched",
+    defaultValues: { fullName: '', dateOfBirth: '', gender: 'PREFER_NOT_TO_SAY', phone: '' },
+    mode: 'onTouched',
   });
 
   useEffect(() => {
     if (loading) return;
     if (!user) {
-      router.replace("/login");
+      router.replace('/login');
       return;
     }
     form.reset({
-      fullName: user.fullName || "",
-      dateOfBirth: "",
-      gender: "PREFER_NOT_TO_SAY",
-      phone: user.phone || "",
+      fullName: user.fullName || '',
+      dateOfBirth: '',
+      gender: 'PREFER_NOT_TO_SAY',
+      phone: user.phone || '',
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, user, router]);
@@ -64,10 +77,12 @@ export default function OnboardingPage() {
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-      <h1 className="mb-2 text-2xl font-bold text-foreground font-[family-name:var(--font-outfit)]">
+      <h1 className="text-foreground mb-2 font-[family-name:var(--font-outfit)] text-2xl font-bold">
         Tell us about yourself
       </h1>
-      <p className="mb-8 text-muted-foreground">A few quick details to finish setting up your account.</p>
+      <p className="text-muted-foreground mb-8">
+        A few quick details to finish setting up your account.
+      </p>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
@@ -132,7 +147,12 @@ export default function OnboardingPage() {
               <FormItem>
                 <FormLabel>Phone Number</FormLabel>
                 <FormControl>
-                  <Input {...field} type="tel" placeholder="+91 98765 43210" className="h-12 rounded-xl" />
+                  <Input
+                    {...field}
+                    type="tel"
+                    placeholder="+91 98765 43210"
+                    className="h-12 rounded-xl"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -141,11 +161,15 @@ export default function OnboardingPage() {
 
           <Button
             type="submit"
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary/80 text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+            className="from-primary to-primary/80 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r text-white transition-opacity hover:opacity-90 disabled:opacity-50"
             disabled={submitting}
           >
-            {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowRight className="h-4 w-4" />}
-            {submitting ? "Saving..." : "Continue"}
+            {submitting ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <ArrowRight className="h-4 w-4" />
+            )}
+            {submitting ? 'Saving...' : 'Continue'}
           </Button>
         </form>
       </Form>

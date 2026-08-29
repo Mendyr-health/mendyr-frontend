@@ -1,14 +1,14 @@
-"use client";
-import { motion } from "framer-motion";
-import { Bell, Lock, Shield } from "lucide-react";
-import { Button } from "@mendyr/shared-ui/src/ui/button";
-import { Input } from "@mendyr/shared-ui/src/ui/input";
+'use client';
+import { motion } from 'framer-motion';
+import { Bell, Lock, Shield } from 'lucide-react';
+import { Button } from '@mendyr/shared-ui/src/ui/button';
+import { Input } from '@mendyr/shared-ui/src/ui/input';
 
 export default function WebNurseSettings() {
   return (
     <div className="space-y-8 pt-8 lg:pt-0">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-foreground font-outfit">Settings</h1>
+        <h1 className="text-foreground font-outfit text-2xl font-bold">Settings</h1>
         <p className="text-muted-foreground mt-1">Manage your account and notifications.</p>
       </motion.div>
 
@@ -16,17 +16,22 @@ export default function WebNurseSettings() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-glass rounded-2xl p-6 border border-border max-w-2xl"
+        className="bg-glass border-border max-w-2xl rounded-2xl border p-6"
       >
-        <div className="flex items-center gap-3 mb-4">
-          <Bell className="h-5 w-5 text-primary" />
-          <h2 className="text-lg font-semibold text-foreground">Notifications</h2>
+        <div className="mb-4 flex items-center gap-3">
+          <Bell className="text-primary h-5 w-5" />
+          <h2 className="text-foreground text-lg font-semibold">Notifications</h2>
         </div>
         <div className="space-y-3">
-          {["Verification status updates", "New patient requests", "Schedule reminders", "Platform announcements"].map((item) => (
-            <label key={item} className="flex items-center justify-between py-2 cursor-pointer">
-              <span className="text-sm text-foreground">{item}</span>
-              <input type="checkbox" defaultChecked className="h-4 w-4 accent-primary rounded" />
+          {[
+            'Verification status updates',
+            'New patient requests',
+            'Schedule reminders',
+            'Platform announcements',
+          ].map((item) => (
+            <label key={item} className="flex cursor-pointer items-center justify-between py-2">
+              <span className="text-foreground text-sm">{item}</span>
+              <input type="checkbox" defaultChecked className="accent-primary h-4 w-4 rounded" />
             </label>
           ))}
         </div>
@@ -36,17 +41,22 @@ export default function WebNurseSettings() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15 }}
-        className="bg-glass rounded-2xl p-6 border border-border max-w-2xl"
+        className="bg-glass border-border max-w-2xl rounded-2xl border p-6"
       >
-        <div className="flex items-center gap-3 mb-4">
+        <div className="mb-4 flex items-center gap-3">
           <Shield className="h-5 w-5 text-amber-500" />
-          <h2 className="text-lg font-semibold text-foreground">Contact Preferences</h2>
+          <h2 className="text-foreground text-lg font-semibold">Contact Preferences</h2>
         </div>
         <div className="space-y-3">
-          {["Email", "Phone", "WhatsApp"].map((method) => (
-            <label key={method} className="flex items-center gap-3 py-2 cursor-pointer">
-              <input type="radio" name="contact" className="accent-primary" defaultChecked={method === "Email"} />
-              <span className="text-sm text-foreground">{method}</span>
+          {['Email', 'Phone', 'WhatsApp'].map((method) => (
+            <label key={method} className="flex cursor-pointer items-center gap-3 py-2">
+              <input
+                type="radio"
+                name="contact"
+                className="accent-primary"
+                defaultChecked={method === 'Email'}
+              />
+              <span className="text-foreground text-sm">{method}</span>
             </label>
           ))}
         </div>
@@ -56,11 +66,11 @@ export default function WebNurseSettings() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="bg-glass rounded-2xl p-6 border border-border max-w-2xl"
+        className="bg-glass border-border max-w-2xl rounded-2xl border p-6"
       >
-        <div className="flex items-center gap-3 mb-4">
+        <div className="mb-4 flex items-center gap-3">
           <Lock className="h-5 w-5 text-red-500" />
-          <h2 className="text-lg font-semibold text-foreground">Change Password</h2>
+          <h2 className="text-foreground text-lg font-semibold">Change Password</h2>
         </div>
         <div className="space-y-4">
           <Input type="password" placeholder="Current password" />

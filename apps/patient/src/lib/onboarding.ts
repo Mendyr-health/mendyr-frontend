@@ -1,4 +1,4 @@
-import type { Role } from "@/lib/mock-users";
+import type { Role } from '@/lib/mock-users';
 
 // Tracks whether a user has completed the post-login "tell us about
 // yourself" step. Backed by localStorage for now since there's no backend
@@ -15,12 +15,12 @@ function storageKey(role: Role): string {
 }
 
 export function isOnboardingComplete(role: Role): boolean {
-  if (typeof window === "undefined") return true;
+  if (typeof window === 'undefined') return true;
   return window.localStorage.getItem(storageKey(role)) !== null;
 }
 
 export function getOnboardingProfile(role: Role): OnboardingProfile | null {
-  if (typeof window === "undefined") return null;
+  if (typeof window === 'undefined') return null;
   const raw = window.localStorage.getItem(storageKey(role));
   if (!raw) return null;
   try {
@@ -31,6 +31,6 @@ export function getOnboardingProfile(role: Role): OnboardingProfile | null {
 }
 
 export function markOnboardingComplete(role: Role, profile: OnboardingProfile): void {
-  if (typeof window === "undefined") return;
+  if (typeof window === 'undefined') return;
   window.localStorage.setItem(storageKey(role), JSON.stringify(profile));
 }

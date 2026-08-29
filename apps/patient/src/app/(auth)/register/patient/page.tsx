@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Link from "next/link";
-import { motion } from "framer-motion";
+import { useState } from 'react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
 import {
   ArrowLeft,
   ArrowRight,
@@ -16,18 +16,18 @@ import {
   MapPin,
   Phone,
   User,
-} from "lucide-react";
-import { format } from "date-fns";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import type { z } from "zod";
+} from 'lucide-react';
+import { format } from 'date-fns';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import type { z } from 'zod';
 
-import { patientRegistrationFormSchema } from "@/lib/validators";
-import { getDateOfBirthRange } from "@/lib/date-of-birth";
-import { apiFetch } from "@/lib/api-client";
-import { cn } from "@mendyr/shared-utils";
-import { Input } from "@mendyr/shared-ui/src/ui/input";
-import { Button } from "@mendyr/shared-ui/src/ui/button";
+import { patientRegistrationFormSchema } from '@/lib/validators';
+import { getDateOfBirthRange } from '@/lib/date-of-birth';
+import { apiFetch } from '@/lib/api-client';
+import { cn } from '@mendyr/shared-utils';
+import { Input } from '@mendyr/shared-ui/src/ui/input';
+import { Button } from '@mendyr/shared-ui/src/ui/button';
 import {
   Form,
   FormControl,
@@ -35,61 +35,61 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@mendyr/shared-ui/src/ui/form";
-import { Popover, PopoverContent, PopoverTrigger } from "@mendyr/shared-ui/src/ui/popover";
-import { Calendar } from "@mendyr/shared-ui/src/ui/calendar";
+} from '@mendyr/shared-ui/src/ui/form';
+import { Popover, PopoverContent, PopoverTrigger } from '@mendyr/shared-ui/src/ui/popover';
+import { Calendar } from '@mendyr/shared-ui/src/ui/calendar';
 
 type PatientFormValues = z.infer<typeof patientRegistrationFormSchema>;
 
-const STEPS = ["Personal Info", "Address", "Review"];
+const STEPS = ['Personal Info', 'Address', 'Review'];
 
 export default function PatientRegisterPage() {
   const [step, setStep] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const { earliestDate, latestDate } = getDateOfBirthRange();
 
   const form = useForm<PatientFormValues>({
     resolver: zodResolver(patientRegistrationFormSchema),
     defaultValues: {
-      fullName: "",
-      email: "",
-      phone: "",
-      password: "",
+      fullName: '',
+      email: '',
+      phone: '',
+      password: '',
       dob: undefined,
-      address: "",
-      city: "",
-      state: "",
+      address: '',
+      city: '',
+      state: '',
     },
-    mode: "onTouched",
+    mode: 'onTouched',
   });
 
   const onSubmit = async (values: PatientFormValues) => {
     setLoading(true);
-    setError("");
+    setError('');
 
     try {
-      const res = await apiFetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await apiFetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...values,
-          dob: format(values.dob, "yyyy-MM-dd"),
-          role: "PATIENT",
+          dob: format(values.dob, 'yyyy-MM-dd'),
+          role: 'PATIENT',
         }),
       });
       const data = await res.json();
 
       if (!data.success) {
-        setError(data.error?.message || "Registration failed");
+        setError(data.error?.message || 'Registration failed');
         return;
       }
 
       setSuccess(true);
     } catch {
-      setError("Something went wrong.");
+      setError('Something went wrong.');
     } finally {
       setLoading(false);
     }
@@ -98,9 +98,9 @@ export default function PatientRegisterPage() {
   const nextStep = async () => {
     const fieldsToValidate: (keyof PatientFormValues)[] =
       step === 0
-        ? ["fullName", "email", "phone", "password", "dob"]
+        ? ['fullName', 'email', 'phone', 'password', 'dob']
         : step === 1
-          ? ["address", "city", "state"]
+          ? ['address', 'city', 'state']
           : [];
 
     if (await form.trigger(fieldsToValidate)) {
@@ -115,14 +115,14 @@ export default function PatientRegisterPage() {
         animate={{ opacity: 1, scale: 1 }}
         className="py-12 text-center"
       >
-        <CheckCircle className="mx-auto mb-6 h-16 w-16 text-success" />
-        <h2 className="mb-3 text-2xl font-bold text-foreground">Registration Successful!</h2>
-        <p className="mb-6 text-muted-foreground">
+        <CheckCircle className="text-success mx-auto mb-6 h-16 w-16" />
+        <h2 className="text-foreground mb-3 text-2xl font-bold">Registration Successful!</h2>
+        <p className="text-muted-foreground mb-6">
           Services will be available soon. We will notify you once operations begin.
         </p>
         <Link
           href="/login"
-          className="inline-flex items-center gap-2 rounded-xl bg-gradient-primary px-6 py-3 font-medium text-white"
+          className="bg-gradient-primary inline-flex items-center gap-2 rounded-xl px-6 py-3 font-medium text-white"
         >
           Go to Login <ArrowRight className="h-4 w-4" />
         </Link>
@@ -132,39 +132,39 @@ export default function PatientRegisterPage() {
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-      <h1 className="mb-2 text-2xl font-bold text-foreground font-[family-name:var(--font-outfit)]">
+      <h1 className="text-foreground mb-2 font-[family-name:var(--font-outfit)] text-2xl font-bold">
         Patient Registration
       </h1>
-      <p className="mb-6 text-muted-foreground">Create your account to join Mendyr</p>
+      <p className="text-muted-foreground mb-6">Create your account to join Mendyr</p>
 
       <div className="mb-8 flex items-center gap-2">
         {STEPS.map((label, index) => (
           <div key={label} className="flex flex-1 items-center gap-2">
             <div
               className={cn(
-                "flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold",
-                index <= step ? "bg-gradient-primary text-white" : "bg-muted text-muted-foreground"
+                'flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold',
+                index <= step ? 'bg-gradient-primary text-white' : 'bg-muted text-muted-foreground',
               )}
             >
               {index + 1}
             </div>
             <span
               className={cn(
-                "hidden text-xs sm:block",
-                index <= step ? "text-foreground" : "text-muted-foreground"
+                'hidden text-xs sm:block',
+                index <= step ? 'text-foreground' : 'text-muted-foreground',
               )}
             >
               {label}
             </span>
             {index < STEPS.length - 1 && (
-              <div className={cn("h-px flex-1", index < step ? "bg-primary" : "bg-muted")} />
+              <div className={cn('h-px flex-1', index < step ? 'bg-primary' : 'bg-muted')} />
             )}
           </div>
         ))}
       </div>
 
       {error && (
-        <div className="mb-4 rounded-xl border border-destructive/20 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+        <div className="border-destructive/20 bg-destructive/10 text-destructive mb-4 rounded-xl border px-4 py-3 text-sm">
           {error}
         </div>
       )}
@@ -172,7 +172,11 @@ export default function PatientRegisterPage() {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           {step === 0 && (
-            <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="space-y-4"
+            >
               <FormField
                 control={form.control}
                 name="fullName"
@@ -180,9 +184,13 @@ export default function PatientRegisterPage() {
                   <FormItem>
                     <FormLabel>Full Name</FormLabel>
                     <div className="relative">
-                      <User className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <User className="text-muted-foreground absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2" />
                       <FormControl>
-                        <Input {...field} placeholder="Full name" className="h-12 rounded-xl pl-11" />
+                        <Input
+                          {...field}
+                          placeholder="Full name"
+                          className="h-12 rounded-xl pl-11"
+                        />
                       </FormControl>
                     </div>
                     <FormMessage />
@@ -197,9 +205,14 @@ export default function PatientRegisterPage() {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <div className="relative">
-                      <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <Mail className="text-muted-foreground absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2" />
                       <FormControl>
-                        <Input {...field} type="email" placeholder="you@example.com" className="h-12 rounded-xl pl-11" />
+                        <Input
+                          {...field}
+                          type="email"
+                          placeholder="you@example.com"
+                          className="h-12 rounded-xl pl-11"
+                        />
                       </FormControl>
                     </div>
                     <FormMessage />
@@ -214,9 +227,14 @@ export default function PatientRegisterPage() {
                   <FormItem>
                     <FormLabel>Phone</FormLabel>
                     <div className="relative">
-                      <Phone className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <Phone className="text-muted-foreground absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2" />
                       <FormControl>
-                        <Input {...field} type="tel" placeholder="Phone number" className="h-12 rounded-xl pl-11" />
+                        <Input
+                          {...field}
+                          type="tel"
+                          placeholder="Phone number"
+                          className="h-12 rounded-xl pl-11"
+                        />
                       </FormControl>
                     </div>
                     <FormMessage />
@@ -231,22 +249,26 @@ export default function PatientRegisterPage() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <div className="relative">
-                      <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <Lock className="text-muted-foreground absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2" />
                       <FormControl>
                         <Input
                           {...field}
-                          type={showPassword ? "text" : "password"}
+                          type={showPassword ? 'text' : 'password'}
                           placeholder="Password"
-                          className="h-12 rounded-xl pl-11 pr-11"
+                          className="h-12 rounded-xl pr-11 pl-11"
                         />
                       </FormControl>
                       <button
                         type="button"
                         onClick={() => setShowPassword((current) => !current)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground"
-                        aria-label={showPassword ? "Hide password" : "Show password"}
+                        className="text-muted-foreground absolute top-1/2 right-4 -translate-y-1/2"
+                        aria-label={showPassword ? 'Hide password' : 'Show password'}
                       >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        {showPassword ? (
+                          <EyeOff className="h-4 w-4" />
+                        ) : (
+                          <Eye className="h-4 w-4" />
+                        )}
                       </button>
                     </div>
                     <FormMessage />
@@ -266,16 +288,19 @@ export default function PatientRegisterPage() {
                           <button
                             type="button"
                             className={cn(
-                              "flex h-12 w-full items-center rounded-xl border border-border/80 bg-card/95 px-4 py-3 text-left text-sm shadow-[0_8px_24px_rgba(15,23,42,0.05)] backdrop-blur-md transition-all focus:outline-none focus:ring-2 focus:ring-primary/20",
-                              !field.value && "text-muted-foreground"
+                              'border-border/80 bg-card/95 focus:ring-primary/20 flex h-12 w-full items-center rounded-xl border px-4 py-3 text-left text-sm shadow-[0_8px_24px_rgba(15,23,42,0.05)] backdrop-blur-md transition-all focus:ring-2 focus:outline-none',
+                              !field.value && 'text-muted-foreground',
                             )}
                           >
                             <CalendarIcon className="mr-2 h-4 w-4 opacity-50" />
-                            {field.value ? format(field.value, "PPP") : <span>Select a date</span>}
+                            {field.value ? format(field.value, 'PPP') : <span>Select a date</span>}
                           </button>
                         </FormControl>
                       </PopoverTrigger>
-                      <PopoverContent className="w-auto border border-border/80 bg-card/98 p-0 shadow-[0_18px_40px_rgba(15,23,42,0.1)] backdrop-blur-md" align="start">
+                      <PopoverContent
+                        className="border-border/80 bg-card/98 w-auto border p-0 shadow-[0_18px_40px_rgba(15,23,42,0.1)] backdrop-blur-md"
+                        align="start"
+                      >
                         <Calendar
                           mode="single"
                           captionLayout="dropdown"
@@ -296,7 +321,11 @@ export default function PatientRegisterPage() {
           )}
 
           {step === 1 && (
-            <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="space-y-4"
+            >
               <FormField
                 control={form.control}
                 name="address"
@@ -304,9 +333,13 @@ export default function PatientRegisterPage() {
                   <FormItem>
                     <FormLabel>Address</FormLabel>
                     <div className="relative">
-                      <MapPin className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                      <MapPin className="text-muted-foreground absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2" />
                       <FormControl>
-                        <Input {...field} placeholder="Full address" className="h-12 rounded-xl pl-11" />
+                        <Input
+                          {...field}
+                          placeholder="Full address"
+                          className="h-12 rounded-xl pl-11"
+                        />
                       </FormControl>
                     </div>
                     <FormMessage />
@@ -349,37 +382,37 @@ export default function PatientRegisterPage() {
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              className="space-y-3 rounded-xl border border-border/80 bg-card/95 p-6 text-sm shadow-[0_8px_24px_rgba(15,23,42,0.05)] backdrop-blur-md"
+              className="border-border/80 bg-card/95 space-y-3 rounded-xl border p-6 text-sm shadow-[0_8px_24px_rgba(15,23,42,0.05)] backdrop-blur-md"
             >
               <div className="flex justify-between gap-4">
                 <span className="text-muted-foreground">Full Name</span>
-                <span className="text-right text-foreground">{form.getValues("fullName")}</span>
+                <span className="text-foreground text-right">{form.getValues('fullName')}</span>
               </div>
               <div className="flex justify-between gap-4">
                 <span className="text-muted-foreground">Email</span>
-                <span className="text-right text-foreground">{form.getValues("email")}</span>
+                <span className="text-foreground text-right">{form.getValues('email')}</span>
               </div>
               <div className="flex justify-between gap-4">
                 <span className="text-muted-foreground">Phone</span>
-                <span className="text-right text-foreground">{form.getValues("phone")}</span>
+                <span className="text-foreground text-right">{form.getValues('phone')}</span>
               </div>
               <div className="flex justify-between gap-4">
                 <span className="text-muted-foreground">DOB</span>
-                <span className="text-right text-foreground">
-                  {form.getValues("dob") ? format(form.getValues("dob"), "PPP") : ""}
+                <span className="text-foreground text-right">
+                  {form.getValues('dob') ? format(form.getValues('dob'), 'PPP') : ''}
                 </span>
               </div>
               <div className="flex justify-between gap-4">
                 <span className="text-muted-foreground">Address</span>
-                <span className="text-right text-foreground">{form.getValues("address")}</span>
+                <span className="text-foreground text-right">{form.getValues('address')}</span>
               </div>
               <div className="flex justify-between gap-4">
                 <span className="text-muted-foreground">City</span>
-                <span className="text-right text-foreground">{form.getValues("city")}</span>
+                <span className="text-foreground text-right">{form.getValues('city')}</span>
               </div>
               <div className="flex justify-between gap-4">
                 <span className="text-muted-foreground">State</span>
-                <span className="text-right text-foreground">{form.getValues("state")}</span>
+                <span className="text-foreground text-right">{form.getValues('state')}</span>
               </div>
             </motion.div>
           )}
@@ -390,7 +423,7 @@ export default function PatientRegisterPage() {
                 type="button"
                 variant="outline"
                 onClick={() => setStep((currentStep) => currentStep - 1)}
-                className="h-12 rounded-xl border-border/80 bg-card/95 text-foreground shadow-[0_8px_24px_rgba(15,23,42,0.05)] backdrop-blur-md hover:bg-white"
+                className="border-border/80 bg-card/95 text-foreground h-12 rounded-xl shadow-[0_8px_24px_rgba(15,23,42,0.05)] backdrop-blur-md hover:bg-white"
               >
                 <ArrowLeft className="h-4 w-4" /> Back
               </Button>
@@ -400,7 +433,7 @@ export default function PatientRegisterPage() {
               <Button
                 type="button"
                 onClick={nextStep}
-                className="h-12 flex-1 rounded-xl bg-gradient-primary text-white transition-opacity hover:opacity-90"
+                className="bg-gradient-primary h-12 flex-1 rounded-xl text-white transition-opacity hover:opacity-90"
               >
                 Next <ArrowRight className="h-4 w-4" />
               </Button>
@@ -408,19 +441,23 @@ export default function PatientRegisterPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="h-12 flex-1 rounded-xl bg-gradient-primary text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                className="bg-gradient-primary h-12 flex-1 rounded-xl text-white transition-opacity hover:opacity-90 disabled:opacity-50"
               >
-                {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle className="h-4 w-4" />}
-                {loading ? "Registering..." : "Complete Registration"}
+                {loading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <CheckCircle className="h-4 w-4" />
+                )}
+                {loading ? 'Registering...' : 'Complete Registration'}
               </Button>
             )}
           </div>
         </form>
       </Form>
 
-      <p className="mt-6 text-center text-sm text-muted-foreground">
-        Already have an account?{" "}
-        <Link href="/login" className="font-medium text-primary hover:underline">
+      <p className="text-muted-foreground mt-6 text-center text-sm">
+        Already have an account?{' '}
+        <Link href="/login" className="text-primary font-medium hover:underline">
           Sign In
         </Link>
       </p>

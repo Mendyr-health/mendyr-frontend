@@ -1,6 +1,6 @@
-"use client";
-import { cn } from "@mendyr/shared-utils";
-import { motion } from "framer-motion";
+'use client';
+import { cn } from '@mendyr/shared-utils';
+import { motion } from 'framer-motion';
 
 export function LampContainer({
   children,
@@ -12,53 +12,51 @@ export function LampContainer({
   return (
     <div
       className={cn(
-        "relative flex min-h-[400px] flex-col items-center justify-center overflow-hidden w-full rounded-md z-0",
-        className
+        'relative z-0 flex min-h-[400px] w-full flex-col items-center justify-center overflow-hidden rounded-md',
+        className,
       )}
     >
-      <div className="relative flex w-full flex-1 scale-y-125 items-center justify-center isolate z-0">
+      <div className="relative isolate z-0 flex w-full flex-1 scale-y-125 items-center justify-center">
         <motion.div
-          initial={{ opacity: 0.5, width: "15rem" }}
-          whileInView={{ opacity: 1, width: "30rem" }}
-          transition={{ delay: 0.3, duration: 0.8, ease: "easeInOut" }}
+          initial={{ opacity: 0.5, width: '15rem' }}
+          whileInView={{ opacity: 1, width: '30rem' }}
+          transition={{ delay: 0.3, duration: 0.8, ease: 'easeInOut' }}
           style={{
-            backgroundImage:
-              "conic-gradient(var(--conic-position), var(--tw-gradient-stops))",
+            backgroundImage: 'conic-gradient(var(--conic-position), var(--tw-gradient-stops))',
           }}
-          className="absolute inset-auto right-1/2 h-56 overflow-visible w-[30rem] bg-gradient-conic from-primary via-transparent to-transparent text-white [--conic-position:from_70deg_at_center_top]"
+          className="bg-gradient-conic from-primary absolute inset-auto right-1/2 h-56 w-[30rem] overflow-visible via-transparent to-transparent text-white [--conic-position:from_70deg_at_center_top]"
         >
-          <div className="absolute w-[100%] left-0 bg-background h-40 bottom-0 z-20 [mask-image:linear-gradient(to_top,white,transparent)]" />
-          <div className="absolute w-40 h-[100%] left-0 bg-background bottom-0 z-20 [mask-image:linear-gradient(to_right,white,transparent)]" />
+          <div className="bg-background absolute bottom-0 left-0 z-20 h-40 w-[100%] [mask-image:linear-gradient(to_top,white,transparent)]" />
+          <div className="bg-background absolute bottom-0 left-0 z-20 h-[100%] w-40 [mask-image:linear-gradient(to_right,white,transparent)]" />
         </motion.div>
         <motion.div
-          initial={{ opacity: 0.5, width: "15rem" }}
-          whileInView={{ opacity: 1, width: "30rem" }}
-          transition={{ delay: 0.3, duration: 0.8, ease: "easeInOut" }}
+          initial={{ opacity: 0.5, width: '15rem' }}
+          whileInView={{ opacity: 1, width: '30rem' }}
+          transition={{ delay: 0.3, duration: 0.8, ease: 'easeInOut' }}
           style={{
-            backgroundImage:
-              "conic-gradient(var(--conic-position), var(--tw-gradient-stops))",
+            backgroundImage: 'conic-gradient(var(--conic-position), var(--tw-gradient-stops))',
           }}
-          className="absolute inset-auto left-1/2 h-56 w-[30rem] bg-gradient-conic from-transparent via-transparent to-primary text-foreground [--conic-position:from_290deg_at_center_top]"
+          className="bg-gradient-conic to-primary text-foreground absolute inset-auto left-1/2 h-56 w-[30rem] from-transparent via-transparent [--conic-position:from_290deg_at_center_top]"
         >
-          <div className="absolute w-40 h-[100%] right-0 bg-background bottom-0 z-20 [mask-image:linear-gradient(to_left,white,transparent)]" />
-          <div className="absolute w-[100%] right-0 bg-background h-40 bottom-0 z-20 [mask-image:linear-gradient(to_top,white,transparent)]" />
+          <div className="bg-background absolute right-0 bottom-0 z-20 h-[100%] w-40 [mask-image:linear-gradient(to_left,white,transparent)]" />
+          <div className="bg-background absolute right-0 bottom-0 z-20 h-40 w-[100%] [mask-image:linear-gradient(to_top,white,transparent)]" />
         </motion.div>
-        <div className="absolute top-1/2 h-48 w-full translate-y-12 scale-x-150 bg-background blur-2xl" />
+        <div className="bg-background absolute top-1/2 h-48 w-full translate-y-12 scale-x-150 blur-2xl" />
         <div className="absolute top-1/2 z-50 h-48 w-full bg-transparent opacity-10 backdrop-blur-md" />
-        <div className="absolute inset-auto z-50 h-36 w-[28rem] -translate-y-1/2 rounded-full bg-primary opacity-50 blur-3xl" />
+        <div className="bg-primary absolute inset-auto z-50 h-36 w-[28rem] -translate-y-1/2 rounded-full opacity-50 blur-3xl" />
         <motion.div
-          initial={{ width: "8rem" }}
-          whileInView={{ width: "16rem" }}
-          transition={{ delay: 0.3, duration: 0.8, ease: "easeInOut" }}
-          className="absolute inset-auto z-30 h-36 w-64 -translate-y-[6rem] rounded-full bg-primary-light blur-2xl"
+          initial={{ width: '8rem' }}
+          whileInView={{ width: '16rem' }}
+          transition={{ delay: 0.3, duration: 0.8, ease: 'easeInOut' }}
+          className="bg-primary-light absolute inset-auto z-30 h-36 w-64 -translate-y-[6rem] rounded-full blur-2xl"
         />
         <motion.div
-          initial={{ width: "15rem" }}
-          whileInView={{ width: "30rem" }}
-          transition={{ delay: 0.3, duration: 0.8, ease: "easeInOut" }}
-          className="absolute inset-auto z-50 h-0.5 w-[30rem] -translate-y-[7rem] bg-primary-light"
+          initial={{ width: '15rem' }}
+          whileInView={{ width: '30rem' }}
+          transition={{ delay: 0.3, duration: 0.8, ease: 'easeInOut' }}
+          className="bg-primary-light absolute inset-auto z-50 h-0.5 w-[30rem] -translate-y-[7rem]"
         />
-        <div className="absolute inset-auto z-40 h-44 w-full -translate-y-[12.5rem] bg-background" />
+        <div className="bg-background absolute inset-auto z-40 h-44 w-full -translate-y-[12.5rem]" />
       </div>
       <div className="relative z-50 flex -translate-y-60 flex-col items-center px-5">
         {children}
