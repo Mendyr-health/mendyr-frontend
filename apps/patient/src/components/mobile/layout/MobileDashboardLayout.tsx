@@ -17,7 +17,7 @@ interface MobileDashboardLayoutProps {
 
 export default function MobileDashboardLayout({ children, navLinks, role, userName, onLogout }: MobileDashboardLayoutProps) {
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-[100svh] flex flex-col bg-background">
       <TopAppBar userName={userName} onLogout={onLogout} />
       
       {/* Scrollable Main Content */}

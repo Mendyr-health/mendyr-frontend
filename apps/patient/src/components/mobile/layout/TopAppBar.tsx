@@ -9,7 +9,7 @@ interface TopAppBarProps {
 
 export function TopAppBar({ userName, onLogout }: TopAppBarProps) {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border h-16 px-4 pt-safe flex items-center justify-between">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border min-h-[4rem] px-4 pt-safe py-2 flex items-center justify-between">
       <div className="flex items-center gap-2">
         <Image src="/mendyr.png" loading="eager" alt="Mendyr Logo" width={90} height={30} className="h-6 w-auto object-contain" />
       </div>
