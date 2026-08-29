@@ -6,8 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-<<<<<<< HEAD
-    "dev": "next dev --turbopack",
+    "dev": "next dev -H 0.0.0.0 --turbopack",
     "build": "next build",
     "build:patient": "NEXT_PUBLIC_APP_TARGET=patient next build",
     "build:provider": "NEXT_PUBLIC_APP_TARGET=provider next build",
