@@ -470,7 +470,7 @@ export default function NurseDashboard() {
     setChatInput('');
   };
 
-  const handleAccept = (req: unknown) => {
+  const handleAccept = (req: any) => {
     setRequests(requests.filter((r) => r.id !== req.id));
     setActiveVisits([...activeVisits, { ...req, type: req.condition }]);
     setSelectedRequest(null);
@@ -501,7 +501,7 @@ export default function NurseDashboard() {
     setOtherReasonText('');
   };
 
-  const startVisit = (visit: unknown) => {
+  const startVisit = (visit: any) => {
     setExecutionVisit(visit);
     setExecutionState('en_route');
     setOtp(['', '', '', '']);
@@ -850,7 +850,7 @@ export default function NurseDashboard() {
                                   Visits Completed ({hist.visits.length})
                                 </h5>
                                 <div className="space-y-2">
-                                  {hist.visits.map((visit: unknown, idx: number) => (
+                                  {hist.visits.map((visit: any, idx: number) => (
                                     <div
                                       key={idx}
                                       className="bg-muted/50 flex items-center justify-between rounded-lg p-2"
