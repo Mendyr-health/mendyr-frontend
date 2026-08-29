@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
 import { useAppointments } from "@/features/nurse/useAppointments";
@@ -18,13 +19,20 @@ import {
   MapPin,
   Check,
   X,
-  Play,
   ArrowRight,
   Activity,
   MessageSquare,
+  Navigation,
+  Info,
 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@mendyr/shared-ui/src/ui/button";
+import dynamic from "next/dynamic";
+
+const VisitExecutionOverlay = dynamic(() => import("@/components/nurse/VisitExecutionOverlay"));
+const CancelVisitModal = dynamic(() => import("@/components/nurse/CancelVisitModal"));
+const RequestDetailModal = dynamic(() => import("@/components/nurse/RequestDetailModal"));
+const OnlineStatusToggle = dynamic(() => import("@/components/nurse/OnlineStatusToggle"));
 
 const statusConfig: Record<string, { icon: React.ReactNode; color: string; label: string; desc: string; bg: string }> = {
   PENDING: { icon: <Clock className="h-8 w-8 text-amber-500" />, color: "text-amber-500", bg: "bg-amber-500/10", label: "Pending Review", desc: "Your application is awaiting review." },
@@ -35,11 +43,27 @@ const statusConfig: Record<string, { icon: React.ReactNode; color: string; label
 
 export default function MobileNurseDashboard() {
   const { user } = useAuth();
-  const { pendingRequests, acceptedVisits, inProgressVisits, acceptAppointment, rejectAppointment, startVisit, getEarningsSummary } = useAppointments();
+  const { pendingRequests, acceptedVisits, inProgressVisits, acceptAppointment, rejectAppointment, cancelVisit, startVisit, completeVisit, getEarningsSummary } = useAppointments();
   const summary = getEarningsSummary();
+
+  // Interactive overlay state
+  const [isOnline, setIsOnline] = useState(true);
+  const [executionVisit, setExecutionVisit] = useState<any>(null);
+  const [cancelVisitId, setCancelVisitId] = useState<string | null>(null);
+  const [selectedRequest, setSelectedRequest] = useState<any>(null);
 
   const status: string = user?.status || "APPROVED";
   const config = statusConfig[status] || statusConfig.APPROVED;
+
+  const handleStartVisit = (apt: any) => {
+    setExecutionVisit({
+      publicId: apt.publicId,
+      patientName: apt.patientName,
+      serviceName: apt.serviceName,
+      location: apt.location,
+    });
+    startVisit(apt.publicId);
+  };
 
   return (
     <div className="pb-28 space-y-6 px-3 pt-2">
@@ -49,27 +73,26 @@ export default function MobileNurseDashboard() {
           <h1 className="text-2xl font-bold text-foreground font-outfit">
             Welcome, <span className="text-primary">{user?.fullName?.split(" ")[0] || "Nurse Keshav"}</span> 👋
           </h1>
-          <p className="text-xs text-muted-foreground mt-0.5">Mobile Clinical Dashboard</p>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            {isOnline ? (
+              <span className="flex items-center gap-1.5">
+                <span className="relative flex h-2 w-2"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" /><span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" /></span>
+                Online — searching for care requests...
+              </span>
+            ) : "Offline — go online to receive requests."}
+          </p>
         </div>
-        <Link href="/nurse/appointments">
-          <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-1.5 rounded-xl h-10 px-3.5 shadow-md shadow-primary/20">
-            <Calendar className="h-4 w-4" /> ({pendingRequests.length + acceptedVisits.length})
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          <OnlineStatusToggle isOnline={isOnline} onChange={setIsOnline} />
+          <Link href="/nurse/appointments">
+            <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-1.5 rounded-xl h-10 px-3.5 shadow-md shadow-primary/20">
+              <Calendar className="h-4 w-4" /> ({pendingRequests.length + acceptedVisits.length})
+            </Button>
+          </Link>
+        </div>
       </div>
 
-      {/* Hero Status Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className={`rounded-3xl p-5 ${config.bg} border border-border shadow-sm flex items-center gap-4`}
-      >
-        <div className="shrink-0">{config.icon}</div>
-        <div>
-          <h2 className="text-base font-bold text-foreground">{config.label}</h2>
-          <p className={`text-xs ${config.color} font-medium leading-relaxed`}>{config.desc}</p>
-        </div>
-      </motion.div>
+
 
       {/* Quick Stats Grid (2x2) */}
       <div className="grid grid-cols-2 gap-3">
@@ -167,6 +190,14 @@ export default function MobileNurseDashboard() {
                 <div className="flex items-center gap-2 pt-1">
                   <Button
                     size="sm"
+                    variant="outline"
+                    onClick={() => setSelectedRequest(apt)}
+                    className="border-primary/30 text-primary text-xs h-9 rounded-xl"
+                  >
+                    <Info className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button
+                    size="sm"
                     onClick={() => acceptAppointment(apt.publicId)}
                     className="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold gap-1 flex-1 text-xs h-9 rounded-xl"
                   >
@@ -187,6 +218,57 @@ export default function MobileNurseDashboard() {
         )}
       </div>
 
+      {/* Accepted Visits with Start / Cancel */}
+      {acceptedVisits.length > 0 && (
+        <div className="space-y-3">
+          <h3 className="text-base font-bold text-foreground px-1 flex items-center gap-1.5">
+            <Stethoscope className="h-4 w-4 text-blue-400" /> Confirmed Visits ({acceptedVisits.length})
+          </h3>
+          <div className="space-y-3">
+            {acceptedVisits.map((apt) => (
+              <div key={apt.publicId} className="bg-card rounded-2xl p-4 border-l-4 border-l-primary border border-border/80 shadow-sm space-y-3">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h4 className="font-bold text-foreground text-sm">{apt.patientName}</h4>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-semibold">
+                      {apt.serviceName}
+                    </span>
+                  </div>
+                  <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded-md">
+                    {apt.timeSlot}
+                  </span>
+                </div>
+                <div className="text-xs text-muted-foreground space-y-1">
+                  <p className="flex items-center gap-1.5 font-medium text-foreground">
+                    <Calendar className="h-3 w-3 text-primary" /> {apt.date}
+                  </p>
+                  <p className="flex items-center gap-1.5">
+                    <MapPin className="h-3 w-3 text-red-400" /> {apt.location.address}
+                  </p>
+                </div>
+                <div className="flex gap-2 pt-1">
+                  <Button
+                    size="sm"
+                    className="flex-1 bg-primary hover:bg-primary/90 text-white font-semibold gap-1.5 text-xs h-10 rounded-xl shadow-md shadow-primary/20"
+                    onClick={() => handleStartVisit(apt)}
+                  >
+                    <Navigation className="h-3.5 w-3.5" /> Start Visit
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="border-rose-200 text-rose-500 hover:bg-rose-50 text-xs h-10 rounded-xl"
+                    onClick={() => setCancelVisitId(apt.publicId)}
+                  >
+                    <X className="h-3.5 w-3.5" /> Cancel
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Menu Navigation List */}
       <div className="space-y-2 pt-2">
         <h3 className="text-base font-bold text-foreground px-1">Clinical Menu</h3>
@@ -196,7 +278,6 @@ export default function MobileNurseDashboard() {
             { title: "Patient Messages", icon: MessageSquare, href: "/nurse/messages", bg: "bg-blue-500/10", color: "text-blue-500" },
             { title: "Earnings & Payouts", icon: DollarSign, href: "/nurse/earnings", bg: "bg-emerald-500/10", color: "text-emerald-500" },
             { title: "Weekly Availability", icon: Clock, href: "/nurse/availability", bg: "bg-amber-500/10", color: "text-amber-500" },
-            { title: "Documents & Credentials", icon: FileText, href: "/nurse/documents", bg: "bg-purple-500/10", color: "text-purple-500" },
             { title: "Edit Profile", icon: User, href: "/nurse/profile", bg: "bg-blue-500/10", color: "text-blue-500" },
           ].map((item, idx, arr) => (
             <Link
@@ -215,6 +296,33 @@ export default function MobileNurseDashboard() {
           ))}
         </div>
       </div>
+
+      {/* --- OVERLAYS --- */}
+
+      {/* Visit Execution Overlay */}
+      <VisitExecutionOverlay
+        visit={executionVisit}
+        onClose={() => setExecutionVisit(null)}
+        onComplete={(publicId) => completeVisit(publicId, "Visit completed successfully")}
+      />
+
+      {/* Cancel Visit Modal */}
+      <CancelVisitModal
+        isOpen={!!cancelVisitId}
+        onClose={() => setCancelVisitId(null)}
+        onConfirm={(reason) => {
+          if (cancelVisitId) cancelVisit(cancelVisitId, reason);
+          setCancelVisitId(null);
+        }}
+      />
+
+      {/* Request Detail Modal */}
+      <RequestDetailModal
+        appointment={selectedRequest}
+        onClose={() => setSelectedRequest(null)}
+        onAccept={(id) => acceptAppointment(id)}
+        onDecline={(id) => rejectAppointment(id, "Schedule conflict")}
+      />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { User, Phone, MapPin, Mail, Briefcase, Award, Check } from "lucide-react";
+import { User, Phone, MapPin, Mail, Briefcase, Award, Check, CheckCircle, FileText } from "lucide-react";
 import { Button } from "@mendyr/shared-ui/src/ui/button";
 import { Input } from "@mendyr/shared-ui/src/ui/input";
 import { useAuth } from "@/hooks/use-auth";
@@ -107,6 +107,53 @@ export default function MobileNurseProfile() {
               )}
             </div>
           ))}
+        </div>
+      </motion.div>
+
+      {/* Status & Documents Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="px-2"
+      >
+        <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider mb-3 px-2 flex items-center gap-2">
+          <Award className="w-4 h-4" /> Status & Documents
+        </h3>
+        <div className="bg-card border border-border rounded-3xl overflow-hidden shadow-sm p-4 space-y-4">
+          <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-4 flex items-center gap-3">
+            <CheckCircle className="h-6 w-6 text-emerald-500 shrink-0" />
+            <div>
+              <h4 className="font-semibold text-sm text-foreground">Approved & Verified</h4>
+              <p className="text-xs text-emerald-600/80 mt-0.5">Profile is active and ready.</p>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            {[
+              { name: "Nursing License", status: "Verified" },
+              { name: "Aadhaar Card", status: "Verified" },
+              { name: "Degree Certificate", status: "Verified" },
+            ].map((doc) => (
+              <div key={doc.name} className="flex items-center justify-between p-3 bg-muted/50 border border-border rounded-xl">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-primary/10 rounded-lg text-primary">
+                    <FileText className="h-4 w-4" />
+                  </div>
+                  <span className="text-sm font-medium text-foreground">{doc.name}</span>
+                </div>
+                <span className="text-[10px] font-semibold px-2 py-0.5 bg-emerald-500/10 text-emerald-500 rounded-md uppercase">
+                  {doc.status}
+                </span>
+              </div>
+            ))}
+            
+            {editing && (
+              <Button variant="outline" size="sm" className="w-full mt-2 border-dashed border-2 rounded-xl">
+                + Upload Document
+              </Button>
+            )}
+          </div>
         </div>
       </motion.div>
 

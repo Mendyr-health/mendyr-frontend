@@ -32,13 +32,11 @@ export function NativeAppBootstrap() {
     const raf = requestAnimationFrame(hideSplash);
 
     const backButtonListener = App.addListener("backButton", ({ canGoBack }) => {
-      if (canGoBack) {
-        // Use Next's router (not raw window.history.back()) so the App
-        // Router's client-side cache/state stays in sync with the URL the
-        // hardware back button navigates to — mixing the two can otherwise
-        // leave the screen showing stale content after a back press.
-        router.back();
-      } else {
+      const currentPath = window.location.pathname;
+      const rootPages = ["/", "/login", "/patient", "/nurse"];
+      const isRootPage = rootPages.includes(currentPath);
+
+      if (isRootPage) {
         Dialog.confirm({
           title: "Exit App",
           message: "Are you sure you want to exit?",
@@ -47,6 +45,14 @@ export function NativeAppBootstrap() {
             App.exitApp();
           }
         });
+      } else if (canGoBack) {
+        // Use Next's router (not raw window.history.back()) so the App
+        // Router's client-side cache/state stays in sync with the URL the
+        // hardware back button navigates to — mixing the two can otherwise
+        // leave the screen showing stale content after a back press.
+        router.back();
+      } else {
+        App.minimizeApp();
       }
     });
 

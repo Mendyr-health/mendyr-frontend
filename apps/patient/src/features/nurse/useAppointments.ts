@@ -59,6 +59,13 @@ export function useAppointments() {
     });
   };
 
+  const cancelVisit = (publicId: string, reason: string = "Nurse cancelled") => {
+    dispatch(rejectAppointmentRequest({ id: publicId, reason }));
+    toast.error("Visit Cancelled", {
+      description: `Reason: ${reason}. The appointment has been removed from your schedule.`,
+    });
+  };
+
   const getEarningsSummary = () => earningsSummary;
 
   return {
@@ -70,6 +77,7 @@ export function useAppointments() {
     rejectedRequests,
     acceptAppointment,
     rejectAppointment,
+    cancelVisit,
     startVisit,
     completeVisit,
     getEarningsSummary,
