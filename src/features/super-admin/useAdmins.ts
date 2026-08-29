@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
+import { apiFetch } from "@/lib/api-client";
 
 export interface AdminEntry {
   publicId: string;
@@ -23,7 +24,7 @@ export function useAdmins() {
   const fetchAdmins = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/v1/admin/admins?q=${debouncedQuery}`);
+      const res = await apiFetch(`/api/v1/admin/admins?q=${debouncedQuery}`);
       const data = await res.json();
       if (data.success) setAdmins(data.data || []);
     } catch {/* */} finally { setLoading(false); }
@@ -34,7 +35,7 @@ export function useAdmins() {
   const handleCreateAdmin = async () => {
     setCreating(true);
     try {
-      await fetch("/api/v1/admin/admins", {
+      await apiFetch("/api/v1/admin/admins", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newAdmin),
@@ -46,7 +47,7 @@ export function useAdmins() {
   };
 
   const handleSuspend = async (publicId: string) => {
-    await fetch(`/api/v1/admin/admins/${publicId}/suspend`, { method: "POST" });
+    await apiFetch(`/api/v1/admin/admins/${publicId}/suspend`, { method: "POST" });
     fetchAdmins();
   };
 

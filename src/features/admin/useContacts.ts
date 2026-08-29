@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { apiFetch } from "@/lib/api-client";
 
 export interface ContactEntry {
   publicId: string;
@@ -32,7 +33,7 @@ export function useContacts() {
     if (debouncedQuery) params.set("q", debouncedQuery);
     if (statusFilter) params.set("status", statusFilter);
     try {
-      const res = await fetch(`/api/v1/search?${params}`);
+      const res = await apiFetch(`/api/v1/search?${params}`);
       const data = await res.json();
       if (data.success) { 
         setContacts(data.data || []); 

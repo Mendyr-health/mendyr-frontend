@@ -24,6 +24,7 @@ import type { z } from "zod";
 
 import { patientRegistrationFormSchema } from "@/lib/validators";
 import { getDateOfBirthRange } from "@/lib/date-of-birth";
+import { apiFetch } from "@/lib/api-client";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -70,7 +71,7 @@ export default function PatientRegisterPage() {
     setError("");
 
     try {
-      const res = await fetch("/api/auth/register", {
+      const res = await apiFetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

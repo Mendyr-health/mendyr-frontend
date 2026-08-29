@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Users, UserCheck, ClipboardList, Mail, ArrowRight, Activity, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { apiFetch } from "@/lib/api-client";
 
 interface Stats {
   totalPatients: number;
@@ -28,7 +29,7 @@ export default function MobileAdminDashboard() {
   useEffect(() => {
     async function fetchStats() {
       try {
-        const res = await fetch("/api/v1/admin/dashboard");
+        const res = await apiFetch("/api/v1/admin/dashboard");
         const data = await res.json();
         if (data.success) setStats(data.data);
       } catch {

@@ -1,6 +1,23 @@
 @import "tailwindcss";
 @source "../";
 
+/* ─── Safe Area Utilities (notch / home indicator) ────── */
+@utility pt-safe {
+  padding-top: env(safe-area-inset-top);
+}
+
+@utility pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+@utility pl-safe {
+  padding-left: env(safe-area-inset-left);
+}
+
+@utility pr-safe {
+  padding-right: env(safe-area-inset-right);
+}
+
 /* ─── Custom Theme Tokens ─────────────────────── */
 :root {
   /* Primary - Deep Blue Theme */
@@ -92,6 +109,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   background-color: hsl(var(--background));
   overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -106,6 +124,36 @@ body {
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
   min-height: 100vh;
   overscroll-behavior-y: none;
+}
+
+/* ─── Native App Feel ─────────────────────────── */
+/* Disable the iOS long-press callout menu and text selection on chrome
+   (buttons/links/nav), while leaving normal text selection intact elsewhere. */
+button,
+a,
+[role="button"],
+nav {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Inside the native shell we already provide our own chrome, so a
+   desktop-style scrollbar reads as a web page, not an app. */
+.is-native-app ::-webkit-scrollbar {
+  display: none;
+}
+
+.is-native-app {
+  scrollbar-width: none;
+}
+
+/* iOS auto-zooms the page on focusing any text input smaller than 16px.
+   Scoped to the native shell only, so the web experience keeps its design. */
+.is-native-app input,
+.is-native-app textarea,
+.is-native-app select {
+  font-size: 16px;
 }
 
 /* ─── Typography ──────────────────────────────── */

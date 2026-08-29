@@ -22,6 +22,9 @@ import {
   InfiniteMovingCards,
 } from "@/components/aceternity";
 import { HEALTHCARE_SERVICES, FAQ_ITEMS } from "@/lib/constants";
+import { apiFetch } from "@/lib/api-client";
+import { usePlatform } from "@/hooks/usePlatform";
+import { MinimalHome } from "@/components/mobile/public/MinimalHome";
 
 const iconMap: Record<string, React.ReactNode> = {
   Heart: <Heart className="w-6 h-6" />,
@@ -440,7 +443,7 @@ function WaitlistSection() {
     e.preventDefault();
     if (!email) return;
     try {
-      await fetch("/api/v1/waitlist", {
+      await apiFetch("/api/v1/waitlist", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, source: "landing" }),
@@ -515,6 +518,12 @@ function WaitlistSection() {
 // ─── Main Landing Page ───────────────────────────
 
 export default function LandingPage() {
+  const { isCapacitor } = usePlatform();
+
+  if (isCapacitor) {
+    return <MinimalHome />;
+  }
+
   return (
     <>
       <HeroSection />

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Send, CheckCircle, MapPin, Mail, Phone } from "lucide-react";
+import { apiFetch } from "@/lib/api-client";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
@@ -13,7 +14,7 @@ export default function ContactPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      await fetch("/api/v1/contacts", {
+      await apiFetch("/api/v1/contacts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

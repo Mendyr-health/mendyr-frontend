@@ -7,8 +7,11 @@ on:
 
 jobs:
   build-web:
-    name: Build Next.js Web App
+    name: Build Next.js Web App (${{ matrix.target }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: [patient, provider]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -25,29 +28,39 @@ jobs:
           path: |
             ~/.npm
             ${{ github.workspace }}/.next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          key: ${{ runner.os }}-nextjs-${{ matrix.target }}-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+            ${{ runner.os }}-nextjs-${{ matrix.target }}-${{ hashFiles('**/package-lock.json') }}-
 
       - name: Install NPM Dependencies
         run: npm ci
 
-      - name: Build Next.js Web App
-        run: npm run build
+      # NEXT_PUBLIC_APP_TARGET is baked into the static export at build time (there's no
+      # server at runtime to read it from) — this is what makes the patient build show
+      # patient branding/routes and the provider build show provider branding/routes.
+      - name: Build Next.js Web App (${{ matrix.target }})
+        run: npm run build:${{ matrix.target }}
         env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1/' }}
+          # Bare origin only — every apiFetch() call site already includes its own full
+          # path (/api/auth/..., /api/v1/...), so a fallback with a path suffix baked in
+          # would double up on every request. Set the NEXT_PUBLIC_API_URL repo secret to
+          # your real deployed backend origin before relying on this in production.
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL || 'http://localhost:8000' }}
 
       - name: Upload Web Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: web-build-out-android
+          name: web-build-out-android-${{ matrix.target }}
           path: out
           retention-days: 1
 
   build-android:
-    name: Build Android APK
+    name: Build Android APK (${{ matrix.target }})
     runs-on: ubuntu-latest
     needs: build-web
+    strategy:
+      matrix:
+        target: [patient, provider]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -74,11 +87,19 @@ jobs:
       - name: Download Web Build Artifact
         uses: actions/download-artifact@v4
         with:
-          name: web-build-out-android
+          name: web-build-out-android-${{ matrix.target }}
           path: out
+
+      # Re-identifies the single checked-in android/ project's applicationId/appName for
+      # this target — see scripts/apply-app-target.js. Must run before `cap sync` or the
+      # APK gets built with whatever identity was last committed, not this target's.
+      - name: Apply ${{ matrix.target }} app identity
+        run: node scripts/apply-app-target.js ${{ matrix.target }}
 
       - name: Sync Capacitor Android
         run: npx cap sync android
+        env:
+          CAPACITOR_APP_TARGET: ${{ matrix.target }}
 
       - name: Build Android Debug APK
         working-directory: ./android
@@ -87,6 +108,6 @@ jobs:
       - name: Upload Android APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mendyr-android-apk
+          name: mendyr-android-${{ matrix.target }}-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 7

@@ -27,9 +27,11 @@ This project is configured as a purely static **Frontend Only** Next.js applicat
 Ensure your backend API URL is configured correctly. Create a `.env.local` file in the root directory:
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1/
+NEXT_PUBLIC_API_URL=http://localhost:8000
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
+
+`NEXT_PUBLIC_API_URL` must be the backend's absolute origin (no trailing path). All API calls resolve against it explicitly — the Capacitor iOS/Android builds load the app from a local scheme with no same-origin proxy, so relative `fetch("/api/...")` calls cannot work on-device. See [`src/lib/api-client.ts`](src/lib/api-client.ts).
 
 ### 2. Web Development
 
@@ -70,7 +72,40 @@ Open the native iOS project in Xcode:
 ```bash
 npx cap open ios
 ```
-From Xcode, you can manage provisioning profiles and launch the iOS Simulator.
+From Xcode, you can manage provisioning profiles and launch the iOS Simulator. Requires CocoaPods (`brew install cocoapods`) before the first `cap sync`.
+
+---
+
+## 📦 Two Apps, One Codebase
+
+Mendyr ships as two separate installable apps built from this repo: a **patient app** and a **provider app** (nurses/pharmacists/doctors/admin staff). Which one you get is controlled by `NEXT_PUBLIC_APP_TARGET` — it picks the minimal native home screen branding and which registration path is offered (see [`src/lib/app-target.ts`](src/lib/app-target.ts)).
+
+There's still only one `android/` and `ios/` native project checked in — building a given target re-identifies it (applicationId/bundle id + display name) rather than maintaining two full duplicate native trees. Before shipping both apps to the stores in parallel, split into two real native project directories; until then:
+
+```bash
+# Patient app
+npm run sync:patient    # builds with NEXT_PUBLIC_APP_TARGET=patient, re-identifies the native project, then cap sync
+
+# Provider app
+npm run sync:provider
+```
+
+Then `npx cap open android` / `npx cap open ios` as usual. See [`scripts/apply-app-target.js`](scripts/apply-app-target.js) for exactly what gets patched.
+
+---
+
+## 🧪 Trying the App Without a Backend
+
+There's no backend running yet, so the login form falls back to a dummy session if the API is unreachable (a network error, not a rejected password — once a real backend responds, this stops triggering). The role is picked from a keyword in the email:
+
+| Email contains | Role routed to |
+|---|---|
+| `super` | Super Admin |
+| `admin` | Admin |
+| `nurse`, `pharmacist`, or `doctor` | Nurse |
+| anything else | Patient |
+
+e.g. sign in with `nurse@test.com` / any password to land on the nurse dashboard with dummy data. First login for a role goes through a one-time "Tell us about yourself" step ([`/onboarding`](src/app/(auth)/onboarding/page.tsx)) before reaching the dashboard. See [`src/lib/mock-users.ts`](src/lib/mock-users.ts), [`src/lib/mock-session.ts`](src/lib/mock-session.ts), and [`src/lib/onboarding.ts`](src/lib/onboarding.ts).
 
 ---
 

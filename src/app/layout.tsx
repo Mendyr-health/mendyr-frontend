@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Toaster } from "sonner";
@@ -55,9 +55,18 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+  themeColor: "#F7F9FC",
+};
+
 import { StoreProvider } from "@/store/StoreProvider";
 import { I18nProvider } from "@/components/I18nProvider";
-import { CapacitorAppListener } from "@/components/CapacitorAppListener";
+import { NativeAppBootstrap } from "@/components/NativeAppBootstrap";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
@@ -73,7 +82,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
-        <CapacitorAppListener />
+        <NativeAppBootstrap />
         <I18nProvider>
           <StoreProvider>{children}</StoreProvider>
         </I18nProvider>

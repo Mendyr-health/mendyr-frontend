@@ -7,8 +7,11 @@ on:
 
 jobs:
   build-web:
-    name: Build Next.js Web App
+    name: Build Next.js Web App (${{ matrix.target }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: [patient, provider]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -25,29 +28,39 @@ jobs:
           path: |
             ~/.npm
             ${{ github.workspace }}/.next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          key: ${{ runner.os }}-nextjs-${{ matrix.target }}-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+            ${{ runner.os }}-nextjs-${{ matrix.target }}-${{ hashFiles('**/package-lock.json') }}-
 
       - name: Install NPM Dependencies
         run: npm ci
 
-      - name: Build Next.js Web App
-        run: npm run build
+      # NEXT_PUBLIC_APP_TARGET is baked into the static export at build time (there's no
+      # server at runtime to read it from) — this is what makes the patient build show
+      # patient branding/routes and the provider build show provider branding/routes.
+      - name: Build Next.js Web App (${{ matrix.target }})
+        run: npm run build:${{ matrix.target }}
         env:
-          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/v1/' }}
+          # Bare origin only — every apiFetch() call site already includes its own full
+          # path (/api/auth/..., /api/v1/...), so a fallback with a path suffix baked in
+          # would double up on every request. Set the NEXT_PUBLIC_API_URL repo secret to
+          # your real deployed backend origin before relying on this in production.
+          NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL || 'http://localhost:8000' }}
 
       - name: Upload Web Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: web-build-out-ios
+          name: web-build-out-ios-${{ matrix.target }}
           path: out
           retention-days: 1
 
   build-ios:
-    name: Build iOS App
+    name: Build iOS App (${{ matrix.target }})
     runs-on: macos-latest
     needs: build-web
+    strategy:
+      matrix:
+        target: [patient, provider]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -64,8 +77,14 @@ jobs:
       - name: Download Web Build Artifact
         uses: actions/download-artifact@v4
         with:
-          name: web-build-out-ios
+          name: web-build-out-ios-${{ matrix.target }}
           path: out
+
+      # Re-identifies the single checked-in ios/ project's bundle id/display name for this
+      # target — see scripts/apply-app-target.js. Must run before `cap sync` or the app
+      # gets built with whatever identity was last committed, not this target's.
+      - name: Apply ${{ matrix.target }} app identity
+        run: node scripts/apply-app-target.js ${{ matrix.target }}
 
       - name: Symlink Node for Xcode
         run: sudo ln -s $(which node) /usr/local/bin/node || true
@@ -76,6 +95,8 @@ jobs:
 
       - name: Sync Capacitor iOS
         run: npx cap sync ios
+        env:
+          CAPACITOR_APP_TARGET: ${{ matrix.target }}
 
       - name: Build unsigned iOS App Archive
         working-directory: ./ios/App
@@ -89,10 +110,10 @@ jobs:
           CODE_SIGNING_ALLOWED=NO \
           build \
           -derivedDataPath build
-          
+
       - name: Upload iOS Build Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mendyr-ios-unsigned
+          name: mendyr-ios-${{ matrix.target }}-unsigned
           path: ios/App/build/Build/Products/Release-iphoneos/App.app
           retention-days: 7

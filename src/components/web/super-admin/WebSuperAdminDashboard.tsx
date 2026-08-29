@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Users, UserCheck, Shield, ClipboardList, Mail, FileText, ArrowRight, Settings, Activity } from "lucide-react";
+import { apiFetch } from "@/lib/api-client";
 
 export default function WebSuperAdminDashboard() {
   const [stats, setStats] = useState({ totalPatients: 0, totalNurses: 0, totalAdmins: 0, pendingVerifications: 0, waitlistCount: 0, newContacts: 0, totalAuditLogs: 0 });
@@ -12,7 +13,7 @@ export default function WebSuperAdminDashboard() {
   useEffect(() => {
     async function fetchStats() {
       try {
-        const res = await fetch("/api/v1/admin/dashboard");
+        const res = await apiFetch("/api/v1/admin/dashboard");
         const data = await res.json();
         if (data.success) setStats(data.data);
       } catch {

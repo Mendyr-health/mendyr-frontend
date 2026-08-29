@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect, useCallback } from "react";
 import type { UserPublic } from "@/types";
+import { apiFetch } from "@/lib/api-client";
+import { getMockSession, clearMockSession } from "@/lib/mock-session";
 
 export function useAuth() {
   const [user, setUser] = useState<UserPublic | null>(null);
@@ -8,7 +10,7 @@ export function useAuth() {
 
   const fetchUser = useCallback(async () => {
     try {
-      const res = await fetch("/api/auth/me");
+      const res = await apiFetch("/api/auth/me");
       if (res.ok) {
         const data = await res.json();
         setUser(data.data);
@@ -16,7 +18,10 @@ export function useAuth() {
         setUser(null);
       }
     } catch {
-      setUser(null);
+      // No backend reachable — fall back to the dummy session created by
+      // the login page's mock fallback, if one exists, instead of forcing
+      // the user back out to /login.
+      setUser(getMockSession());
     } finally {
       setLoading(false);
     }
@@ -29,8 +34,9 @@ export function useAuth() {
 
   const logout = useCallback(async () => {
     try {
-      await fetch("/api/auth/logout", { method: "POST" });
+      await apiFetch("/api/auth/logout", { method: "POST" });
     } finally {
+      clearMockSession();
       setUser(null);
       window.location.href = "/login";
     }
