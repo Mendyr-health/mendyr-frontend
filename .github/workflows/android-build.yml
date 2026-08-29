@@ -90,10 +90,30 @@ jobs:
       - name: Build Android Debug APK
         working-directory: ./apps/${{ matrix.target }}/android
         run: ./gradlew assembleDebug
+      - name: Rename APK file
+        run: |
+          apk_name="Mendyr"
+          if [ "${{ matrix.target }}" == "nurse" ]; then
+            apk_name="Mendyr Work"
+          fi
+          mv apps/${{ matrix.target }}/android/app/build/outputs/apk/debug/app-debug.apk "apps/${{ matrix.target }}/android/app/build/outputs/apk/debug/${apk_name}.apk"
+          echo "APK_FILE=${apk_name}.apk" >> $GITHUB_ENV
+          echo "APK_NAME=${apk_name}" >> $GITHUB_ENV
 
       - name: Upload Android APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mendyr-android-${{ matrix.target }}-apk
-          path: apps/${{ matrix.target }}/android/app/build/outputs/apk/debug/app-debug.apk
+          name: ${{ env.APK_NAME }}
+          path: apps/${{ matrix.target }}/android/app/build/outputs/apk/debug/${{ env.APK_FILE }}
           retention-days: 7
+      - name: Create Nightly Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/main'
+        with:
+          tag_name: latest-build
+          name: "Latest Mobile Builds"
+          body: "Direct download links for the latest Android APKs."
+          files: apps/${{ matrix.target }}/android/app/build/outputs/apk/debug/${{ env.APK_FILE }}
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
