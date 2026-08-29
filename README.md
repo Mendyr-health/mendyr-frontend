@@ -151,3 +151,22 @@ mendyr/
 ├── next.config.ts         # Next.js configuration (Set to output: 'export')
 └── tailwind.config.ts     # Tailwind CSS theme and design tokens
 ```
+
+---
+
+## 🌳 Git Workflow & Branch Naming Conventions
+
+To keep our repository organized and our CI/CD pipelines running smoothly, please follow these branch naming conventions when creating new branches:
+
+- **`feature/*`**: For new features, major additions, or user-facing changes.
+  *Example:* `feature/patient-dashboard`, `feature/push-notifications`
+- **`bugfix/*`** or **`fix/*`**: For bug fixes and resolving issues in existing code.
+  *Example:* `bugfix/login-crash`, `fix/calendar-timezone`
+- **`architecture/*`**: For core structural changes, major refactors, or infrastructure updates.
+  *Example:* `architecture/monorepo-migration`, `architecture/api-client`
+- **`tech-debt/*`** or **`chore/*`**: For maintenance, dependency updates, removing deprecated code, or general cleanups.
+  *Example:* `tech-debt/remove-old-ui`, `chore/update-react`
+- **`docs/*`**: For changes exclusively related to documentation.
+  *Example:* `docs/api-readme`
+
+When opening a Pull Request, please ensure you use the provided Pull Request template and link any relevant issue numbers.
