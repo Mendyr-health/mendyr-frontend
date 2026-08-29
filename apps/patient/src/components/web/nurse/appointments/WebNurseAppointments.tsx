@@ -27,6 +27,7 @@ import {
 import { Button } from "@mendyr/shared-ui/src/ui/button";
 import { Input } from "@mendyr/shared-ui/src/ui/input";
 import { Textarea } from "@mendyr/shared-ui/src/ui/textarea";
+import { useModalHistory } from "@mendyr/shared-utils";
 import type { AppointmentPublic } from "@/types";
 
 export default function WebNurseAppointments() {
@@ -58,6 +59,9 @@ export default function WebNurseAppointments() {
   const [spo2, setSpo2] = useState("98%");
   const [meds, setMeds] = useState("Routine oral medication");
   const [careNotes, setCareNotes] = useState("Patient is stable, vital signs normal. Wound dressing changed with sterile technique.");
+
+  useModalHistory(!!rejectingId, () => setRejectingId(null), "reject-appointment-modal");
+  useModalHistory(!!completingId, () => setCompletingId(null), "complete-visit-modal");
 
   const handleConfirmReject = () => {
     if (!rejectingId) return;
@@ -381,11 +385,11 @@ export default function WebNurseAppointments() {
                   />
                 )}
               </div>
-              <div className="flex items-center justify-end gap-3 pt-2">
-                <Button variant="outline" onClick={() => setRejectingId(null)}>
+              <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-3 pt-4 mt-2 border-t border-border">
+                <Button variant="outline" onClick={() => setRejectingId(null)} className="w-full sm:w-auto">
                   Cancel
                 </Button>
-                <Button onClick={handleConfirmReject} className="bg-red-500 hover:bg-red-600 text-white font-semibold">
+                <Button onClick={handleConfirmReject} className="bg-red-500 hover:bg-red-600 text-white font-semibold w-full sm:w-auto">
                   Confirm Decline
                 </Button>
               </div>
@@ -450,11 +454,11 @@ export default function WebNurseAppointments() {
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-2 border-t border-border">
-                <Button variant="outline" onClick={() => setCompletingId(null)}>
+              <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-3 pt-4 mt-2 border-t border-border">
+                <Button variant="outline" onClick={() => setCompletingId(null)} className="w-full sm:w-auto">
                   Cancel
                 </Button>
-                <Button onClick={handleConfirmComplete} className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold gap-1.5 px-6">
+                <Button onClick={handleConfirmComplete} className="bg-emerald-500 hover:bg-emerald-600 text-white font-bold gap-1.5 px-6 w-full sm:w-auto">
                   <Check className="h-4 w-4" /> Submit Report & Claim Payout
                 </Button>
               </div>

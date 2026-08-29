@@ -130,8 +130,6 @@ export const NURSE_NAV_LINKS = [
   { label: "Messages", href: "/nurse/messages", icon: "MessageSquare" },
   { label: "Availability", href: "/nurse/availability", icon: "Clock" },
   { label: "Earnings", href: "/nurse/earnings", icon: "DollarSign" },
-  { label: "Documents", href: "/nurse/documents", icon: "FileText" },
-  { label: "Status", href: "/nurse/status", icon: "CheckCircle" },
   { label: "Profile", href: "/nurse/profile", icon: "User" },
   { label: "Settings", href: "/nurse/settings", icon: "Settings" },
 ] as const;

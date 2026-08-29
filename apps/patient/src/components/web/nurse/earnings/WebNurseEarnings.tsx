@@ -56,39 +56,39 @@ export default function WebNurseEarnings() {
       </motion.div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {[
           {
             title: "Today's Earnings",
             amount: `₹${summary.todayEarnings.toLocaleString("en-IN")}`,
-            desc: "Earned from today's care sessions",
+            desc: "Earned today",
             icon: TrendingUp,
-            color: "text-emerald-400",
-            bg: "bg-emerald-500/10 border-emerald-500/30",
+            color: "text-emerald-500",
+            bg: "bg-emerald-500/10 border-emerald-500/20",
           },
           {
             title: "This Week",
             amount: `₹${summary.weekEarnings.toLocaleString("en-IN")}`,
-            desc: "Total completed sessions this week",
+            desc: "Total this week",
             icon: Calendar,
-            color: "text-blue-400",
-            bg: "bg-blue-500/10 border-blue-500/30",
+            color: "text-blue-500",
+            bg: "bg-blue-500/10 border-blue-500/20",
           },
           {
             title: "Pending Payout",
             amount: `₹${summary.pendingPayout.toLocaleString("en-IN")}`,
-            desc: "Scheduled & in-progress shifts",
+            desc: "In-progress shifts",
             icon: Clock,
-            color: "text-amber-400",
-            bg: "bg-amber-500/10 border-amber-500/30",
+            color: "text-amber-500",
+            bg: "bg-amber-500/10 border-amber-500/20",
           },
           {
-            title: "Total Completed Care Visits",
+            title: "Completed Visits",
             amount: `${summary.completedVisitsCount}`,
-            desc: "Verified 5-star patient reviews",
+            desc: "Verified reviews",
             icon: CheckCircle2,
-            color: "text-purple-400",
-            bg: "bg-purple-500/10 border-purple-500/30",
+            color: "text-purple-500",
+            bg: "bg-purple-500/10 border-purple-500/20",
           },
         ].map((card, idx) => (
           <motion.div
@@ -96,17 +96,17 @@ export default function WebNurseEarnings() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
-            className="bg-glass rounded-2xl p-6 border border-border flex flex-col justify-between"
+            className="bg-glass rounded-2xl p-4 sm:p-6 border border-border flex flex-col justify-between h-full hover:border-primary/50 transition-all group"
           >
             <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-muted-foreground">{card.title}</span>
-              <div className={`p-2.5 rounded-xl border ${card.bg}`}>
-                <card.icon className={`h-5 w-5 ${card.color}`} />
+              <span className="text-[10px] sm:text-xs font-bold text-muted-foreground uppercase tracking-wider">{card.title}</span>
+              <div className={`p-1.5 sm:p-2.5 rounded-xl border ${card.bg}`}>
+                <card.icon className={`h-3.5 w-3.5 sm:h-5 sm:w-5 ${card.color}`} />
               </div>
             </div>
-            <div className="mt-4">
-              <div className="text-2xl md:text-3xl font-black text-foreground font-outfit">{card.amount}</div>
-              <p className="text-xs text-muted-foreground mt-1">{card.desc}</p>
+            <div className="mt-3 sm:mt-4">
+              <div className="text-xl sm:text-3xl font-black text-foreground font-outfit group-hover:text-primary transition-colors">{card.amount}</div>
+              <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 sm:mt-1">{card.desc}</p>
             </div>
           </motion.div>
         ))}

@@ -20,6 +20,7 @@ import {
   Search,
   MoreVertical,
   ShieldAlert,
+  ChevronLeft,
 } from "lucide-react";
 import { Button } from "@mendyr/shared-ui/src/ui/button";
 import { Input } from "@mendyr/shared-ui/src/ui/input";
@@ -176,6 +177,7 @@ export default function WebNurseMessages() {
   const [activeThreadId, setActiveThreadId] = useState<string>("t-1");
   const [inputVal, setInputVal] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [showMobileChat, setShowMobileChat] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const activeThread = threads.find((t) => t.id === activeThreadId) || threads[0];
@@ -190,6 +192,7 @@ export default function WebNurseMessages() {
 
   const handleSelectThread = (id: string) => {
     setActiveThreadId(id);
+    setShowMobileChat(true);
     setThreads((prev) =>
       prev.map((t) => (t.id === id ? { ...t, unreadCount: 0 } : t))
     );
@@ -281,9 +284,9 @@ export default function WebNurseMessages() {
       </motion.div>
 
       {/* Main Chat Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-[720px] bg-glass rounded-3xl border border-border overflow-hidden shadow-2xl">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 lg:gap-6 h-[calc(100vh-200px)] min-h-[600px] lg:h-[720px] bg-glass rounded-3xl border border-border overflow-hidden shadow-2xl relative">
         {/* Left Sidebar: Thread List (4 cols) */}
-        <div className="lg:col-span-4 border-r border-border flex flex-col h-full bg-card/40">
+        <div className={`lg:col-span-4 border-r border-border flex-col h-full bg-card/40 ${showMobileChat ? "hidden lg:flex" : "flex"}`}>
           <div className="p-4 border-b border-border space-y-3">
             <div className="relative">
               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -340,11 +343,17 @@ export default function WebNurseMessages() {
         </div>
 
         {/* Right Main Area: Active Thread (8 cols) */}
-        <div className="lg:col-span-8 flex flex-col h-full bg-card/20">
+        <div className={`lg:col-span-8 flex-col h-full bg-card/20 ${showMobileChat ? "flex" : "hidden lg:flex"}`}>
           {/* Thread Header */}
-          <div className="p-4 px-6 border-b border-border bg-glass flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-3">
-              <div className="h-11 w-11 rounded-2xl bg-primary/20 text-primary flex items-center justify-center font-bold text-base">
+          <div className="p-4 px-4 md:px-6 border-b border-border bg-glass flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-2 md:gap-3">
+              <button 
+                onClick={() => setShowMobileChat(false)}
+                className="lg:hidden p-2 -ml-2 rounded-xl text-muted-foreground hover:bg-muted/50 transition-colors"
+              >
+                <ChevronLeft className="h-6 w-6" />
+              </button>
+              <div className="h-10 w-10 md:h-11 md:w-11 rounded-2xl bg-primary/20 text-primary flex items-center justify-center font-bold text-base shrink-0">
                 {activeThread.patientName.split(" ").map((n) => n[0]).join("")}
               </div>
               <div>
@@ -482,9 +491,9 @@ export default function WebNurseMessages() {
               <Button
                 type="submit"
                 disabled={!inputVal.trim()}
-                className="h-12 px-6 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 shadow-lg shadow-primary/20 shrink-0"
+                className="h-12 px-4 md:px-6 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold gap-2 shadow-lg shadow-primary/20 shrink-0"
               >
-                <Send className="h-4 w-4" /> Send
+                <Send className="h-4 w-4" /> <span className="hidden md:inline">Send</span>
               </Button>
             </form>
           </div>
