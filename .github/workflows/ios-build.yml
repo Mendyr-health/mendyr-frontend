@@ -2,8 +2,8 @@ name: Build iOS App (Capacitor)
 
 on:
   workflow_dispatch: # Allows manual triggering from the GitHub Actions tab
-  schedule:
-    - cron: '0 5 * * *' # Runs at 5:00 AM UTC every day
+#  schedule:
+#    - cron: '0 5 * * *' # Runs at 5:00 AM UTC every day
 
 jobs:
   build-web:
