@@ -40,6 +40,8 @@ Review the branch the changes are on. The naming convention must be one of:
 ## 5. Raise the PR
 - Push the branch to the remote repository:
   `git push -u origin HEAD`
-- Use the GitHub CLI to create the PR:
-  `gh pr create --title "<Brief Title>" --body "<Description of changes>"`
+- To create the PR body, read the `.github/pull_request_template.md` file.
+- Fill out the template (check the appropriate checkboxes, add description, etc.) and save it to a temporary file like `/tmp/pr_body.md`.
+- Use the GitHub CLI to create the PR using the filled template:
+  `gh pr create --title "<Brief Title>" --body-file /tmp/pr_body.md`
 - If `gh` CLI is not authenticated or fails, instruct the user to click the PR creation link provided in the `git push` output.

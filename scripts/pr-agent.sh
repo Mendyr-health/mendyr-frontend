@@ -53,7 +53,8 @@ git push -u origin HEAD
 
 echo "📬 Attempting to create PR..."
 if command -v gh &> /dev/null; then
-  gh pr create --fill || echo "⚠️ Could not automatically create PR with gh cli. Please use the link above."
+  echo "📝 Opening interactive PR creation (uses PR template)..."
+  gh pr create || echo "⚠️ Could not automatically create PR with gh cli. Please use the link above."
 else
   echo "⚠️ 'gh' CLI not found. Please click the link in the git push output to create your PR."
 fi
