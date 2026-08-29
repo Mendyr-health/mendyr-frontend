@@ -1,9 +1,11 @@
-"use client";
-import { usePlatform } from "@mendyr/shared-utils";
-import dynamic from "next/dynamic";
+'use client';
+import { usePlatform } from '@mendyr/shared-utils';
+import dynamic from 'next/dynamic';
 
-const WebPatientDashboard = dynamic(() => import("@/components/web/patient/WebPatientDashboard"));
-const MobilePatientDashboard = dynamic(() => import("@/components/mobile/patient/MobilePatientDashboard"));
+const WebPatientDashboard = dynamic(() => import('@/components/web/patient/WebPatientDashboard'));
+const MobilePatientDashboard = dynamic(
+  () => import('@/components/mobile/patient/MobilePatientDashboard'),
+);
 
 export default function PatientDashboardPage() {
   const { isMobile } = usePlatform();

@@ -1,9 +1,13 @@
-"use client";
-import { usePlatform } from "@mendyr/shared-utils";
-import dynamic from "next/dynamic";
+'use client';
+import { usePlatform } from '@mendyr/shared-utils';
+import dynamic from 'next/dynamic';
 
-const WebNurseDocuments = dynamic(() => import("@/components/web/nurse/documents/WebNurseDocuments"));
-const MobileNurseDocuments = dynamic(() => import("@/components/mobile/nurse/documents/MobileNurseDocuments"));
+const WebNurseDocuments = dynamic(
+  () => import('@/components/web/nurse/documents/WebNurseDocuments'),
+);
+const MobileNurseDocuments = dynamic(
+  () => import('@/components/mobile/nurse/documents/MobileNurseDocuments'),
+);
 
 export default function NurseDocumentsPage() {
   const { isMobile } = usePlatform();

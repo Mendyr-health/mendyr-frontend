@@ -1,7 +1,7 @@
-"use client";
-import { motion } from "framer-motion";
-import { Bell, Lock, Shield, ChevronRight, HelpCircle, LogOut } from "lucide-react";
-import { useState } from "react";
+'use client';
+import { motion } from 'framer-motion';
+import { Bell, Lock, Shield, ChevronRight, HelpCircle, LogOut } from 'lucide-react';
+import { useState } from 'react';
 
 // Mobile Toggle Switch Primitive
 function MobileToggle({ checked, onChange }: { checked: boolean; onChange: () => void }) {
@@ -11,12 +11,12 @@ function MobileToggle({ checked, onChange }: { checked: boolean; onChange: () =>
       aria-checked={checked}
       onClick={onChange}
       className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
-        checked ? "bg-primary" : "bg-muted"
+        checked ? 'bg-primary' : 'bg-muted'
       }`}
     >
       <span
         className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
-          checked ? "translate-x-6" : "translate-x-1"
+          checked ? 'translate-x-6' : 'translate-x-1'
         }`}
       />
     </button>
@@ -31,9 +31,9 @@ export default function MobilePatientSettings() {
   });
 
   return (
-    <div className="pb-24 space-y-6">
+    <div className="space-y-6 pb-24">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="px-2">
-        <h1 className="text-2xl font-bold text-foreground">Settings</h1>
+        <h1 className="text-foreground text-2xl font-bold">Settings</h1>
       </motion.div>
 
       <motion.div
@@ -41,50 +41,50 @@ export default function MobilePatientSettings() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
-        <div className="px-4 mb-2">
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Preferences</h2>
+        <div className="mb-2 px-4">
+          <h2 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
+            Preferences
+          </h2>
         </div>
-        <div className="bg-card border border-border rounded-3xl overflow-hidden shadow-sm mx-2">
-          
-          <div className="flex items-center justify-between p-4 border-b border-border/50">
+        <div className="bg-card border-border mx-2 overflow-hidden rounded-3xl border shadow-sm">
+          <div className="border-border/50 flex items-center justify-between border-b p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-primary/10 rounded-full text-primary">
-                <Bell className="w-4 h-4" />
+              <div className="bg-primary/10 text-primary rounded-full p-2">
+                <Bell className="h-4 w-4" />
               </div>
-              <span className="text-sm font-medium text-foreground">Service Launches</span>
+              <span className="text-foreground text-sm font-medium">Service Launches</span>
             </div>
-            <MobileToggle 
-              checked={notifications.launches} 
-              onChange={() => setNotifications(prev => ({ ...prev, launches: !prev.launches }))} 
+            <MobileToggle
+              checked={notifications.launches}
+              onChange={() => setNotifications((prev) => ({ ...prev, launches: !prev.launches }))}
             />
           </div>
 
-          <div className="flex items-center justify-between p-4 border-b border-border/50">
+          <div className="border-border/50 flex items-center justify-between border-b p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-emerald-500/10 rounded-full text-emerald-500">
-                <Bell className="w-4 h-4" />
+              <div className="rounded-full bg-emerald-500/10 p-2 text-emerald-500">
+                <Bell className="h-4 w-4" />
               </div>
-              <span className="text-sm font-medium text-foreground">Promotional Offers</span>
+              <span className="text-foreground text-sm font-medium">Promotional Offers</span>
             </div>
-            <MobileToggle 
-              checked={notifications.promos} 
-              onChange={() => setNotifications(prev => ({ ...prev, promos: !prev.promos }))} 
+            <MobileToggle
+              checked={notifications.promos}
+              onChange={() => setNotifications((prev) => ({ ...prev, promos: !prev.promos }))}
             />
           </div>
 
           <div className="flex items-center justify-between p-4">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-amber-500/10 rounded-full text-amber-500">
-                <Bell className="w-4 h-4" />
+              <div className="rounded-full bg-amber-500/10 p-2 text-amber-500">
+                <Bell className="h-4 w-4" />
               </div>
-              <span className="text-sm font-medium text-foreground">Account Alerts</span>
+              <span className="text-foreground text-sm font-medium">Account Alerts</span>
             </div>
-            <MobileToggle 
-              checked={notifications.alerts} 
-              onChange={() => setNotifications(prev => ({ ...prev, alerts: !prev.alerts }))} 
+            <MobileToggle
+              checked={notifications.alerts}
+              onChange={() => setNotifications((prev) => ({ ...prev, alerts: !prev.alerts }))}
             />
           </div>
-
         </div>
       </motion.div>
 
@@ -93,18 +93,20 @@ export default function MobilePatientSettings() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
       >
-        <div className="px-4 mb-2">
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Security</h2>
+        <div className="mb-2 px-4">
+          <h2 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
+            Security
+          </h2>
         </div>
-        <div className="bg-card border border-border rounded-3xl overflow-hidden shadow-sm mx-2">
-          <button className="w-full flex items-center justify-between p-4 active:bg-muted transition-colors">
+        <div className="bg-card border-border mx-2 overflow-hidden rounded-3xl border shadow-sm">
+          <button className="active:bg-muted flex w-full items-center justify-between p-4 transition-colors">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-500/10 rounded-full text-blue-500">
-                <Lock className="w-4 h-4" />
+              <div className="rounded-full bg-blue-500/10 p-2 text-blue-500">
+                <Lock className="h-4 w-4" />
               </div>
-              <span className="text-sm font-medium text-foreground">Change Password</span>
+              <span className="text-foreground text-sm font-medium">Change Password</span>
             </div>
-            <ChevronRight className="w-5 h-5 text-muted-foreground" />
+            <ChevronRight className="text-muted-foreground h-5 w-5" />
           </button>
         </div>
       </motion.div>
@@ -114,27 +116,32 @@ export default function MobilePatientSettings() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
-        <div className="px-4 mb-2">
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Support</h2>
+        <div className="mb-2 px-4">
+          <h2 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
+            Support
+          </h2>
         </div>
-        <div className="bg-card border border-border rounded-3xl overflow-hidden shadow-sm mx-2">
-          <a href="mailto:support@mendyr.app" className="w-full flex items-center justify-between p-4 active:bg-muted transition-colors border-b border-border/50">
+        <div className="bg-card border-border mx-2 overflow-hidden rounded-3xl border shadow-sm">
+          <a
+            href="mailto:support@mendyr.app"
+            className="active:bg-muted border-border/50 flex w-full items-center justify-between border-b p-4 transition-colors"
+          >
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-rose-500/10 rounded-full text-rose-500">
-                <HelpCircle className="w-4 h-4" />
+              <div className="rounded-full bg-rose-500/10 p-2 text-rose-500">
+                <HelpCircle className="h-4 w-4" />
               </div>
-              <span className="text-sm font-medium text-foreground">Contact Support</span>
+              <span className="text-foreground text-sm font-medium">Contact Support</span>
             </div>
-            <ChevronRight className="w-5 h-5 text-muted-foreground" />
+            <ChevronRight className="text-muted-foreground h-5 w-5" />
           </a>
-          <div className="w-full flex items-center justify-between p-4 active:bg-muted transition-colors">
+          <div className="active:bg-muted flex w-full items-center justify-between p-4 transition-colors">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-slate-500/10 rounded-full text-slate-500">
-                <Shield className="w-4 h-4" />
+              <div className="rounded-full bg-slate-500/10 p-2 text-slate-500">
+                <Shield className="h-4 w-4" />
               </div>
-              <span className="text-sm font-medium text-foreground">Privacy Policy</span>
+              <span className="text-foreground text-sm font-medium">Privacy Policy</span>
             </div>
-            <ChevronRight className="w-5 h-5 text-muted-foreground" />
+            <ChevronRight className="text-muted-foreground h-5 w-5" />
           </div>
         </div>
       </motion.div>

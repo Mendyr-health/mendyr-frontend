@@ -1,6 +1,6 @@
-"use client";
-import { cn } from "@mendyr/shared-utils";
-import { useEffect, useRef } from "react";
+'use client';
+import { cn } from '@mendyr/shared-utils';
+import { useEffect, useRef } from 'react';
 
 export function SparklesCore({
   id,
@@ -24,7 +24,7 @@ export function SparklesCore({
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
     let animationId: number;
@@ -44,12 +44,12 @@ export function SparklesCore({
       ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     };
     resize();
-    window.addEventListener("resize", resize);
+    window.addEventListener('resize', resize);
 
     const density = particleDensity || 50;
     const min = minSize || 0.5;
     const max = maxSize || 1.5;
-    const color = particleColor || "#FDE68A";
+    const color = particleColor || '#FDE68A';
 
     for (let i = 0; i < density; i++) {
       particles.push({
@@ -90,7 +90,7 @@ export function SparklesCore({
 
     return () => {
       cancelAnimationFrame(animationId);
-      window.removeEventListener("resize", resize);
+      window.removeEventListener('resize', resize);
     };
   }, [minSize, maxSize, particleDensity, particleColor]);
 
@@ -98,11 +98,11 @@ export function SparklesCore({
     <canvas
       ref={canvasRef}
       id={id}
-      className={cn("pointer-events-none absolute inset-0", className)}
+      className={cn('pointer-events-none absolute inset-0', className)}
       style={{
-        width: "100%",
-        height: "100%",
-        background: background || "transparent",
+        width: '100%',
+        height: '100%',
+        background: background || 'transparent',
       }}
     />
   );

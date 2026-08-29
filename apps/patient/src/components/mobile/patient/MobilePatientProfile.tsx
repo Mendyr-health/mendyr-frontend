@@ -1,8 +1,8 @@
-"use client";
-import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "@/hooks/use-auth";
-import { User, Phone, MapPin, Mail, Camera, Save, X } from "lucide-react";
-import { useState } from "react";
+'use client';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '@/hooks/use-auth';
+import { User, Phone, MapPin, Mail, Camera, Save, X } from 'lucide-react';
+import { useState } from 'react';
 
 export default function MobilePatientProfile() {
   const { user } = useAuth();
@@ -11,93 +11,95 @@ export default function MobilePatientProfile() {
   return (
     <div className="pb-24">
       {/* Header Profile Info (Avatar) */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col items-center justify-center py-6 relative"
+        className="relative flex flex-col items-center justify-center py-6"
       >
         <div className="relative mb-4">
-          <div className="h-24 w-24 rounded-full bg-primary/10 flex items-center justify-center border-4 border-background shadow-lg overflow-hidden">
-             <User className="h-10 w-10 text-primary" />
+          <div className="bg-primary/10 border-background flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border-4 shadow-lg">
+            <User className="text-primary h-10 w-10" />
           </div>
           {editing && (
-            <button className="absolute bottom-0 right-0 p-2 bg-primary rounded-full text-primary-foreground shadow-md active:scale-95 transition-transform">
-              <Camera className="w-4 h-4" />
+            <button className="bg-primary text-primary-foreground absolute right-0 bottom-0 rounded-full p-2 shadow-md transition-transform active:scale-95">
+              <Camera className="h-4 w-4" />
             </button>
           )}
         </div>
-        <h2 className="text-xl font-bold text-foreground">
-          {user?.fullName || "Loading..."}
-        </h2>
-        <span className="text-sm text-primary font-medium mt-1">Patient</span>
+        <h2 className="text-foreground text-xl font-bold">{user?.fullName || 'Loading...'}</h2>
+        <span className="text-primary mt-1 text-sm font-medium">Patient</span>
       </motion.div>
 
       {/* Profile Details (Cards) */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
         className="space-y-4 px-2"
       >
-        <div className="flex items-center justify-between px-2 mb-2">
-           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Personal Info</h3>
-           <button 
-             onClick={() => setEditing(!editing)}
-             className="text-sm text-primary font-medium active:opacity-70"
-           >
-             {editing ? "Cancel" : "Edit"}
-           </button>
+        <div className="mb-2 flex items-center justify-between px-2">
+          <h3 className="text-muted-foreground text-sm font-semibold tracking-wider uppercase">
+            Personal Info
+          </h3>
+          <button
+            onClick={() => setEditing(!editing)}
+            className="text-primary text-sm font-medium active:opacity-70"
+          >
+            {editing ? 'Cancel' : 'Edit'}
+          </button>
         </div>
 
-        <div className="bg-card border border-border rounded-3xl overflow-hidden shadow-sm">
+        <div className="bg-card border-border overflow-hidden rounded-3xl border shadow-sm">
           {/* Full Name */}
-          <div className="p-4 border-b border-border/50">
-            <label className="text-xs font-medium text-muted-foreground mb-1 block">Full Name</label>
+          <div className="border-border/50 border-b p-4">
+            <label className="text-muted-foreground mb-1 block text-xs font-medium">
+              Full Name
+            </label>
             {editing ? (
-              <input 
+              <input
                 type="text"
-                defaultValue={user?.fullName || ""}
-                className="w-full bg-background border border-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                defaultValue={user?.fullName || ''}
+                className="bg-background border-border text-foreground focus:ring-primary/50 w-full rounded-xl border px-3 py-2 text-base focus:ring-2 focus:outline-none"
               />
             ) : (
-              <div className="flex items-center gap-3 text-foreground">
-                <User className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">{user?.fullName || "—"}</span>
+              <div className="text-foreground flex items-center gap-3">
+                <User className="text-muted-foreground h-4 w-4" />
+                <span className="text-sm font-medium">{user?.fullName || '—'}</span>
               </div>
             )}
           </div>
 
           {/* Email (read-only typically, or editable) */}
-          <div className="p-4 border-b border-border/50">
-            <label className="text-xs font-medium text-muted-foreground mb-1 block">Email</label>
-            <div className="flex items-center gap-3 text-foreground">
-              <Mail className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium">{user?.email || "—"}</span>
+          <div className="border-border/50 border-b p-4">
+            <label className="text-muted-foreground mb-1 block text-xs font-medium">Email</label>
+            <div className="text-foreground flex items-center gap-3">
+              <Mail className="text-muted-foreground h-4 w-4" />
+              <span className="text-sm font-medium">{user?.email || '—'}</span>
             </div>
           </div>
 
           {/* Phone */}
-          <div className="p-4 border-b border-border/50">
-            <label className="text-xs font-medium text-muted-foreground mb-1 block">Phone</label>
+          <div className="border-border/50 border-b p-4">
+            <label className="text-muted-foreground mb-1 block text-xs font-medium">Phone</label>
             {editing ? (
-              <input 
+              <input
                 type="tel"
-                defaultValue={user?.phone || ""}
-                className="w-full bg-background border border-border rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                defaultValue={user?.phone || ''}
+                className="bg-background border-border text-foreground focus:ring-primary/50 w-full rounded-xl border px-3 py-2 text-base focus:ring-2 focus:outline-none"
               />
             ) : (
-              <div className="flex items-center gap-3 text-foreground">
-                <Phone className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm font-medium">{user?.phone || "Not provided"}</span>
+              <div className="text-foreground flex items-center gap-3">
+                <Phone className="text-muted-foreground h-4 w-4" />
+                <span className="text-sm font-medium">{user?.phone || 'Not provided'}</span>
               </div>
             )}
           </div>
 
           {/* Location */}
           <div className="p-4">
-            <label className="text-xs font-medium text-muted-foreground mb-1 block">Location</label>
-            <div className="flex items-center gap-3 text-foreground">
-              <MapPin className="h-4 w-4 text-muted-foreground" />
+            <label className="text-muted-foreground mb-1 block text-xs font-medium">Location</label>
+            <div className="text-foreground flex items-center gap-3">
+              <MapPin className="text-muted-foreground h-4 w-4" />
               <span className="text-sm font-medium">India</span>
             </div>
           </div>
@@ -107,25 +109,25 @@ export default function MobilePatientProfile() {
       {/* Sticky Save Button (only visible when editing) */}
       <AnimatePresence>
         {editing && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-[72px] left-0 right-0 p-4 z-40"
+            className="fixed right-0 bottom-[72px] left-0 z-40 p-4"
           >
             <div className="flex gap-3">
-              <button 
+              <button
                 onClick={() => setEditing(false)}
-                className="flex-1 flex items-center justify-center gap-2 bg-muted text-foreground font-medium py-3.5 rounded-2xl active:scale-95 transition-transform"
+                className="bg-muted text-foreground flex flex-1 items-center justify-center gap-2 rounded-2xl py-3.5 font-medium transition-transform active:scale-95"
               >
-                <X className="w-5 h-5" />
+                <X className="h-5 w-5" />
                 Cancel
               </button>
-              <button 
+              <button
                 onClick={() => setEditing(false)}
-                className="flex-[2] flex items-center justify-center gap-2 bg-primary text-primary-foreground font-medium py-3.5 rounded-2xl shadow-lg active:scale-95 transition-transform"
+                className="bg-primary text-primary-foreground flex flex-[2] items-center justify-center gap-2 rounded-2xl py-3.5 font-medium shadow-lg transition-transform active:scale-95"
               >
-                <Save className="w-5 h-5" />
+                <Save className="h-5 w-5" />
                 Save Changes
               </button>
             </div>

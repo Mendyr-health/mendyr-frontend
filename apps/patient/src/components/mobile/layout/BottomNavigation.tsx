@@ -1,9 +1,9 @@
-"use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { cn } from "@mendyr/shared-utils";
-import { NAV_ICONS } from "@/lib/nav-icons";
-import { hapticTap } from "@/lib/haptics";
+'use client';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { cn } from '@mendyr/shared-utils';
+import { NAV_ICONS } from '@/lib/nav-icons';
+import { hapticTap } from '@/lib/haptics';
 
 interface NavLink {
   readonly label: string;
@@ -25,7 +25,7 @@ export function BottomNavigation({ navLinks, role }: BottomNavigationProps) {
   };
 
   const isActive = (href: string) => {
-    if (href === `/${role.toLowerCase().replace("_", "-")}`) {
+    if (href === `/${role.toLowerCase().replace('_', '-')}`) {
       return pathname === href;
     }
     return pathname.startsWith(href);
@@ -35,8 +35,8 @@ export function BottomNavigation({ navLinks, role }: BottomNavigationProps) {
   const displayLinks = navLinks.slice(0, 5);
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-border px-2 pb-safe pt-2">
-      <div className="flex justify-around items-center h-14">
+    <nav className="bg-background border-border pb-safe fixed right-0 bottom-0 left-0 z-50 border-t px-2 pt-2">
+      <div className="flex h-14 items-center justify-around">
         {displayLinks.map((link) => {
           const active = isActive(link.href);
           return (
@@ -45,12 +45,12 @@ export function BottomNavigation({ navLinks, role }: BottomNavigationProps) {
               href={link.href}
               onClick={() => hapticTap()}
               className={cn(
-                "flex flex-col items-center justify-center w-full h-full space-y-1 transition-colors",
-                active ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                'flex h-full w-full flex-col items-center justify-center space-y-1 transition-colors',
+                active ? 'text-primary' : 'text-muted-foreground hover:text-foreground',
               )}
             >
               {getIcon(link.icon)}
-              <span className="text-[10px] font-medium leading-none">{link.label}</span>
+              <span className="text-[10px] leading-none font-medium">{link.label}</span>
             </Link>
           );
         })}

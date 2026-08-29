@@ -1,14 +1,8 @@
-"use client";
-import { cn } from "@mendyr/shared-utils";
-import { useEffect, useRef, useState } from "react";
+'use client';
+import { cn } from '@mendyr/shared-utils';
+import { useEffect, useRef, useState } from 'react';
 
-export function Spotlight({
-  className,
-  fill,
-}: {
-  className?: string;
-  fill?: string;
-}) {
+export function Spotlight({ className, fill }: { className?: string; fill?: string }) {
   const divRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [opacity, setOpacity] = useState(0);
@@ -25,16 +19,16 @@ export function Spotlight({
 
     const el = divRef.current;
     if (el) {
-      el.addEventListener("mousemove", handleMouseMove);
-      el.addEventListener("mouseenter", handleMouseEnter);
-      el.addEventListener("mouseleave", handleMouseLeave);
+      el.addEventListener('mousemove', handleMouseMove);
+      el.addEventListener('mouseenter', handleMouseEnter);
+      el.addEventListener('mouseleave', handleMouseLeave);
     }
 
     return () => {
       if (el) {
-        el.removeEventListener("mousemove", handleMouseMove);
-        el.removeEventListener("mouseenter", handleMouseEnter);
-        el.removeEventListener("mouseleave", handleMouseLeave);
+        el.removeEventListener('mousemove', handleMouseMove);
+        el.removeEventListener('mouseenter', handleMouseEnter);
+        el.removeEventListener('mouseleave', handleMouseLeave);
       }
     };
   }, []);
@@ -42,13 +36,13 @@ export function Spotlight({
   return (
     <div
       ref={divRef}
-      className={cn("pointer-events-none absolute inset-0 z-0 overflow-hidden", className)}
+      className={cn('pointer-events-none absolute inset-0 z-0 overflow-hidden', className)}
     >
       <div
         className="absolute inset-0 transition-opacity duration-500"
         style={{
           opacity,
-          background: `radial-gradient(800px circle at ${position.x}px ${position.y}px, ${fill || "rgba(13, 148, 136, 0.12)"}, transparent 40%)`,
+          background: `radial-gradient(800px circle at ${position.x}px ${position.y}px, ${fill || 'rgba(13, 148, 136, 0.12)'}, transparent 40%)`,
         }}
       />
     </div>

@@ -1,21 +1,28 @@
-import { useState, useEffect, useCallback } from "react";
-import { useSearchParams } from "next/navigation";
-import { apiFetch } from "@/lib/api-client";
+import { useState, useEffect, useCallback } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { apiFetch } from '@/lib/api-client';
 
 export interface NurseEntry {
   publicId: string;
   verificationStatus: string;
   experience: string | null;
-  user: { publicId: string; email: string; fullName: string; phone: string | null; status: string; createdAt: string };
+  user: {
+    publicId: string;
+    email: string;
+    fullName: string;
+    phone: string | null;
+    status: string;
+    createdAt: string;
+  };
 }
 
 export function useNurses() {
   const searchParams = useSearchParams();
   const [nurses, setNurses] = useState<NurseEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [query, setQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState(searchParams.get("status") || "");
+  const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState(searchParams.get('status') || '');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
@@ -27,14 +34,14 @@ export function useNurses() {
   const fetchNurses = useCallback(async () => {
     setLoading(true);
     const params = new URLSearchParams({
-      entity: "nurses",
+      entity: 'nurses',
       page: String(page),
-      limit: "20",
-      sortBy: "createdAt",
-      sortOrder: "desc",
+      limit: '20',
+      sortBy: 'createdAt',
+      sortOrder: 'desc',
     });
-    if (debouncedQuery) params.set("q", debouncedQuery);
-    if (statusFilter) params.set("status", statusFilter);
+    if (debouncedQuery) params.set('q', debouncedQuery);
+    if (statusFilter) params.set('status', statusFilter);
 
     try {
       const res = await apiFetch(`/api/v1/search?${params}`);
@@ -45,16 +52,18 @@ export function useNurses() {
       }
     } catch {
       // Ignore
-    } finally { 
-      setLoading(false); 
+    } finally {
+      setLoading(false);
     }
   }, [debouncedQuery, statusFilter, page]);
 
-  useEffect(() => { fetchNurses(); }, [fetchNurses]);
+  useEffect(() => {
+    fetchNurses();
+  }, [fetchNurses]);
 
-  const handleAction = async (publicId: string, action: "approve" | "reject") => {
+  const handleAction = async (publicId: string, action: 'approve' | 'reject') => {
     try {
-      await apiFetch(`/api/v1/admin/nurses/${publicId}/${action}`, { method: "POST" });
+      await apiFetch(`/api/v1/admin/nurses/${publicId}/${action}`, { method: 'POST' });
       fetchNurses();
     } catch {
       // Ignore
@@ -71,6 +80,6 @@ export function useNurses() {
     page,
     setPage,
     totalPages,
-    handleAction
+    handleAction,
   };
 }

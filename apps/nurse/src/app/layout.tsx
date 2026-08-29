@@ -1,13 +1,13 @@
-import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Inter, Outfit } from 'next/font/google';
+import './globals.css';
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const outfit = Outfit({ subsets: ['latin'], variable: '--font-outfit' });
 
 export const metadata: Metadata = {
-  title: "Mendyr Nurse Dashboard",
-  description: "Task management and patient overview for nurses.",
+  title: 'Mendyr Nurse Dashboard',
+  description: 'Task management and patient overview for nurses.',
 };
 
 export default function RootLayout({

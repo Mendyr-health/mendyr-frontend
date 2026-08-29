@@ -1,11 +1,11 @@
-"use client";
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { cn } from "@mendyr/shared-utils";
-import { Heart, LogOut, Menu, X } from "lucide-react";
-import { useState } from "react";
-import { NAV_ICONS } from "@/lib/nav-icons";
+'use client';
+import Link from 'next/link';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { cn } from '@mendyr/shared-utils';
+import { Heart, LogOut, Menu, X } from 'lucide-react';
+import { useState } from 'react';
+import { NAV_ICONS } from '@/lib/nav-icons';
 
 interface NavLink {
   readonly label: string;
@@ -33,31 +33,39 @@ export function DashboardSidebar({
   };
 
   const isActive = (href: string) => {
-    if (href === `/${role.toLowerCase().replace("_", "-")}`) {
+    if (href === `/${role.toLowerCase().replace('_', '-')}`) {
       return pathname === href;
     }
     return pathname.startsWith(href);
   };
 
   const sidebarContent = (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       {/* Logo */}
-      <div className="flex items-center gap-2 px-6 py-5 border-b border-border">
-        <Image src="/mendyr.png" loading="eager" alt="Mendyr Logo" width={120} height={40} className="h-8 w-auto object-contain" style={{ width: "auto" }} />
+      <div className="border-border flex items-center gap-2 border-b px-6 py-5">
+        <Image
+          src="/mendyr.png"
+          loading="eager"
+          alt="Mendyr Logo"
+          width={120}
+          height={40}
+          className="h-8 w-auto object-contain"
+          style={{ width: 'auto' }}
+        />
       </div>
 
       {/* Nav Links */}
-      <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4">
         {navLinks.map((link) => (
           <Link
             key={link.href}
             href={link.href}
             onClick={() => setMobileOpen(false)}
             className={cn(
-              "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200",
+              'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
               isActive(link.href)
-                ? "bg-primary/10 text-primary-light border border-primary"
-                : "text-muted-foreground hover:text-muted-foreground hover:bg-muted"
+                ? 'bg-primary/10 text-primary-light border-primary border'
+                : 'text-muted-foreground hover:text-muted-foreground hover:bg-muted',
             )}
           >
             {getIcon(link.icon)}
@@ -67,18 +75,16 @@ export function DashboardSidebar({
       </nav>
 
       {/* User Section */}
-      <div className="border-t border-border px-3 py-4">
+      <div className="border-border border-t px-3 py-4">
         {userName && (
-          <div className="px-3 py-2 mb-2">
-            <p className="text-xs text-muted-foreground">Signed in as</p>
-            <p className="text-sm text-muted-foreground font-medium truncate">
-              {userName}
-            </p>
+          <div className="mb-2 px-3 py-2">
+            <p className="text-muted-foreground text-xs">Signed in as</p>
+            <p className="text-muted-foreground truncate text-sm font-medium">{userName}</p>
           </div>
         )}
         <button
           onClick={onLogout}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-red-400 hover:bg-red-500/10 transition-all duration-200 w-full cursor-pointer"
+          className="text-muted-foreground flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200 hover:bg-red-500/10 hover:text-red-400"
         >
           <LogOut className="h-5 w-5" />
           Logout
@@ -92,19 +98,19 @@ export function DashboardSidebar({
       {/* Mobile Toggle */}
       <button
         onClick={() => setMobileOpen(!mobileOpen)}
-        className="fixed top-4 left-4 z-50 lg:hidden p-2 rounded-lg bg-glass cursor-pointer"
+        className="bg-glass fixed top-4 left-4 z-50 cursor-pointer rounded-lg p-2 lg:hidden"
       >
         {mobileOpen ? (
-          <X className="h-5 w-5 text-muted-foreground" />
+          <X className="text-muted-foreground h-5 w-5" />
         ) : (
-          <Menu className="h-5 w-5 text-muted-foreground" />
+          <Menu className="text-muted-foreground h-5 w-5" />
         )}
       </button>
 
       {/* Mobile Overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-muted z-40 lg:hidden"
+          className="bg-muted fixed inset-0 z-40 lg:hidden"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -112,8 +118,8 @@ export function DashboardSidebar({
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed top-0 left-0 z-40 h-screen w-64 bg-sidebar border-r border-border transition-transform duration-300",
-          mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+          'bg-sidebar border-border fixed top-0 left-0 z-40 h-screen w-64 border-r transition-transform duration-300',
+          mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
         )}
       >
         {sidebarContent}

@@ -196,11 +196,11 @@ export interface DashboardStats {
 // ─── Search ──────────────────────────────────
 
 export interface SearchParams {
-  entity: "nurses" | "patients" | "services" | "contacts" | "waitlist";
+  entity: 'nurses' | 'patients' | 'services' | 'contacts' | 'waitlist';
   q?: string;
   filters?: Record<string, string | string[]>;
   sortBy?: string;
-  sortOrder?: "asc" | "desc";
+  sortOrder?: 'asc' | 'desc';
   page?: number;
   limit?: number;
 }
@@ -227,14 +227,14 @@ export interface PermissionPublic {
 // ─── Nurse Appointments & Clinical Care ─────
 
 export type AppointmentStatus =
-  | "PENDING_ACCEPTANCE"
-  | "REQUESTED"
-  | "ACCEPTED"
-  | "CONFIRMED"
-  | "REJECTED"
-  | "IN_PROGRESS"
-  | "COMPLETED"
-  | "CANCELLED";
+  | 'PENDING_ACCEPTANCE'
+  | 'REQUESTED'
+  | 'ACCEPTED'
+  | 'CONFIRMED'
+  | 'REJECTED'
+  | 'IN_PROGRESS'
+  | 'COMPLETED'
+  | 'CANCELLED';
 
 export interface AppointmentPublic {
   publicId: string;
@@ -289,7 +289,7 @@ export interface EarningTransactionPublic {
   serviceName: string;
   date: string;
   amount: number;
-  status: "PAID" | "PROCESSING" | "PENDING";
+  status: 'PAID' | 'PROCESSING' | 'PENDING';
   paymentMethod?: string;
 }
 
@@ -302,4 +302,3 @@ export interface NurseEarningsSummary {
   completedVisitsCount: number;
   transactions: EarningTransactionPublic[];
 }
-
