@@ -228,7 +228,9 @@ export interface PermissionPublic {
 
 export type AppointmentStatus =
   | "PENDING_ACCEPTANCE"
+  | "REQUESTED"
   | "ACCEPTED"
+  | "CONFIRMED"
   | "REJECTED"
   | "IN_PROGRESS"
   | "COMPLETED"
@@ -242,14 +244,14 @@ export interface AppointmentPublic {
   patientAvatar?: string | null;
   patientPhone?: string;
   serviceName: string;
-  serviceSlug: string;
+  serviceSlug?: string;
   date: string; // ISO date or formatted string
   timeSlot: string; // e.g. "09:00 AM - 01:00 PM"
-  durationHours: number;
+  durationHours?: number;
   location: {
     address: string;
     city: string;
-    state: string;
+    state?: string;
     distanceKm?: number;
   };
   payoutAmount: number;
@@ -260,7 +262,7 @@ export interface AppointmentPublic {
   checkInTime?: string;
   checkOutTime?: string;
   careNotes?: CareNotePublic[];
-  createdAt: string;
+  createdAt?: string;
 }
 
 export interface CareNotePublic {
@@ -268,9 +270,10 @@ export interface CareNotePublic {
   timestamp: string;
   vitals?: {
     bloodPressure?: string;
-    heartRate?: string;
-    temperature?: string;
-    oxygenSaturation?: string;
+    heartRate?: string | number;
+    temperature?: string | number;
+    oxygenSaturation?: string | number;
+    oxygenLevel?: string | number;
   };
   medicationsAdministered?: string[];
   notes: string;
@@ -281,7 +284,7 @@ export interface CareNotePublic {
 
 export interface EarningTransactionPublic {
   id: string;
-  appointmentId: string;
+  appointmentId?: string;
   patientName: string;
   serviceName: string;
   date: string;

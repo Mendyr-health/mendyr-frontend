@@ -77,11 +77,11 @@ function Calendar({
           defaultClassNames.dropdowns
         ),
         dropdown_root: cn(
-          "cn-calendar-dropdown-root relative rounded-(--cell-radius)",
+          "cn-calendar-dropdown-root relative rounded-(--cell-radius) cursor-pointer hover:bg-muted px-2 py-1 transition-colors",
           defaultClassNames.dropdown_root
         ),
         dropdown: cn(
-          "absolute inset-0 bg-popover opacity-0",
+          "absolute inset-0 bg-popover opacity-0 cursor-pointer w-full h-full",
           defaultClassNames.dropdown
         ),
         caption_label: cn(
