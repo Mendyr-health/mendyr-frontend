@@ -10,19 +10,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
 
 import { loginSchema } from "@/lib/validators";
-<<<<<<< HEAD:src/app/(auth)/login/page.tsx
 import { apiFetch } from "@/lib/api-client";
 import { inferRoleFromEmail, getMockUserForRole, ROLE_DASHBOARD_PATH } from "@/lib/mock-users";
 import { saveMockSession } from "@/lib/mock-session";
 import { isOnboardingComplete } from "@/lib/onboarding";
 import { IS_PROVIDER_APP, IS_PATIENT_APP } from "@/lib/app-target";
-import { usePlatform } from "@/hooks/usePlatform";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-=======
+import { usePlatform } from "@mendyr/shared-utils";
 import { Input } from "@mendyr/shared-ui/src/ui/input";
 import { Button } from "@mendyr/shared-ui/src/ui/button";
->>>>>>> origin/keshav:apps/patient/src/app/(auth)/login/page.tsx
 import {
   Form,
   FormControl,

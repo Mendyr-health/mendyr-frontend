@@ -1,16 +1,10 @@
 "use client";
 import { useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
-<<<<<<< HEAD:src/app/(dashboard)/layout.tsx
-import { ADMIN_NAV_LINKS, SUPER_ADMIN_NAV_LINKS, NURSE_NAV_LINKS, PATIENT_NAV_LINKS } from "@/lib/constants";
-import { usePathname, useRouter } from "next/navigation";
-import { usePlatform } from "@/hooks/usePlatform";
-import { initPushNotifications } from "@/lib/push-notifications";
-=======
 import { ADMIN_NAV_LINKS, SUPER_ADMIN_NAV_LINKS, NURSE_NAV_LINKS, PATIENT_NAV_LINKS } from "@mendyr/shared-utils";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { usePlatform } from "@mendyr/shared-utils";
->>>>>>> origin/keshav:apps/patient/src/app/(dashboard)/layout.tsx
+import { initPushNotifications } from "@/lib/push-notifications";
 import dynamic from "next/dynamic";
 
 // Dynamically load layouts so we don't send mobile layout code to web users and vice-versa

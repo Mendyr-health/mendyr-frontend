@@ -23,17 +23,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
 
 import { patientRegistrationFormSchema } from "@/lib/validators";
-<<<<<<< HEAD:src/app/(auth)/register/patient/page.tsx
 import { getDateOfBirthRange } from "@/lib/date-of-birth";
 import { apiFetch } from "@/lib/api-client";
-import { cn } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-=======
 import { cn } from "@mendyr/shared-utils";
 import { Input } from "@mendyr/shared-ui/src/ui/input";
 import { Button } from "@mendyr/shared-ui/src/ui/button";
->>>>>>> origin/keshav:apps/patient/src/app/(auth)/register/patient/page.tsx
 import {
   Form,
   FormControl,
@@ -49,14 +43,6 @@ type PatientFormValues = z.infer<typeof patientRegistrationFormSchema>;
 
 const STEPS = ["Personal Info", "Address", "Review"];
 
-<<<<<<< HEAD:src/app/(auth)/register/patient/page.tsx
-=======
-const DEFAULT_PATIENT_DOB = new Date(1990, 0, 1);
-const OLDEST_PATIENT_DOB = new Date(1900, 0, 1);
-const YOUNGEST_PATIENT_DOB = new Date();
-YOUNGEST_PATIENT_DOB.setFullYear(YOUNGEST_PATIENT_DOB.getFullYear() - 18);
-
->>>>>>> origin/keshav:apps/patient/src/app/(auth)/register/patient/page.tsx
 export default function PatientRegisterPage() {
   const [step, setStep] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
@@ -295,19 +281,10 @@ export default function PatientRegisterPage() {
                           captionLayout="dropdown"
                           selected={field.value}
                           onSelect={(date) => field.onChange(date)}
-<<<<<<< HEAD:src/app/(auth)/register/patient/page.tsx
                           defaultMonth={latestDate}
                           startMonth={earliestDate}
                           endMonth={latestDate}
                           disabled={(date) => date < earliestDate || date > latestDate}
-=======
-                          disabled={(date) => date > YOUNGEST_PATIENT_DOB || date < OLDEST_PATIENT_DOB}
-                          captionLayout="dropdown"
-                          startMonth={OLDEST_PATIENT_DOB}
-                          endMonth={YOUNGEST_PATIENT_DOB}
-                          reverseYears={true}
-                          defaultMonth={field.value || DEFAULT_PATIENT_DOB}
->>>>>>> origin/keshav:apps/patient/src/app/(auth)/register/patient/page.tsx
                         />
                       </PopoverContent>
                     </Popover>

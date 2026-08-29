@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,91462,e=>{"use strict";var s=e.i(82568);class c extends s.WebPlugin{async show(e){}async hide(e){}}e.s(["SplashScreenWeb",0,c])}]);

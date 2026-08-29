@@ -2,16 +2,14 @@ name: Build iOS App (Capacitor)
 
 on:
   workflow_dispatch: # Allows manual triggering from the GitHub Actions tab
-#  schedule:
-#    - cron: '0 5 * * *' # Runs at 5:00 AM UTC every day
 
 jobs:
   build-web:
     name: Build Next.js Web App (${{ matrix.target }})
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     strategy:
       matrix:
-        target: [patient, provider]
+        target: [patient, nurse]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -27,7 +25,7 @@ jobs:
         with:
           path: |
             ~/.npm
-            ${{ github.workspace }}/.next/cache
+            ${{ github.workspace }}/apps/${{ matrix.target }}/.next/cache
           key: ${{ runner.os }}-nextjs-${{ matrix.target }}-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ matrix.target }}-${{ hashFiles('**/package-lock.json') }}-
@@ -35,32 +33,25 @@ jobs:
       - name: Install NPM Dependencies
         run: npm ci
 
-      # NEXT_PUBLIC_APP_TARGET is baked into the static export at build time (there's no
-      # server at runtime to read it from) — this is what makes the patient build show
-      # patient branding/routes and the provider build show provider branding/routes.
       - name: Build Next.js Web App (${{ matrix.target }})
-        run: npm run build:${{ matrix.target }}
+        run: npm run build -w @mendyr/${{ matrix.target }}
         env:
-          # Bare origin only — every apiFetch() call site already includes its own full
-          # path (/api/auth/..., /api/v1/...), so a fallback with a path suffix baked in
-          # would double up on every request. Set the NEXT_PUBLIC_API_URL repo secret to
-          # your real deployed backend origin before relying on this in production.
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL || 'http://localhost:8000' }}
 
       - name: Upload Web Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: web-build-out-ios-${{ matrix.target }}
-          path: out
+          path: apps/${{ matrix.target }}/out
           retention-days: 1
 
   build-ios:
-    name: Build iOS App (${{ matrix.target }})
+    name: Build iOS IPA (${{ matrix.target }})
     runs-on: macos-latest
     needs: build-web
     strategy:
       matrix:
-        target: [patient, provider]
+        target: [patient, nurse]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -71,6 +62,14 @@ jobs:
           node-version: 20
           cache: 'npm'
 
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Install CocoaPods
+        run: sudo gem install cocoapods
+
       - name: Install NPM Dependencies
         run: npm ci
 
@@ -78,42 +77,20 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: web-build-out-ios-${{ matrix.target }}
-          path: out
-
-      # Re-identifies the single checked-in ios/ project's bundle id/display name for this
-      # target — see scripts/apply-app-target.js. Must run before `cap sync` or the app
-      # gets built with whatever identity was last committed, not this target's.
-      - name: Apply ${{ matrix.target }} app identity
-        run: node scripts/apply-app-target.js ${{ matrix.target }}
-
-      - name: Symlink Node for Xcode
-        run: sudo ln -s $(which node) /usr/local/bin/node || true
-
-      - name: Update CocoaPods Repo
-        run: pod repo update || true
-        working-directory: ./ios/App
+          path: apps/${{ matrix.target }}/out
 
       - name: Sync Capacitor iOS
+        working-directory: ./apps/${{ matrix.target }}
         run: npx cap sync ios
-        env:
-          CAPACITOR_APP_TARGET: ${{ matrix.target }}
 
-      - name: Build unsigned iOS App Archive
-        working-directory: ./ios/App
+      - name: Build iOS App
+        working-directory: ./apps/${{ matrix.target }}/ios/App
         run: |
-          xcodebuild -workspace App.xcworkspace \
-          -scheme App \
-          -configuration Release \
-          -sdk iphoneos \
-          CODE_SIGN_IDENTITY="" \
-          CODE_SIGNING_REQUIRED=NO \
-          CODE_SIGNING_ALLOWED=NO \
-          build \
-          -derivedDataPath build
-
-      - name: Upload iOS Build Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: mendyr-ios-${{ matrix.target }}-unsigned
-          path: ios/App/build/Build/Products/Release-iphoneos/App.app
-          retention-days: 7
+          xcodebuild clean build \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
