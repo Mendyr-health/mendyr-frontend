@@ -170,3 +170,4 @@ To keep our repository organized and our CI/CD pipelines running smoothly, pleas
   *Example:* `docs/api-readme`
 
 When opening a Pull Request, please ensure you use the provided Pull Request template and link any relevant issue numbers.
+Made with ❤️ by Mendyr
