@@ -5,6 +5,9 @@ on:
   schedule:
     - cron: '0 5 * * *' # Runs at 5:00 AM UTC every day
 
+permissions:
+  contents: write
+
 jobs:
   build-web:
     name: Build Next.js Web App (${{ matrix.target }})
@@ -19,7 +22,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: 'npm'
 
       - name: Cache Next.js Build
@@ -61,7 +64,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: 'npm'
 
       - name: Setup Java JDK
