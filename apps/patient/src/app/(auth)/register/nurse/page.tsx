@@ -25,19 +25,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { z } from "zod";
 
 import { nurseRegistrationFormSchema } from "@/lib/validators";
-<<<<<<< HEAD:src/app/(auth)/register/nurse/page.tsx
 import { getDateOfBirthRange } from "@/lib/date-of-birth";
 import { apiFetch } from "@/lib/api-client";
-import { cn } from "@/lib/utils";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-=======
 import { cn } from "@mendyr/shared-utils";
 import { Input } from "@mendyr/shared-ui/src/ui/input";
 import { Textarea } from "@mendyr/shared-ui/src/ui/textarea";
 import { Button } from "@mendyr/shared-ui/src/ui/button";
->>>>>>> origin/keshav:apps/patient/src/app/(auth)/register/nurse/page.tsx
 import {
   Form,
   FormControl,

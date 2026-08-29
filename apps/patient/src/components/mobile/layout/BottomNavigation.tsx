@@ -1,14 +1,9 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-<<<<<<< HEAD:src/components/mobile/layout/BottomNavigation.tsx
-import { cn } from "@/lib/utils";
+import { cn } from "@mendyr/shared-utils";
 import { NAV_ICONS } from "@/lib/nav-icons";
 import { hapticTap } from "@/lib/haptics";
-=======
-import { cn } from "@mendyr/shared-utils";
-import * as LucideIcons from "lucide-react";
->>>>>>> origin/keshav:apps/patient/src/components/mobile/layout/BottomNavigation.tsx
 
 interface NavLink {
   readonly label: string;

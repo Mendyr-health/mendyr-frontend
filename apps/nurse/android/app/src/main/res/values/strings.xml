@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Mendyr Pro</string>
+    <string name="title_activity_main">Mendyr Pro</string>
+    <string name="package_name">com.mendyr.provider</string>
+    <string name="custom_url_scheme">com.mendyr.provider</string>
+</resources>

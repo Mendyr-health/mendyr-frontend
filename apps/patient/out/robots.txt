@@ -1,0 +1,11 @@
+User-Agent: *
+Allow: /
+Disallow: /api/
+Disallow: /patient/
+Disallow: /nurse/
+Disallow: /admin/
+Disallow: /super-admin/
+Disallow: /login
+Disallow: /register/
+
+Sitemap: https://mendyr.app/sitemap.xml

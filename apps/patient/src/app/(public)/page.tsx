@@ -21,14 +21,10 @@ import {
   LampEffect,
   InfiniteMovingCards,
 } from "@/components/aceternity";
-<<<<<<< HEAD:src/app/(public)/page.tsx
-import { HEALTHCARE_SERVICES, FAQ_ITEMS } from "@/lib/constants";
-import { apiFetch } from "@/lib/api-client";
-import { usePlatform } from "@/hooks/usePlatform";
-import { MinimalHome } from "@/components/mobile/public/MinimalHome";
-=======
 import { HEALTHCARE_SERVICES, FAQ_ITEMS } from "@mendyr/shared-utils";
->>>>>>> origin/keshav:apps/patient/src/app/(public)/page.tsx
+import { apiFetch } from "@/lib/api-client";
+import { usePlatform } from "@mendyr/shared-utils";
+import { MinimalHome } from "@/components/mobile/public/MinimalHome";
 
 const iconMap: Record<string, React.ReactNode> = {
   Heart: <Heart className="w-6 h-6" />,

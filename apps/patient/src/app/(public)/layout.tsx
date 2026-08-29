@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { PublicHeader, PublicFooter } from "@/components/layout/public-layout";
-import { usePlatform } from "@/hooks/usePlatform";
+import { usePlatform } from "@mendyr/shared-utils";
 
 export default function PublicLayout({
   children,
