@@ -67,7 +67,7 @@ export function PublicHeader() {
       </div>
 
       {/* Mobile Top Header (Minimal) */}
-      <header className="md:hidden h-16 px-4 flex items-center justify-between border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-30">
+      <header className="md:hidden min-h-[4rem] pt-safe px-4 flex items-center justify-between border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-30">
         <Image src="/mendyr.png" alt="Mendyr Logo" width={100} height={32} loading="eager" className="h-7 w-auto object-contain" />
         <Link
           href="/register/patient"
@@ -78,7 +78,7 @@ export function PublicHeader() {
       </header>
 
       {/* Mobile Bottom Navigation Bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 h-[70px] bg-background/90 backdrop-blur-xl border-t border-border flex items-center justify-around px-2 pb-safe z-40 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 min-h-[70px] pt-2 bg-background/90 backdrop-blur-xl border-t border-border flex items-center justify-around px-2 pb-safe z-40 shadow-[0_-10px_40px_rgba(0,0,0,0.05)]">
         {bottomNavLinks.map((link) => {
           const Icon = iconMap[link.label] || Home;
           const isActive = pathname === link.href;
