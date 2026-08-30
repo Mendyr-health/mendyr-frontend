@@ -84,7 +84,9 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col" suppressHydrationWarning>
         <NativeAppBootstrap />
         <I18nProvider>
-          <StoreProvider>{children}</StoreProvider>
+          <StoreProvider>
+            <div className="native-scroll-container">{children}</div>
+          </StoreProvider>
         </I18nProvider>
         <Toaster position="top-right" richColors theme="dark" />
       </body>

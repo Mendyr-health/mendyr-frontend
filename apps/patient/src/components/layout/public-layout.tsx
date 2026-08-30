@@ -10,10 +10,13 @@ import { PUBLIC_NAV_LINKS } from '@mendyr/shared-utils';
 
 import { Home, Stethoscope, Info, Phone } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import { usePlatform } from '@mendyr/shared-utils';
+import { IS_PATIENT_APP, IS_PROVIDER_APP } from '@/lib/app-target';
 
 export function PublicHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+  const { isCapacitor } = usePlatform();
 
   const iconMap: Record<string, React.ElementType> = {
     Home,
@@ -66,12 +69,14 @@ export function PublicHeader() {
               >
                 Sign In
               </Link>
-              <Link
-                href="/register/patient"
-                className="bg-gradient-primary rounded-xl border border-white/20 px-5 py-2.5 text-sm font-medium text-white shadow-[0_4px_20px_rgba(5,17,242,0.3)] transition-all hover:opacity-90"
-              >
-                Get Started
-              </Link>
+              {(!isCapacitor || IS_PATIENT_APP) && (
+                <Link
+                  href="/register/patient"
+                  className="bg-gradient-primary rounded-xl border border-white/20 px-5 py-2.5 text-sm font-medium text-white shadow-[0_4px_20px_rgba(5,17,242,0.3)] transition-all hover:opacity-90"
+                >
+                  Get Started
+                </Link>
+              )}
             </div>
           </div>
         </FloatingNavbar>
@@ -87,12 +92,14 @@ export function PublicHeader() {
           loading="eager"
           className="h-7 w-auto object-contain"
         />
-        <Link
-          href="/register/patient"
-          className="bg-gradient-primary rounded-xl px-4 py-2 text-xs font-medium text-white shadow-md hover:opacity-90"
-        >
-          Sign Up
-        </Link>
+        {!isCapacitor && (
+          <Link
+            href="/register/patient"
+            className="bg-gradient-primary rounded-xl px-4 py-2 text-xs font-medium text-white shadow-md hover:opacity-90"
+          >
+            Sign Up
+          </Link>
+        )}
       </header>
 
       {/* Mobile Bottom Navigation Bar */}
@@ -185,13 +192,15 @@ export function PublicHeader() {
                 >
                   Sign In
                 </Link>
-                <Link
-                  href="/register/patient"
-                  onClick={() => setMobileOpen(false)}
-                  className="bg-gradient-primary shadow-primary/30 mt-2 rounded-2xl px-6 py-4 text-center text-lg font-semibold text-white shadow-lg"
-                >
-                  Get Started
-                </Link>
+                {!isCapacitor && (
+                  <Link
+                    href="/register/patient"
+                    onClick={() => setMobileOpen(false)}
+                    className="bg-gradient-primary shadow-primary/30 mt-2 rounded-2xl px-6 py-4 text-center text-lg font-semibold text-white shadow-lg"
+                  >
+                    Get Started
+                  </Link>
+                )}
               </div>
             </motion.div>
           </>
@@ -202,6 +211,8 @@ export function PublicHeader() {
 }
 
 export function PublicFooter() {
+  const { isCapacitor } = usePlatform();
+
   const footerLinks = {
     Services: [
       { label: 'Home Nursing', href: '/services/home-nursing' },
@@ -212,13 +223,16 @@ export function PublicFooter() {
     Company: [
       { label: 'About Us', href: '/about' },
       { label: 'Contact', href: '/contact' },
-      { label: 'Become a Nurse', href: '/become-a-nurse' },
     ],
     Legal: [
       { label: 'Privacy Policy', href: '/privacy' },
       { label: 'Terms of Service', href: '/terms' },
     ],
   };
+
+  if (!isCapacitor || IS_PROVIDER_APP) {
+    footerLinks.Company.push({ label: 'Become a Nurse', href: '/become-a-nurse' });
+  }
 
   return (
     <footer className="border-border bg-background border-t">

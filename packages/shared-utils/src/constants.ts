@@ -136,6 +136,7 @@ export const NURSE_NAV_LINKS = [
 
 export const PATIENT_NAV_LINKS = [
   { label: "Dashboard", href: "/patient", icon: "LayoutDashboard" },
+  { label: "Appointments", href: "/patient/appointments", icon: "Calendar" },
   { label: "Profile", href: "/patient/profile", icon: "User" },
   { label: "Settings", href: "/patient/settings", icon: "Settings" },
 ] as const;

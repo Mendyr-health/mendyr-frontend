@@ -110,6 +110,7 @@ html {
   background-color: hsl(var(--background));
   overscroll-behavior-y: none;
   -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
 }
 
 body {
@@ -134,6 +135,7 @@ body {
     sans-serif;
   min-height: 100vh;
   overscroll-behavior-y: none;
+  overflow-x: hidden;
 }
 
 /* ─── Native App Feel ─────────────────────────── */
@@ -156,6 +158,26 @@ nav {
 
 .is-native-app {
   scrollbar-width: none;
+  overflow: hidden;
+  height: 100vh;
+  height: 100svh;
+  position: fixed;
+  width: 100%;
+}
+
+.is-native-app body {
+  overflow: hidden;
+  height: 100vh;
+  height: 100svh;
+  position: fixed;
+  width: 100%;
+}
+
+.is-native-app .native-scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
 }
 
 /* iOS auto-zooms the page on focusing any text input smaller than 16px.

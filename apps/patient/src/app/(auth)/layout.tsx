@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-[100svh]">
+    <div className="flex min-h-[100svh] w-full flex-col lg:flex-row overflow-y-auto">
       {/* Left Panel — Branding */}
       <div className="from-primary-dark to-background relative hidden items-center justify-center overflow-hidden bg-gradient-to-br p-12 lg:flex lg:w-1/2">
         <div className="absolute inset-0 opacity-10">

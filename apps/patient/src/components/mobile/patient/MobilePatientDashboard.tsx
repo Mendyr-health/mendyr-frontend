@@ -261,13 +261,13 @@ export default function MobilePatientDashboard() {
           transition={{ delay: 0.3 }}
         >
           <Link
-            href="/services"
+            href="/patient/appointments"
             className="bg-card border-border flex flex-col items-center justify-center gap-2 rounded-2xl border p-4 transition-transform active:scale-95"
           >
             <div className="rounded-full bg-emerald-500/10 p-3 text-emerald-500">
               <Calendar className="h-6 w-6" />
             </div>
-            <span className="text-foreground text-sm font-medium">Services</span>
+            <span className="text-foreground text-sm font-medium">Appointments</span>
           </Link>
         </motion.div>
       </div>

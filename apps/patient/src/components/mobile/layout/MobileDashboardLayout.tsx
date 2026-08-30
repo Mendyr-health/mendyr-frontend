@@ -24,7 +24,7 @@ export default function MobileDashboardLayout({
 }: MobileDashboardLayoutProps) {
   return (
     <div className="bg-background flex min-h-[100svh] flex-col">
-      <TopAppBar userName={userName} onLogout={onLogout} />
+      <TopAppBar userName={userName} onLogout={onLogout} navLinks={navLinks} />
 
       {/* Scrollable Main Content */}
       <main className="flex-1 overflow-y-auto pt-16 pb-20">
