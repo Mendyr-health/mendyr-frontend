@@ -9,9 +9,9 @@ export function Carousel({ children, className, ...props }: CarouselProps) {
   return (
     <div
       className={cn(
-        'flex w-full snap-x snap-mandatory gap-4 overflow-x-auto pb-4 pt-2 px-4 md:px-0',
+        'flex w-full snap-x snap-mandatory gap-4 overflow-x-auto px-4 pt-2 pb-4 md:px-0',
         'scrollbar-hide -mx-4 md:mx-0',
-        className
+        className,
       )}
       style={{
         scrollbarWidth: 'none',
@@ -20,11 +20,15 @@ export function Carousel({ children, className, ...props }: CarouselProps) {
       }}
       {...props}
     >
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
         }
-      `}} />
+      `,
+        }}
+      />
       {children}
     </div>
   );
@@ -33,10 +37,7 @@ export function Carousel({ children, className, ...props }: CarouselProps) {
 export function CarouselItem({ children, className, ...props }: CarouselProps) {
   return (
     <div
-      className={cn(
-        'w-[85%] md:w-[45%] lg:w-[30%] shrink-0 snap-center md:snap-start',
-        className
-      )}
+      className={cn('w-[85%] shrink-0 snap-center md:w-[45%] md:snap-start lg:w-[30%]', className)}
       {...props}
     >
       {children}

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useEffect, useRef } from 'react';
 
@@ -11,15 +11,19 @@ export function useModalHistory(isOpen: boolean, onClose: () => void, modalId: s
 
   useEffect(() => {
     if (!isOpen) return;
-    
+
     // Safety check for SSR
     if (typeof window === 'undefined') return;
 
     const targetHash = `#${modalId}`;
-    
+
     // If we aren't already on the hash, push it.
     if (window.location.hash !== targetHash) {
-      window.history.pushState(null, "", window.location.pathname + window.location.search + targetHash);
+      window.history.pushState(
+        null,
+        '',
+        window.location.pathname + window.location.search + targetHash,
+      );
     }
 
     const handlePopState = () => {
@@ -30,17 +34,17 @@ export function useModalHistory(isOpen: boolean, onClose: () => void, modalId: s
       }
     };
 
-    window.addEventListener("popstate", handlePopState);
+    window.addEventListener('popstate', handlePopState);
 
     return () => {
-      window.removeEventListener("popstate", handlePopState);
-      
+      window.removeEventListener('popstate', handlePopState);
+
       // If the component unmounts or isOpen becomes false due to programmatic close (e.g. 'X' button)
       // we should remove the hash from the history stack to keep it clean.
       if (!isClosingViaHistory.current && window.location.hash === targetHash) {
         window.history.back();
       }
-      
+
       isClosingViaHistory.current = false;
     };
   }, [isOpen, onClose, modalId]);

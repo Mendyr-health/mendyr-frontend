@@ -1,5 +1,11 @@
 'use client';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@mendyr/shared-ui/src/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@mendyr/shared-ui/src/ui/card';
 import { MessageSquare } from 'lucide-react';
 
 export default function WebPatientMessages() {
