@@ -25,7 +25,7 @@ jobs:
         with:
           path: |
             ~/.npm
-            ${{ github.workspace }}/apps/${{ matrix.target }}/.next/cache
+            ${{ github.workspace }}/apps/patient/.next/cache
           key: ${{ runner.os }}-nextjs-${{ matrix.target }}-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ matrix.target }}-${{ hashFiles('**/package-lock.json') }}-
@@ -33,16 +33,17 @@ jobs:
       - name: Install NPM Dependencies
         run: npm ci
 
-      - name: Build Next.js Web App (${{ matrix.target }})
-        run: npm run build -w @mendyr/${{ matrix.target }}
+      - name: Build Next.js Web App
+        run: npm run build -w @mendyr/patient
         env:
           NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL || 'http://localhost:8000' }}
+          NEXT_PUBLIC_APP_TARGET: ${{ matrix.target == 'nurse' && 'provider' || 'patient' }}
 
       - name: Upload Web Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: web-build-out-ios-${{ matrix.target }}
-          path: apps/${{ matrix.target }}/out
+          path: apps/patient/out
           retention-days: 1
 
   build-ios:
@@ -77,7 +78,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: web-build-out-ios-${{ matrix.target }}
-          path: apps/${{ matrix.target }}/out
+          path: apps/patient/out
 
       - name: Sync Capacitor iOS
         working-directory: ./apps/${{ matrix.target }}
