@@ -6,7 +6,7 @@ import { KeyboardResize } from '@capacitor/keyboard';
 const config: CapacitorConfig = {
   appId: 'com.mendyr.provider',
   appName: 'Mendyr Pro',
-  webDir: 'out',
+  webDir: '../patient/out',
   plugins: {
     SplashScreen: {
       // We hide it manually from NativeAppBootstrap once the app has

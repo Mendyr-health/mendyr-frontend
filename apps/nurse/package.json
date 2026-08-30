@@ -3,27 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack --port 3001",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint . --ext .ts,.tsx",
-    "type-check": "tsc --noEmit"
+    "sync": "cap sync"
   },
   "dependencies": {
-    "@mendyr/shared-ui": "*",
-    "@mendyr/shared-utils": "*",
-    "next": "16.2.6",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "lucide-react": "^0.513.0",
-    "framer-motion": "^12.0.0"
+    "@capacitor/android": "^8.4.2",
+    "@capacitor/app": "^8.1.1",
+    "@capacitor/core": "^8.4.2",
+    "@capacitor/dialog": "^8.0.1",
+    "@capacitor/ios": "^8.4.2"
   },
   "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "tailwindcss": "^4",
-    "@tailwindcss/postcss": "^4",
-    "typescript": "^5"
+    "@capacitor/cli": "^7.6.8"
   }
 }
