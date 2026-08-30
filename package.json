@@ -10,7 +10,8 @@
     "build": "npm run build --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "type-check": "npm run type-check --workspaces --if-present",
-    "format": "prettier --write \"apps/**/*.{ts,tsx,css,json}\" \"packages/**/*.{ts,tsx,css,json}\""
+    "format": "prettier --write \"apps/**/*.{ts,tsx,css,json}\" \"packages/**/*.{ts,tsx,css,json}\"",
+    "prepare": "husky"
   },
   "dependencies": {
     "@capacitor/android": "^8.4.2",
@@ -68,6 +69,12 @@
   },
   "devDependencies": {
     "concurrently": "^9.2.4",
-    "glob": "^13.0.6"
+    "glob": "^13.0.6",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.4.1",
+    "prettier": "^3.9.6"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,css,json}": "prettier --write"
   }
 }

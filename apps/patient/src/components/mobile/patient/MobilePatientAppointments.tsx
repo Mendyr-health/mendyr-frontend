@@ -135,7 +135,7 @@ export default function MobilePatientAppointments() {
             </div>
             <h3 className="text-foreground mt-4 font-semibold">No appointments</h3>
             <p className="text-muted-foreground mt-1 text-sm">
-              You don't have any {activeTab} appointments.
+              You don&apos;t have any {activeTab} appointments.
             </p>
             {activeTab === 'upcoming' && (
               <Link
