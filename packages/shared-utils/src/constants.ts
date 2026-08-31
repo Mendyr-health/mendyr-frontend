@@ -219,6 +219,7 @@ export const NURSE_NAV_LINKS = [
   { label: 'Appointments', href: '/nurse/appointments', icon: 'Calendar' },
   { label: 'Messages', href: '/nurse/messages', icon: 'MessageSquare' },
   { label: 'Availability', href: '/nurse/availability', icon: 'Clock' },
+  { label: 'My Services', href: '/nurse/services', icon: 'Stethoscope' },
   { label: 'Earnings', href: '/nurse/earnings', icon: 'DollarSign' },
   { label: 'Profile', href: '/nurse/profile', icon: 'User' },
   { label: 'Settings', href: '/nurse/settings', icon: 'Settings' },
