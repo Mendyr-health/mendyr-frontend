@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import type { UserPublic } from '@/types';
 import { apiFetch } from '@/lib/api-client';
 import { getMockSession, clearMockSession } from '@/lib/mock-session';
+import { adaptBackendUser } from '@/lib/user-adapter';
 
 export function useAuth() {
   const [user, setUser] = useState<UserPublic | null>(null);
@@ -13,7 +14,7 @@ export function useAuth() {
       const res = await apiFetch('/api/auth/me');
       if (res.ok) {
         const data = await res.json();
-        setUser(data.data);
+        setUser(adaptBackendUser(data.data));
       } else {
         setUser(null);
       }

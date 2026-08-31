@@ -14,6 +14,7 @@ import { apiFetch } from '@/lib/api-client';
 import { inferRoleFromEmail, getMockUserForRole, ROLE_DASHBOARD_PATH } from '@/lib/mock-users';
 import { saveMockSession } from '@/lib/mock-session';
 import { isOnboardingComplete } from '@/lib/onboarding';
+import { adaptBackendRole } from '@/lib/user-adapter';
 import { IS_PROVIDER_APP, IS_PATIENT_APP } from '@/lib/app-target';
 import { usePlatform } from '@mendyr/shared-utils';
 import { Input } from '@mendyr/shared-ui/src/ui/input';
@@ -58,28 +59,37 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
 
+    let res: Response;
     try {
-      const res = await apiFetch('/api/auth/login', {
+      res = await apiFetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values),
       });
-      const data = await res.json();
+    } catch {
+      // The request itself never completed — DNS/connection/CORS failure, no backend
+      // reachable. Sign in with a dummy account instead of dead-ending, so the app can be
+      // exercised end-to-end. Pick the role from a keyword in the email (e.g.
+      // "nurse@test.com", "admin@test.com"); this fallback stops mattering the moment a
+      // real API responds. Deliberately NOT wrapping the response-handling below in this
+      // same catch: a bug in handling a real response (once masked a working login as a
+      // mock one — see git blame) must surface as a real error, not vanish into this path.
+      const role = inferRoleFromEmail(values.email);
+      saveMockSession(getMockUserForRole(role, values.email));
+      proceedPastLogin(role);
+      setLoading(false);
+      return;
+    }
 
+    try {
+      const data = await res.json();
       if (!data.success) {
         setError(data.error?.message || 'Invalid credentials');
         return;
       }
-
-      proceedPastLogin(data.data.user.role);
+      proceedPastLogin(adaptBackendRole(data.data.user.role));
     } catch {
-      // No backend reachable yet — sign in with a dummy account instead of
-      // dead-ending, so the app can be exercised end-to-end. Pick the role
-      // from a keyword in the email (e.g. "nurse@test.com", "admin@test.com");
-      // this fallback stops mattering the moment a real API responds above.
-      const role = inferRoleFromEmail(values.email);
-      saveMockSession(getMockUserForRole(role, values.email));
-      proceedPastLogin(role);
+      setError('Something went wrong while signing in. Please try again.');
     } finally {
       setLoading(false);
     }
