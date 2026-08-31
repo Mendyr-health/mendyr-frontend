@@ -16,10 +16,56 @@ import { Button } from '@mendyr/shared-ui/src/ui/button';
 import { Input } from '@mendyr/shared-ui/src/ui/input';
 import { useAuth } from '@/hooks/use-auth';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function WebNurseProfile() {
-  const { user } = useAuth();
+  const { user, updateProfile } = useAuth();
   const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [fullName, setFullName] = useState('');
+  const [phone, setPhone] = useState('');
+
+  const startEditing = () => {
+    setFullName(user?.fullName || '');
+    setPhone(user?.phone || '');
+    setEditing(true);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await updateProfile({ fullName, phone });
+      toast.success('Profile updated.');
+      setEditing(false);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to update profile.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // Experience/qualifications/certifications below are display-only for now — they live on
+  // the professional's KYC profile, not the user record `updateProfile` writes to.
+  const personalFields = [
+    {
+      key: 'fullName',
+      label: 'Full Name',
+      icon: User,
+      display: user?.fullName,
+      editValue: fullName,
+      setEditValue: setFullName,
+    },
+    { key: 'email', label: 'Email Address', icon: Mail, display: user?.email, editValue: null },
+    {
+      key: 'phone',
+      label: 'Phone Number',
+      icon: Phone,
+      display: user?.phone || 'Not set',
+      editValue: phone,
+      setEditValue: setPhone,
+    },
+    { key: 'location', label: 'Location', icon: MapPin, display: 'India', editValue: null },
+  ];
 
   return (
     <div className="space-y-8 pt-8 lg:pt-0">
@@ -50,7 +96,7 @@ export default function WebNurseProfile() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setEditing(!editing)}
+            onClick={() => (editing ? setEditing(false) : startEditing())}
             className="h-10 w-full shrink-0 rounded-xl px-4 sm:w-auto"
           >
             {editing ? 'Cancel' : 'Edit Profile'}
@@ -58,25 +104,21 @@ export default function WebNurseProfile() {
         </div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          {[
-            { label: 'Full Name', icon: User, value: user?.fullName },
-            { label: 'Email Address', icon: Mail, value: user?.email },
-            { label: 'Phone Number', icon: Phone, value: user?.phone || 'Not set' },
-            { label: 'Location', icon: MapPin, value: 'India' },
-          ].map((field) => (
-            <div key={field.label} className="space-y-1.5">
+          {personalFields.map((field) => (
+            <div key={field.key} className="space-y-1.5">
               <label className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
                 {field.label}
               </label>
-              {editing && field.label !== 'Email Address' ? (
+              {editing && field.setEditValue ? (
                 <Input
-                  defaultValue={field.value || ''}
+                  value={field.editValue || ''}
+                  onChange={(e) => field.setEditValue!(e.target.value)}
                   className="bg-muted/50 border-border h-11 rounded-xl"
                 />
               ) : (
                 <div className="text-foreground bg-muted/30 border-border/50 flex min-h-[44px] items-center gap-3 rounded-xl border p-3 text-sm font-medium">
                   <field.icon className="text-primary h-4 w-4 shrink-0 opacity-80" />
-                  <span className="truncate">{field.value || '—'}</span>
+                  <span className="truncate">{field.display || '—'}</span>
                 </div>
               )}
             </div>
@@ -85,8 +127,12 @@ export default function WebNurseProfile() {
 
         {editing && (
           <div className="border-border/60 mt-8 flex justify-end border-t pt-6">
-            <Button className="bg-primary text-primary-foreground shadow-primary/20 h-11 rounded-xl px-6 font-semibold shadow-md transition-transform hover:scale-[1.02]">
-              Save Changes
+            <Button
+              onClick={handleSave}
+              disabled={saving}
+              className="bg-primary text-primary-foreground shadow-primary/20 h-11 rounded-xl px-6 font-semibold shadow-md transition-transform hover:scale-[1.02]"
+            >
+              {saving ? 'Saving...' : 'Save Changes'}
             </Button>
           </div>
         )}

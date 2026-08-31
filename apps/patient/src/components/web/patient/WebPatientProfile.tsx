@@ -1,14 +1,37 @@
 'use client';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/use-auth';
-import { User, Phone, MapPin, Mail } from 'lucide-react';
+import { User, Phone, MapPin, Mail, Loader2 } from 'lucide-react';
 import { Button } from '@mendyr/shared-ui/src/ui/button';
 import { Input } from '@mendyr/shared-ui/src/ui/input';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function WebPatientProfile() {
-  const { user } = useAuth();
+  const { user, updateProfile } = useAuth();
   const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [fullName, setFullName] = useState('');
+  const [phone, setPhone] = useState('');
+
+  const startEditing = () => {
+    setFullName(user?.fullName || '');
+    setPhone(user?.phone || '');
+    setEditing(true);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await updateProfile({ fullName, phone });
+      toast.success('Profile updated.');
+      setEditing(false);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to update profile.');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="space-y-8 pt-8 lg:pt-0">
@@ -37,7 +60,11 @@ export default function WebPatientProfile() {
               </span>
             </div>
           </div>
-          <Button variant="outline" size="sm" onClick={() => setEditing(!editing)}>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => (editing ? setEditing(false) : startEditing())}
+          >
             {editing ? 'Cancel' : 'Edit'}
           </Button>
         </div>
@@ -47,7 +74,7 @@ export default function WebPatientProfile() {
             <div>
               <label className="text-muted-foreground mb-1 block text-xs">Full Name</label>
               {editing ? (
-                <Input defaultValue={user?.fullName || ''} />
+                <Input value={fullName} onChange={(e) => setFullName(e.target.value)} />
               ) : (
                 <div className="text-muted-foreground flex items-center gap-2">
                   <User className="text-muted-foreground h-4 w-4" />
@@ -65,7 +92,7 @@ export default function WebPatientProfile() {
             <div>
               <label className="text-muted-foreground mb-1 block text-xs">Phone</label>
               {editing ? (
-                <Input defaultValue={user?.phone || ''} />
+                <Input value={phone} onChange={(e) => setPhone(e.target.value)} />
               ) : (
                 <div className="text-muted-foreground flex items-center gap-2">
                   <Phone className="text-muted-foreground h-4 w-4" />
@@ -84,8 +111,11 @@ export default function WebPatientProfile() {
 
           {editing && (
             <div className="flex gap-3 pt-4">
-              <Button size="sm">Save Changes</Button>
-              <Button variant="ghost" size="sm" onClick={() => setEditing(false)}>
+              <Button size="sm" onClick={handleSave} disabled={saving}>
+                {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Save Changes
+              </Button>
+              <Button variant="ghost" size="sm" onClick={() => setEditing(false)} disabled={saving}>
                 Cancel
               </Button>
             </div>

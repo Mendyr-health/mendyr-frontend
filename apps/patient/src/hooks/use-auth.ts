@@ -48,5 +48,36 @@ export function useAuth() {
     await fetchUser();
   }, [fetchUser]);
 
-  return { user, loading, logout, refreshUser, isAuthenticated: !!user };
+  // Backend field names (app/schemas/user.py UserUpdateIn) — snake_case, unlike the rest of
+  // this app's camelCase. Kept as a small boundary adapter here rather than exposing the raw
+  // wire shape to every profile-editing screen that calls this.
+  const updateProfile = useCallback(
+    async (updates: {
+      fullName?: string;
+      phone?: string;
+      email?: string;
+      gender?: 'male' | 'female' | 'other' | 'unspecified';
+    }) => {
+      const body: Record<string, unknown> = {};
+      if (updates.fullName !== undefined) body.full_name = updates.fullName;
+      if (updates.phone !== undefined) body.phone_number = updates.phone;
+      if (updates.email !== undefined) body.email = updates.email;
+      if (updates.gender !== undefined) body.gender = updates.gender;
+
+      const res = await apiFetch('/api/v1/users/me', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      if (!data.success) {
+        throw new Error(data.error?.message || 'Failed to update profile.');
+      }
+      setUser(adaptBackendUser(data.data));
+      return adaptBackendUser(data.data);
+    },
+    [],
+  );
+
+  return { user, loading, logout, refreshUser, updateProfile, isAuthenticated: !!user };
 }

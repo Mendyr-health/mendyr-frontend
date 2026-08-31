@@ -1,12 +1,35 @@
 'use client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@/hooks/use-auth';
-import { User, Phone, MapPin, Mail, Camera, Save, X } from 'lucide-react';
+import { User, Phone, MapPin, Mail, Camera, Save, X, Loader2 } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function MobilePatientProfile() {
-  const { user } = useAuth();
+  const { user, updateProfile } = useAuth();
   const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [fullName, setFullName] = useState('');
+  const [phone, setPhone] = useState('');
+
+  const startEditing = () => {
+    setFullName(user?.fullName || '');
+    setPhone(user?.phone || '');
+    setEditing(true);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await updateProfile({ fullName, phone });
+      toast.success('Profile updated.');
+      setEditing(false);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to update profile.');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="pb-24">
@@ -42,7 +65,7 @@ export default function MobilePatientProfile() {
             Personal Info
           </h3>
           <button
-            onClick={() => setEditing(!editing)}
+            onClick={() => (editing ? setEditing(false) : startEditing())}
             className="text-primary text-sm font-medium active:opacity-70"
           >
             {editing ? 'Cancel' : 'Edit'}
@@ -58,7 +81,8 @@ export default function MobilePatientProfile() {
             {editing ? (
               <input
                 type="text"
-                defaultValue={user?.fullName || ''}
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
                 className="bg-background border-border text-foreground focus:ring-primary/50 w-full rounded-xl border px-3 py-2 text-base focus:ring-2 focus:outline-none"
               />
             ) : (
@@ -84,7 +108,8 @@ export default function MobilePatientProfile() {
             {editing ? (
               <input
                 type="tel"
-                defaultValue={user?.phone || ''}
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 className="bg-background border-border text-foreground focus:ring-primary/50 w-full rounded-xl border px-3 py-2 text-base focus:ring-2 focus:outline-none"
               />
             ) : (
@@ -118,16 +143,22 @@ export default function MobilePatientProfile() {
             <div className="flex gap-3">
               <button
                 onClick={() => setEditing(false)}
-                className="bg-muted text-foreground flex flex-1 items-center justify-center gap-2 rounded-2xl py-3.5 font-medium transition-transform active:scale-95"
+                disabled={saving}
+                className="bg-muted text-foreground flex flex-1 items-center justify-center gap-2 rounded-2xl py-3.5 font-medium transition-transform active:scale-95 disabled:opacity-50"
               >
                 <X className="h-5 w-5" />
                 Cancel
               </button>
               <button
-                onClick={() => setEditing(false)}
-                className="bg-primary text-primary-foreground flex flex-[2] items-center justify-center gap-2 rounded-2xl py-3.5 font-medium shadow-lg transition-transform active:scale-95"
+                onClick={handleSave}
+                disabled={saving}
+                className="bg-primary text-primary-foreground flex flex-[2] items-center justify-center gap-2 rounded-2xl py-3.5 font-medium shadow-lg transition-transform active:scale-95 disabled:opacity-50"
               >
-                <Save className="h-5 w-5" />
+                {saving ? (
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                ) : (
+                  <Save className="h-5 w-5" />
+                )}
                 Save Changes
               </button>
             </div>

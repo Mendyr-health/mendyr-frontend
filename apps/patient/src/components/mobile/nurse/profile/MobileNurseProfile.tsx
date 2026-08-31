@@ -16,10 +16,31 @@ import { Button } from '@mendyr/shared-ui/src/ui/button';
 import { Input } from '@mendyr/shared-ui/src/ui/input';
 import { useAuth } from '@/hooks/use-auth';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function MobileNurseProfile() {
-  const { user } = useAuth();
+  const { user, updateProfile } = useAuth();
   const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [phone, setPhone] = useState('');
+
+  const startEditing = () => {
+    setPhone(user?.phone || '');
+    setEditing(true);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await updateProfile({ phone });
+      toast.success('Profile updated.');
+      setEditing(false);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to update profile.');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="space-y-6 pb-24">
@@ -27,7 +48,7 @@ export default function MobileNurseProfile() {
       <div className="flex items-center justify-between px-2">
         <h1 className="text-foreground text-2xl font-bold">Profile</h1>
         <button
-          onClick={() => setEditing(!editing)}
+          onClick={() => (editing ? setEditing(false) : startEditing())}
           className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors ${editing ? 'bg-muted text-foreground' : 'bg-primary/10 text-primary'}`}
         >
           {editing ? 'Cancel' : 'Edit'}
@@ -72,13 +93,9 @@ export default function MobileNurseProfile() {
               editable: true,
               placeholder: 'Enter phone number',
             },
-            {
-              label: 'Location',
-              icon: MapPin,
-              value: 'India',
-              editable: true,
-              placeholder: 'Enter location',
-            },
+            // Not a real field yet (no address record backs this) — shown, not editable, so
+            // the UI doesn't promise a save that doesn't happen.
+            { label: 'Location', icon: MapPin, value: 'India', editable: false },
           ].map((field, idx, arr) => (
             <div
               key={field.label}
@@ -91,7 +108,8 @@ export default function MobileNurseProfile() {
               {editing && field.editable ? (
                 <input
                   type="text"
-                  defaultValue={field.value}
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                   placeholder={field.placeholder}
                   className="bg-muted/50 border-border focus:border-primary w-full rounded-xl border px-3 py-2 text-sm focus:outline-none"
                 />
@@ -205,8 +223,12 @@ export default function MobileNurseProfile() {
           animate={{ opacity: 1, y: 0 }}
           className="fixed right-4 bottom-20 left-4 z-40"
         >
-          <button className="bg-primary text-primary-foreground shadow-primary/30 w-full rounded-2xl py-4 text-lg font-bold shadow-xl transition-transform active:scale-[0.98]">
-            Save Changes
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="bg-primary text-primary-foreground shadow-primary/30 w-full rounded-2xl py-4 text-lg font-bold shadow-xl transition-transform active:scale-[0.98] disabled:opacity-50"
+          >
+            {saving ? 'Saving...' : 'Save Changes'}
           </button>
         </motion.div>
       )}
