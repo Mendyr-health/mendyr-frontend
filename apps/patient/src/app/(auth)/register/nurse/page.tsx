@@ -25,7 +25,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
 
 import { nurseRegistrationFormSchema } from '@/lib/validators';
-import { getDateOfBirthRange } from '@/lib/date-of-birth';
+import { getProfessionalDateOfBirthRange } from '@/lib/date-of-birth';
 import { apiFetch } from '@/lib/api-client';
 import { cn } from '@mendyr/shared-utils';
 import { Input } from '@mendyr/shared-ui/src/ui/input';
@@ -188,7 +188,7 @@ export default function NurseRegisterPage() {
     );
   }
 
-  const { earliestDate, latestDate } = getDateOfBirthRange();
+  const { earliestDate, latestDate } = getProfessionalDateOfBirthRange();
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>

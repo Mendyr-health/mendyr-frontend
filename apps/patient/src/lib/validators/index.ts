@@ -1,5 +1,12 @@
 import { z } from 'zod';
-import { isEligibleDateOfBirth } from '@/lib/date-of-birth';
+import {
+  isEligibleDateOfBirth,
+  isEligibleProfessionalDateOfBirth,
+  PATIENT_MAXIMUM_AGE,
+  PATIENT_MINIMUM_AGE,
+  PROFESSIONAL_MAXIMUM_AGE,
+  PROFESSIONAL_MINIMUM_AGE,
+} from '@/lib/date-of-birth';
 
 // ── Common ───────────────────────────────────────
 
@@ -32,19 +39,30 @@ const dateOfBirthSchema = z
   .date({ required_error: 'Date of birth is required' })
   .max(new Date(), 'Date of birth cannot be in the future');
 
-const eligibleDateOfBirthSchema = dateOfBirthSchema.refine(isEligibleDateOfBirth, {
-  message: 'You must be between 18 and 55 years old',
+// Patients and professionals have deliberately different eligible ranges — see
+// lib/date-of-birth.ts. Sharing one schema previously capped patient registration at 55,
+// which would reject most of the app's actual (elderly-skewing) patient base.
+const eligiblePatientDateOfBirthSchema = dateOfBirthSchema.refine(isEligibleDateOfBirth, {
+  message: `You must be between ${PATIENT_MINIMUM_AGE} and ${PATIENT_MAXIMUM_AGE} years old`,
 });
+
+const eligibleProfessionalDateOfBirthSchema = dateOfBirthSchema.refine(
+  isEligibleProfessionalDateOfBirth,
+  {
+    message: `You must be between ${PROFESSIONAL_MINIMUM_AGE} and ${PROFESSIONAL_MAXIMUM_AGE} years old`,
+  },
+);
 
 export const patientRegistrationFormSchema = z.object({
   fullName: nameSchema,
   email: emailSchema,
   phone: z.string().min(10, 'Invalid phone number').max(15, 'Invalid phone number'),
   password: passwordSchema,
-  dob: eligibleDateOfBirthSchema,
+  dob: eligiblePatientDateOfBirthSchema,
   address: z.string().min(5, 'Address is required').max(500),
   city: z.string().min(2, 'City is required').max(100),
   state: z.string().min(2, 'State is required').max(100),
+  referralCode: z.string().max(12).optional().or(z.literal('')),
 });
 
 export const nurseRegistrationFormSchema = z.object({
@@ -53,7 +71,7 @@ export const nurseRegistrationFormSchema = z.object({
   phone: z.string().min(10, 'Invalid phone number').max(15, 'Invalid phone number'),
   password: passwordSchema,
   gender: z.enum(['MALE', 'FEMALE', 'OTHER', 'PREFER_NOT_TO_SAY']),
-  dateOfBirth: eligibleDateOfBirthSchema,
+  dateOfBirth: eligibleProfessionalDateOfBirthSchema,
   address: z.string().min(5, 'Address is required').max(500),
   city: z.string().min(2, 'City is required').max(100),
   state: z.string().min(2, 'State is required').max(100),
