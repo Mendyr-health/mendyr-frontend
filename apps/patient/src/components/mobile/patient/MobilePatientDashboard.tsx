@@ -19,11 +19,13 @@ import {
 import Link from 'next/link';
 import { useState } from 'react';
 import { patientDashboardData } from '@/features/patient/dashboardData';
+import { useNearbyProviders } from '@/features/patient/useNearbyProviders';
 
 export default function MobilePatientDashboard() {
   const { user } = useAuth();
   const [bookedProviderId, setBookedProviderId] = useState<string | null>(null);
-  const { nearbyProviders, carePlan, healthSummary, emergencyContact } = patientDashboardData;
+  const { carePlan, healthSummary, emergencyContact } = patientDashboardData;
+  const { providers: nearbyProviders, loading: nearbyLoading } = useNearbyProviders();
   const progress = Math.round((carePlan.completed / carePlan.total) * 100);
   const bookedProvider = nearbyProviders.find((provider) => provider.id === bookedProviderId);
 
@@ -87,8 +89,9 @@ export default function MobilePatientDashboard() {
             </div>
           </div>
           <button
-            onClick={() => setBookedProviderId(nearbyProviders[0].id)}
-            className="bg-primary text-primary-foreground hover:bg-primary/90 mt-4 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold"
+            onClick={() => nearbyProviders[0] && setBookedProviderId(nearbyProviders[0].id)}
+            disabled={nearbyProviders.length === 0}
+            className="bg-primary text-primary-foreground hover:bg-primary/90 mt-4 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold disabled:cursor-not-allowed disabled:opacity-50"
           >
             <Calendar className="h-4 w-4" /> Book appointment
           </button>
@@ -111,62 +114,71 @@ export default function MobilePatientDashboard() {
             <MapPin className="text-primary h-5 w-5" />
             <h2 className="text-foreground font-semibold">Nearby care providers</h2>
           </div>
-          <span className="text-primary text-xs font-semibold">Within 3 km</span>
         </div>
-        <div className="space-y-3">
-          {nearbyProviders.map((provider) => {
-            const Icon =
-              provider.role === 'Nurse'
-                ? UserRound
-                : provider.role === 'Doctor'
-                  ? Stethoscope
-                  : Phone;
-            const color =
-              provider.role === 'Nurse'
-                ? 'bg-emerald-500/10 text-emerald-500'
-                : provider.role === 'Doctor'
-                  ? 'bg-blue-500/10 text-blue-500'
-                  : 'bg-amber-500/10 text-amber-500';
-            return (
-              <div
-                key={provider.id}
-                className="border-border bg-card rounded-2xl border p-4 shadow-sm"
-              >
-                <div className="flex items-start gap-3">
-                  <div className={`rounded-xl p-2 ${color}`}>
-                    <Icon className="h-4 w-4" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <p className="text-foreground text-sm font-bold">{provider.name}</p>
-                        <p className="text-primary text-xs font-semibold">{provider.role}</p>
-                      </div>
-                      <span className="text-muted-foreground flex items-center gap-1 text-xs">
-                        <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                        {provider.rating}
-                      </span>
+        {nearbyLoading ? (
+          <div className="text-muted-foreground py-6 text-center text-sm">
+            Finding nearby providers...
+          </div>
+        ) : nearbyProviders.length === 0 ? (
+          <div className="text-muted-foreground py-6 text-center text-sm">
+            No available providers near your saved address right now.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {nearbyProviders.map((provider) => {
+              const Icon =
+                provider.role === 'Nurse'
+                  ? UserRound
+                  : provider.role === 'Doctor'
+                    ? Stethoscope
+                    : Phone;
+              const color =
+                provider.role === 'Nurse'
+                  ? 'bg-emerald-500/10 text-emerald-500'
+                  : provider.role === 'Doctor'
+                    ? 'bg-blue-500/10 text-blue-500'
+                    : 'bg-amber-500/10 text-amber-500';
+              return (
+                <div
+                  key={provider.id}
+                  className="border-border bg-card rounded-2xl border p-4 shadow-sm"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className={`rounded-xl p-2 ${color}`}>
+                      <Icon className="h-4 w-4" />
                     </div>
-                    <p className="text-muted-foreground mt-1 text-xs">
-                      {provider.specialty} · {provider.distance}
-                    </p>
-                    <div className="mt-3 flex items-center justify-between">
-                      <span className="text-xs font-medium text-emerald-600">
-                        {provider.availability}
-                      </span>
-                      <button
-                        onClick={() => setBookedProviderId(provider.id)}
-                        className="text-primary text-xs font-bold"
-                      >
-                        {provider.role === 'Pharmacist' ? 'Delivery' : 'Book'} →
-                      </button>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <p className="text-foreground text-sm font-bold">{provider.name}</p>
+                          <p className="text-primary text-xs font-semibold">{provider.role}</p>
+                        </div>
+                        <span className="text-muted-foreground flex items-center gap-1 text-xs">
+                          <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
+                          {provider.rating}
+                        </span>
+                      </div>
+                      <p className="text-muted-foreground mt-1 text-xs">
+                        {provider.specialty} · {provider.distance}
+                      </p>
+                      <div className="mt-3 flex items-center justify-between">
+                        <span className="text-xs font-medium text-emerald-600">
+                          {provider.availability}
+                        </span>
+                        <button
+                          onClick={() => setBookedProviderId(provider.id)}
+                          className="text-primary text-xs font-bold"
+                        >
+                          {provider.role === 'Pharmacist' ? 'Delivery' : 'Book'} →
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </motion.section>
 
       {/* Care progress and health readings */}

@@ -17,12 +17,13 @@ import {
 import Link from 'next/link';
 import { useState } from 'react';
 import { patientDashboardData } from '@/features/patient/dashboardData';
+import { useNearbyProviders } from '@/features/patient/useNearbyProviders';
 
 export default function WebPatientDashboard() {
   const { user } = useAuth();
   const [bookedProviderId, setBookedProviderId] = useState<string | null>(null);
-  const { appointments, nearbyProviders, carePlan, healthSummary, emergencyContact } =
-    patientDashboardData;
+  const { appointments, carePlan, healthSummary, emergencyContact } = patientDashboardData;
+  const { providers: nearbyProviders, loading: nearbyLoading } = useNearbyProviders();
   const progress = Math.round((carePlan.completed / carePlan.total) * 100);
   const bookedProvider = nearbyProviders.find((provider) => provider.id === bookedProviderId);
 
@@ -96,8 +97,9 @@ export default function WebPatientDashboard() {
               </div>
             </div>
             <button
-              onClick={() => setBookedProviderId(nearbyProviders[0].id)}
-              className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-primary/20 inline-flex shrink-0 items-center gap-2 rounded-xl px-5 py-3 text-sm font-bold shadow-lg"
+              onClick={() => nearbyProviders[0] && setBookedProviderId(nearbyProviders[0].id)}
+              disabled={nearbyProviders.length === 0}
+              className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-primary/20 inline-flex shrink-0 items-center gap-2 rounded-xl px-5 py-3 text-sm font-bold shadow-lg disabled:cursor-not-allowed disabled:opacity-50"
             >
               <CalendarDays className="h-4 w-4" /> Book appointment
             </button>
@@ -154,54 +156,64 @@ export default function WebPatientDashboard() {
               Verified professionals near your location.
             </p>
           </div>
-          <span className="text-primary text-sm font-semibold">Within 3 km</span>
         </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          {nearbyProviders.map((provider) => {
-            const Icon =
-              provider.role === 'Nurse'
-                ? UserRound
-                : provider.role === 'Doctor'
-                  ? Stethoscope
-                  : Phone;
-            const color =
-              provider.role === 'Nurse'
-                ? 'text-emerald-500 bg-emerald-500/10 border-emerald-500/30'
-                : provider.role === 'Doctor'
-                  ? 'text-blue-500 bg-blue-500/10 border-blue-500/30'
-                  : 'text-amber-500 bg-amber-500/10 border-amber-500/30';
-            return (
-              <div
-                key={provider.id}
-                className="border-border bg-card hover:border-primary/50 flex flex-col rounded-xl border p-5 transition-all"
-              >
-                <div className="flex items-start justify-between">
-                  <div className={`rounded-xl border p-2.5 ${color}`}>
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <span className="text-muted-foreground flex items-center gap-1 text-xs">
-                    <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" /> {provider.rating}
-                  </span>
-                </div>
-                <div className="mt-4">
-                  <p className="text-foreground font-bold">{provider.name}</p>
-                  <p className="text-primary mt-1 text-xs font-semibold">{provider.role}</p>
-                  <p className="text-muted-foreground mt-2 text-sm">{provider.specialty}</p>
-                </div>
-                <div className="text-muted-foreground mt-4 flex items-center justify-between text-xs">
-                  <span>{provider.distance}</span>
-                  <span className="text-emerald-500">{provider.availability}</span>
-                </div>
-                <button
-                  onClick={() => setBookedProviderId(provider.id)}
-                  className="border-primary/40 text-primary hover:bg-primary/10 mt-4 rounded-lg border py-2 text-sm font-semibold"
+        {nearbyLoading ? (
+          <div className="text-muted-foreground py-8 text-center text-sm">
+            Finding nearby providers...
+          </div>
+        ) : nearbyProviders.length === 0 ? (
+          <div className="text-muted-foreground py-8 text-center text-sm">
+            No available providers near your saved address right now.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {nearbyProviders.map((provider) => {
+              const Icon =
+                provider.role === 'Nurse'
+                  ? UserRound
+                  : provider.role === 'Doctor'
+                    ? Stethoscope
+                    : Phone;
+              const color =
+                provider.role === 'Nurse'
+                  ? 'text-emerald-500 bg-emerald-500/10 border-emerald-500/30'
+                  : provider.role === 'Doctor'
+                    ? 'text-blue-500 bg-blue-500/10 border-blue-500/30'
+                    : 'text-amber-500 bg-amber-500/10 border-amber-500/30';
+              return (
+                <div
+                  key={provider.id}
+                  className="border-border bg-card hover:border-primary/50 flex flex-col rounded-xl border p-5 transition-all"
                 >
-                  {provider.role === 'Pharmacist' ? 'Request delivery' : 'Book now'}
-                </button>
-              </div>
-            );
-          })}
-        </div>
+                  <div className="flex items-start justify-between">
+                    <div className={`rounded-xl border p-2.5 ${color}`}>
+                      <Icon className="h-5 w-5" />
+                    </div>
+                    <span className="text-muted-foreground flex items-center gap-1 text-xs">
+                      <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />{' '}
+                      {provider.rating}
+                    </span>
+                  </div>
+                  <div className="mt-4">
+                    <p className="text-foreground font-bold">{provider.name}</p>
+                    <p className="text-primary mt-1 text-xs font-semibold">{provider.role}</p>
+                    <p className="text-muted-foreground mt-2 text-sm">{provider.specialty}</p>
+                  </div>
+                  <div className="text-muted-foreground mt-4 flex items-center justify-between text-xs">
+                    <span>{provider.distance}</span>
+                    <span className="text-emerald-500">{provider.availability}</span>
+                  </div>
+                  <button
+                    onClick={() => setBookedProviderId(provider.id)}
+                    className="border-primary/40 text-primary hover:bg-primary/10 mt-4 rounded-lg border py-2 text-sm font-semibold"
+                  >
+                    {provider.role === 'Pharmacist' ? 'Request delivery' : 'Book now'}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </motion.section>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
