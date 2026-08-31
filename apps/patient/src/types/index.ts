@@ -81,6 +81,7 @@ export interface UserPublic {
   status: string;
   emailVerified: boolean;
   avatarUrl: string | null;
+  referralCode: string;
   lastLoginAt: string | null;
   createdAt: string;
 }

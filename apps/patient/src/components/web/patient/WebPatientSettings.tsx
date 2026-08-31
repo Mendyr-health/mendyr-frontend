@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Bell, Lock, Shield } from 'lucide-react';
 import { Button } from '@mendyr/shared-ui/src/ui/button';
 import { Input } from '@mendyr/shared-ui/src/ui/input';
+import { ReferralCard } from '@/components/patient/ReferralCard';
 
 export default function WebPatientSettings() {
   return (
@@ -10,6 +11,10 @@ export default function WebPatientSettings() {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="font-outfit text-2xl font-bold text-neutral-100">Settings</h1>
         <p className="text-muted-foreground mt-1">Manage your account preferences.</p>
+      </motion.div>
+
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+        <ReferralCard />
       </motion.div>
 
       {/* Notifications */}

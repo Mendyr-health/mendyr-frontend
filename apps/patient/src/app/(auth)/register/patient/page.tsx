@@ -10,6 +10,7 @@ import {
   CheckCircle,
   Eye,
   EyeOff,
+  Gift,
   Loader2,
   Lock,
   Mail,
@@ -62,6 +63,7 @@ export default function PatientRegisterPage() {
       address: '',
       city: '',
       state: '',
+      referralCode: '',
     },
     mode: 'onTouched',
   });
@@ -375,6 +377,27 @@ export default function PatientRegisterPage() {
                   )}
                 />
               </div>
+
+              <FormField
+                control={form.control}
+                name="referralCode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Referral code (optional)</FormLabel>
+                    <div className="relative">
+                      <Gift className="text-muted-foreground absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2" />
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="Have a friend's code?"
+                          className="h-12 rounded-xl pl-11 uppercase"
+                        />
+                      </FormControl>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </motion.div>
           )}
 

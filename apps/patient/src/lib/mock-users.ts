@@ -43,6 +43,7 @@ export function getMockUserForRole(role: Role, email: string): UserPublic {
     status: 'ACTIVE',
     emailVerified: true,
     avatarUrl: null,
+    referralCode: `MOCK${role.slice(0, 4)}`,
     lastLoginAt: null,
     createdAt: '2025-01-15T00:00:00.000Z',
   };

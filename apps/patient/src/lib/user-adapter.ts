@@ -14,6 +14,7 @@ interface BackendUser {
   email_verified: boolean;
   full_name: string;
   avatar_url: string | null;
+  referral_code: string;
   role: string;
   status: string;
   last_login_at: string | null;
@@ -45,6 +46,7 @@ export function adaptBackendUser(raw: BackendUser): UserPublic {
     status: raw.status.toUpperCase(),
     emailVerified: raw.email_verified,
     avatarUrl: raw.avatar_url,
+    referralCode: raw.referral_code,
     lastLoginAt: raw.last_login_at,
     createdAt: raw.created_at,
   };

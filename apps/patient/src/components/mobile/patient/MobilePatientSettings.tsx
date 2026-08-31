@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import { Bell, Lock, Shield, ChevronRight, HelpCircle, LogOut } from 'lucide-react';
 import { useState } from 'react';
+import { ReferralCard } from '@/components/patient/ReferralCard';
 
 // Mobile Toggle Switch Primitive
 function MobileToggle({ checked, onChange }: { checked: boolean; onChange: () => void }) {
@@ -34,6 +35,15 @@ export default function MobilePatientSettings() {
     <div className="space-y-6 pb-24">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="px-2">
         <h1 className="text-foreground text-2xl font-bold">Settings</h1>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.05 }}
+        className="px-2"
+      >
+        <ReferralCard />
       </motion.div>
 
       <motion.div
