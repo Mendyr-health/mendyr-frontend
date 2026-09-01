@@ -77,6 +77,8 @@ export interface UserPublic {
   email: string;
   phone: string | null;
   fullName: string;
+  gender: string;
+  dateOfBirth: string | null;
   role: string;
   status: string;
   emailVerified: boolean;

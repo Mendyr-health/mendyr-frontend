@@ -9,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { useAuth } from '@/hooks/use-auth';
-import { markOnboardingComplete } from '@/lib/onboarding';
+import { isProfileComplete } from '@/lib/onboarding';
 import { ROLE_DASHBOARD_PATH, type Role } from '@/lib/mock-users';
 import { Input } from '@mendyr/shared-ui/src/ui/input';
 import { Button } from '@mendyr/shared-ui/src/ui/button';
@@ -38,13 +38,34 @@ const onboardingSchema = z.object({
 
 type OnboardingFormValues = z.infer<typeof onboardingSchema>;
 
-// Shown once, right after login, so a first-time user has a profile to work
-// with. There's no backend yet, so this just saves to localStorage — see
-// src/lib/onboarding.ts — and drops the user into their role dashboard.
+// The form speaks the frontend's uppercase values; `app/core/constants.py`'s Gender enum is
+// lowercase, with "prefer not to say" stored as `unspecified`.
+const FORM_TO_GENDER: Record<
+  OnboardingFormValues['gender'],
+  'male' | 'female' | 'other' | 'unspecified'
+> = {
+  MALE: 'male',
+  FEMALE: 'female',
+  OTHER: 'other',
+  PREFER_NOT_TO_SAY: 'unspecified',
+};
+
+const GENDER_TO_FORM: Record<string, OnboardingFormValues['gender']> = {
+  male: 'MALE',
+  female: 'FEMALE',
+  other: 'OTHER',
+  unspecified: 'PREFER_NOT_TO_SAY',
+};
+
+// Shown right after login when the account is still missing details the app needs
+// (see `isProfileComplete`). Submitting persists them to the backend via
+// PATCH /users/me — it used to only write localStorage, so the answers never left the
+// device and the same user was asked again on every fresh install.
 export default function OnboardingPage() {
   const router = useRouter();
-  const { user, loading } = useAuth();
+  const { user, loading, updateProfile } = useAuth();
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
   const role = (user?.role as Role) || null;
 
   const form = useForm<OnboardingFormValues>({
@@ -59,20 +80,44 @@ export default function OnboardingPage() {
       router.replace('/login');
       return;
     }
+    // Reachable directly by URL, and by a stale redirect after the profile is already
+    // filled in — don't ask again for details the backend already has.
+    if (isProfileComplete(user)) {
+      router.replace(ROLE_DASHBOARD_PATH[user.role as Role]);
+      return;
+    }
     form.reset({
       fullName: user.fullName || '',
-      dateOfBirth: '',
-      gender: 'PREFER_NOT_TO_SAY',
+      // `date_of_birth` comes back as an ISO timestamp; <input type="date"> only accepts
+      // YYYY-MM-DD and silently renders blank for anything else.
+      dateOfBirth: user.dateOfBirth ? user.dateOfBirth.slice(0, 10) : '',
+      gender: (GENDER_TO_FORM[user.gender] ??
+        'PREFER_NOT_TO_SAY') as OnboardingFormValues['gender'],
       phone: user.phone || '',
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, user, router]);
 
-  const onSubmit = (values: OnboardingFormValues) => {
+  const onSubmit = async (values: OnboardingFormValues) => {
     if (!role) return;
     setSubmitting(true);
-    markOnboardingComplete(role, values);
-    router.push(ROLE_DASHBOARD_PATH[role]);
+    setError('');
+    try {
+      await updateProfile({
+        fullName: values.fullName,
+        phone: values.phone,
+        gender: FORM_TO_GENDER[values.gender],
+        // The API takes a datetime; the date input gives a bare calendar date.
+        dateOfBirth: new Date(`${values.dateOfBirth}T00:00:00Z`).toISOString(),
+      });
+      router.push(ROLE_DASHBOARD_PATH[role]);
+    } catch (err) {
+      // Keep the user on the form with their answers intact rather than dropping them into a
+      // dashboard whose profile was never actually saved.
+      setError(err instanceof Error ? err.message : 'Could not save your details.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -83,6 +128,12 @@ export default function OnboardingPage() {
       <p className="text-muted-foreground mb-8">
         A few quick details to finish setting up your account.
       </p>
+
+      {error && (
+        <div className="border-destructive/20 bg-destructive/10 text-destructive mb-4 rounded-xl border px-4 py-3 text-sm">
+          {error}
+        </div>
+      )}
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">

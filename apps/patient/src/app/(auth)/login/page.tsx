@@ -8,13 +8,14 @@ import { ArrowRight, Eye, EyeOff, Loader2, Lock, Mail } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
+import type { UserPublic } from '@/types';
 
 import { loginSchema } from '@/lib/validators';
 import { apiFetch } from '@/lib/api-client';
 import { inferRoleFromEmail, getMockUserForRole, ROLE_DASHBOARD_PATH } from '@/lib/mock-users';
 import { saveMockSession } from '@/lib/mock-session';
-import { isOnboardingComplete } from '@/lib/onboarding';
-import { adaptBackendRole } from '@/lib/user-adapter';
+import { isProfileComplete } from '@/lib/onboarding';
+import { adaptBackendUser } from '@/lib/user-adapter';
 import { IS_PROVIDER_APP, IS_PATIENT_APP } from '@/lib/app-target';
 import { usePlatform } from '@mendyr/shared-utils';
 import { Input } from '@mendyr/shared-ui/src/ui/input';
@@ -51,8 +52,11 @@ export default function LoginPage() {
     mode: 'onTouched',
   });
 
-  const proceedPastLogin = (role: keyof typeof ROLE_DASHBOARD_PATH) => {
-    router.push(isOnboardingComplete(role) ? ROLE_DASHBOARD_PATH[role] : '/onboarding');
+  // Takes the whole account, not just the role: whether onboarding is still needed is a
+  // property of the profile the backend holds, not of this device.
+  const proceedPastLogin = (account: UserPublic) => {
+    const role = account.role as keyof typeof ROLE_DASHBOARD_PATH;
+    router.push(isProfileComplete(account) ? ROLE_DASHBOARD_PATH[role] : '/onboarding');
   };
 
   const onSubmit = async (values: LoginFormValues) => {
@@ -74,9 +78,9 @@ export default function LoginPage() {
       // real API responds. Deliberately NOT wrapping the response-handling below in this
       // same catch: a bug in handling a real response (once masked a working login as a
       // mock one — see git blame) must surface as a real error, not vanish into this path.
-      const role = inferRoleFromEmail(values.email);
-      saveMockSession(getMockUserForRole(role, values.email));
-      proceedPastLogin(role);
+      const mockAccount = getMockUserForRole(inferRoleFromEmail(values.email), values.email);
+      saveMockSession(mockAccount);
+      proceedPastLogin(mockAccount);
       setLoading(false);
       return;
     }
@@ -87,7 +91,7 @@ export default function LoginPage() {
         setError(data.error?.message || 'Invalid credentials');
         return;
       }
-      proceedPastLogin(adaptBackendRole(data.data.user.role));
+      proceedPastLogin(adaptBackendUser(data.data.user));
     } catch {
       setError('Something went wrong while signing in. Please try again.');
     } finally {

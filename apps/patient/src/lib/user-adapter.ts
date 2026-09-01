@@ -13,6 +13,8 @@ interface BackendUser {
   email: string | null;
   email_verified: boolean;
   full_name: string;
+  gender: string;
+  date_of_birth: string | null;
   avatar_url: string | null;
   referral_code: string;
   role: string;
@@ -42,6 +44,8 @@ export function adaptBackendUser(raw: BackendUser): UserPublic {
     email: raw.email ?? '',
     phone: raw.phone_number,
     fullName: raw.full_name,
+    gender: raw.gender,
+    dateOfBirth: raw.date_of_birth,
     role: adaptBackendRole(raw.role),
     status: raw.status.toUpperCase(),
     emailVerified: raw.email_verified,

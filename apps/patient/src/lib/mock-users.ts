@@ -37,8 +37,14 @@ export function getMockUserForRole(role: Role, email: string): UserPublic {
   return {
     publicId: `mock-${role.toLowerCase()}-001`,
     email,
-    phone: null,
+    // Deliberately a complete profile (phone + date of birth included): this fallback exists
+    // so the app can be exercised with no backend reachable, and `isProfileComplete` would
+    // otherwise divert every mock session into onboarding — a form that can only save through
+    // the API that is, by definition, unavailable on this path.
+    phone: '+91 98765 43210',
     fullName: ROLE_MOCK_NAMES[role],
+    gender: 'unspecified',
+    dateOfBirth: '1990-01-15T00:00:00.000Z',
     role,
     status: 'ACTIVE',
     emailVerified: true,

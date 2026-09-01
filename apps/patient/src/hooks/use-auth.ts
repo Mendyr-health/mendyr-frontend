@@ -57,12 +57,14 @@ export function useAuth() {
       phone?: string;
       email?: string;
       gender?: 'male' | 'female' | 'other' | 'unspecified';
+      dateOfBirth?: string;
     }) => {
       const body: Record<string, unknown> = {};
       if (updates.fullName !== undefined) body.full_name = updates.fullName;
       if (updates.phone !== undefined) body.phone_number = updates.phone;
       if (updates.email !== undefined) body.email = updates.email;
       if (updates.gender !== undefined) body.gender = updates.gender;
+      if (updates.dateOfBirth !== undefined) body.date_of_birth = updates.dateOfBirth;
 
       const res = await apiFetch('/api/v1/users/me', {
         method: 'PATCH',
