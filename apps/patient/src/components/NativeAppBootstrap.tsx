@@ -33,7 +33,14 @@ export function NativeAppBootstrap() {
 
     const backButtonListener = App.addListener('backButton', ({ canGoBack }) => {
       const currentPath = window.location.pathname;
-      const rootPages = ['/', '/login', '/patient', '/nurse', '/admin', '/super-admin'];
+      const rootPages = [
+        '/',
+        '/login',
+        '/patient',
+        '/nurse',
+        '/admin/nurses',
+        '/super-admin/admins',
+      ];
       const isRootPage = rootPages.includes(currentPath);
 
       if (isRootPage) {

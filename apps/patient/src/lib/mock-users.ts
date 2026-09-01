@@ -8,8 +8,8 @@ import type { UserPublic } from '@/types';
 export type Role = 'SUPER_ADMIN' | 'ADMIN' | 'NURSE' | 'PATIENT';
 
 export const ROLE_DASHBOARD_PATH: Record<Role, string> = {
-  SUPER_ADMIN: '/super-admin',
-  ADMIN: '/admin',
+  SUPER_ADMIN: '/super-admin/admins',
+  ADMIN: '/admin/nurses',
   NURSE: '/nurse',
   PATIENT: '/patient',
 };

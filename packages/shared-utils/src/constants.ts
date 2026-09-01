@@ -197,7 +197,6 @@ export const PUBLIC_NAV_LINKS = [
 ] as const;
 
 export const ADMIN_NAV_LINKS = [
-  { label: 'Dashboard', href: '/admin', icon: 'LayoutDashboard' },
   { label: 'Nurses', href: '/admin/nurses', icon: 'UserCheck' },
   { label: 'Patients', href: '/admin/patients', icon: 'Users' },
   { label: 'Services', href: '/admin/services', icon: 'Stethoscope' },
@@ -206,7 +205,6 @@ export const ADMIN_NAV_LINKS = [
 ] as const;
 
 export const SUPER_ADMIN_NAV_LINKS = [
-  { label: 'Dashboard', href: '/super-admin', icon: 'LayoutDashboard' },
   { label: 'Admins', href: '/super-admin/admins', icon: 'Shield' },
   { label: 'Roles', href: '/super-admin/roles', icon: 'Key' },
   { label: 'Permissions', href: '/super-admin/permissions', icon: 'Lock' },
